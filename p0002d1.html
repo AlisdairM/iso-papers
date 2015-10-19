@@ -22,7 +22,7 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0002R0</td>
+  <td align="left">P0002D1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
@@ -165,12 +165,18 @@ Make the following edits:
     <i>T</i> operator++(<i>VQ T</i>&amp;, int);
 </tt></pre>
 
+<h3><ins><a name="6.4">C??? compatibility features [diff.???.depr]</a></ins></h3>
+<note>
+C99/11 introduces <tt>operator--</tt> for <tt>_Bool</tt> that flips the state (rather than
+sets to <tt>false</tt>) and adds the C++ <tt>operator++</tt>
+</note>
+
 <h3><ins><a name="6.4">C.4.2 Annex D: compatibility features [diff.cpp14.depr]</a></ins></h3>
 <p><ins>D.1</ins></p>
 <p><ins><b>Change:</b> Remove increment operator with <tt>bool</tt> operand [depr.incr.bool].</ins></p>
 <p><ins><b>Rationale:</b> Obsolete feature with occassionally surprising semantics.</ins></p>
 <p><ins><b>Effect on original feature:</b> A valid C++ 2014 expression utilizing the increment operator
-on a <tt>bool</tt> xvalue is ill-formed in this International Standard.  Note that this might occur
+on a <tt>bool</tt> lvalue is ill-formed in this International Standard.  Note that this might occur
 when the xvalue has a type given by a template parameter.</ins></p>
 
 <h3><a name="6.5"><del>
