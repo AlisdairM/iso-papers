@@ -22,7 +22,7 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P004D0</td>
+  <td align="left">D0004R1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
@@ -40,8 +40,25 @@
 
 <h1>Remove Deprecated iostreams aliases</tt></h1>
 
+<h2><a name="0.0">Revision History</a></h2>
+
+<h3><a name="0.1">Revision 0</a></h3>
+<p>
+Original version of the paper for the 2015 pre-Kona mailing.
+</p>
+
+<h3><a name="0.2">Revision 1</a></h3>
+<p>
+Added a compatibility clause for LWG review.
+</p>
+
 <h2><a name="1.0">I. Table of Contents</a></h2>
 <ul>
+<li><a href="#0.0">Revision History</a></li>
+  <ul>
+  <li><a href="#0.1">Revision 0</a></li>
+  <li><a href="#0.2">Revision 1</a></li>
+  </ul>
 <li><a href="#1.0">I. Table of Contents</a></li>
 <li><a href="#2.0">II. Introduction</a></li>
 <li><a href="#3.0">III. Motivation and Scope</a></li>
@@ -55,58 +72,66 @@
 <h2><a name="2.0">II. Introduction</a></h2>
 
 <p>
-Annex D.6 Old iostreams members [depr.ios.members] contains a number of aliases for types and functions
-in the iostreams library facility for compatibility with similar pre-standard libraries.  They were
-deprecated in the original 1998 C++ standard, and it is time to formally remove them.
+Annex D.6 Old iostreams members [depr.ios.members] contains a number of aliases
+for types and functions in the iostreams library facility for compatibility
+with similar pre-standard libraries.  They were deprecated in the original 1998
+C++ standard, and it is time to formally remove them.
 </p>
 
 
 <h2><a name="3.0">III. Motivation and Scope</a></h2>
 
 <p>
-As the C++ standard grows larger, there is an incremental cost in maintaining pages of obsolete
-features.  This was acknowledged at the Urbana meeting with the removal of several deprecated
-library clauses, such <tt>auto_ptr</tt> and the classic function binders.  The the list of references
-at the end of this document for a list of other deprecated features expected to be removed from the
-next version of the standard.
+As the C++ standard grows larger, there is an incremental cost in maintaining
+pages of obsolete features.  This was acknowledged at the Urbana meeting with
+the removal of several deprecated library clauses, such <tt>auto_ptr</tt> and
+the classic function binders.  The the list of references at the end of this
+document for a list of other deprecated features expected to be removed from
+the next version of the standard.
 </p>
 
 <p>
-This paper proposes the removal of some names that are purely aliases of existing library names,
-that many readers of the standard are not aware of due to their presence only in the depracated
-features annex, and not actually present in their corresponding class definitions in clause 27.
+This paper proposes the removal of some names that are purely aliases of
+existing library names, that many readers of the standard are not aware of due
+to their presence only in the depracated features annex, and not actually
+present in their corresponding class definitions in clause 27.
 </p>
 
 <p>
-This paper specifically does <em>not</em> recommend removing clause D.7 though, the <tt>strstream</tt>
-library.  That proposal has been made several times before, and rejected each time for lack of a
-replacement feature to solve the same problems as efficiently.
+This paper specifically does <em>not</em> recommend removing clause D.7 though,
+the <tt>strstream</tt> library.  That proposal has been made several times
+before, and rejected each time for lack of a replacement feature to solve the
+same problems as efficiently.
 </p>
 
 
 <h2><a name="4.0">IV. Compatibilty</a></h2>
 
 <p>
-There will likely be an impact on legacy user code that has not been updated to modernize use of these
-names in the ~20 years they will have been deprecated when the next standard is released.  However, it
-is expected to be a much lower impact than the already approved removal of <tt>auto_ptr</tt> and the
-classic function binders.
+There will likely be an impact on legacy user code that has not been updated to
+modernize use of these names in the ~20 years they will have been deprecated
+when the next standard is released.  However, it is expected to be a much lower
+impact than the already approved removal of <tt>auto_ptr</tt> and the classic
+function binders.
 </p>
 
 <p>
-None of the functions are virtual, so there should be no ABI compatibilty issues.  As with any library
-change, there is always a risk that the specific identifiers presence or absence could be detected with
-SFINAE trickery (such as the recently adopted <tt>void_t</tt>) which may be observable through an ABI,
-but such concerns would inhibit all changes to the standard library, and would be considered an even lower
-risk than usual in this case, as the names are intended only for compatibility with code that predates the
-discovery of SFINAE-based reflection.
+None of the functions are virtual, so there should be no ABI compatibilty
+issues.  As with any library change, there is always a risk that the specific
+identifiers presence or absence could be detected with SFINAE trickery (such as
+the recently adopted <tt>void_t</tt>) which may be observable through an ABI,
+but such concerns would inhibit all changes to the standard library, and would
+be considered an even lower risk than usual in this case, as the names are
+intended only for compatibility with code that predates the discovery of
+SFINAE-based reflection.
 </p>
 
 
 <h2><a name="5.0">V. Impact On the Standard</a></h2>
 
 <p>
-The impact on the standard is minimal, as no other part of the standard assumes these names exist.
+The impact on the standard is minimal, as no other part of the standard assumes
+these names exist.
 </p>
 
 
@@ -220,13 +245,26 @@ certain member functions to overload others on parameters of type <tt>seekdir</t
 </del></p>
 
 
+<p>
+Insert the following compatibility clause into Annex C:
+</p>
+
+<h3><ins><a name="6.1">C.4.2 Annex D: compatibility features [diff.cpp14.depr]</a></ins></h3>
+<p><ins>D.6</ins></p>
+<p><ins><b>Change:</b> Remove Old iostreams members [depr.ios.members].</ins></p>
+<p><ins><b>Rationale:</b> Redundant feature for compatiblity with pre-standard code has served its time.</ins></p>
+<p><ins><b>Effect on original feature:</b> A valid C++ 2014 program using these identifiers may be ill-formed
+in this International Standard.
+</ins></p>
+
+
 <h2><a name="7.0">VII. References</a></h2>
 <ul>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4086">N4086</a> Removing trigraphs??!, Richard Smith</li>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4168">N4168</a> Removing <tt>auto_ptr</tt>, Billy Baker</li>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4190">N4190</a> Removing <tt>auto_ptr</tt>, <tt>random_shuffle()</tt>, And Old <tt>&lt;functional&gt;</tt> Stuff, Stephan T. Lavavej</li>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0001r0.html">P0001R0</a> Remove Deprecated Use of the <tt>register</tt> Keyword</li>
-  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0002r0.html">P0002R2</a> Remove Deprecated <tt>operator++(bool)</tt></li>
+  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0002r0.html">P0002R0</a> Remove Deprecated <tt>operator++(bool)</tt></li>
 </ul>
 
 </body>
