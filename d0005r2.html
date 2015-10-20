@@ -53,7 +53,8 @@
 <li><a href="#0.0">Revision History</a></li>
   <ul>
   <li><a href="#0.1">Revision 0</a></li>
-  <li><a href="#0.1">Revision 1</a></li>
+  <li><a href="#0.2">Revision 1</a></li>
+  <li><a href="#0.3">Revision 2</a></li>
   </ul>
 <li><a href="#1.0">Introduction</a></li>
 <li><a href="#2.0">Recommended for Immediate Adoption</a></li>
@@ -77,12 +78,12 @@
 
 <h2><a name="0.0">Revision History</a></h2>
 
-<h3>Revision 0</h3>
+<h3><a name="0.1">Revision 0</a></h3>
 <p>
 Original version of the paper for the 2015 pre-Kona mailing.
 </p>
 
-<h3>Revision 1</h3>
+<h3><a name="0.2">Revision 1</a></h3>
 <p>
 Revised to follow
 <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0090r0.htm">P0090R0</a>,
@@ -97,9 +98,9 @@ Established precedent for removing features from the standard without a
 period of deprecation.
 </p>
 
-<h3>Revision 2</h3>
+<h3><a name="0.3">Revision 2</a></h3>
 <p>
-LEWG review suggests we should keep the <tt>result_type</tt> typedef for
+LEWG review recommends we should keep the <tt>result_type</tt> typedef for
 <tt>std::hash</tt> and <tt>std::function</tt>.
 </p>
 
@@ -958,9 +959,9 @@ expressions with user-specified return types in <b>20.9.10.3
 </p>
 
 <blockquote>
-7 <i>Returns:</i> A forwarding call wrapper <tt>g</tt> <del>with a nested type
-<tt>result_type</tt> defined as a synonym for <tt>R</tt></del>. The effect of
-<tt>g(u1, u2, ..., uM)</tt> shall be
+7 <i>Returns:</i> A forwarding call wrapper <tt>g</tt> <ins>(20.9.2)</ins><del>
+with a nested type <tt>result_type</tt> defined as a synonym for <tt>R</tt></del>.
+The effect of <tt>g(u1, u2, ..., uM)</tt> shall be
 <tt><i>INVOKE</i>(fd, std::forward&lt;V1&gt;(v1), std::forward&lt;V2&gt;(v2), ..., std::forward&lt;VN&gt;(vN), R)</tt>,
 where the values and types of the bound arguments <tt>v1, v2, ..., vN</tt> are
 determined as specified below.  The copy constructor and move constructor of
@@ -1161,7 +1162,8 @@ namespace std {
 
 <p>
 Add a new section under C.4 [diff.cpp14], between <b>C.4.1 [diff.cpp14.lex]</b>
-and <b>C.4.2 [diff.cpp14.depr]</b>: </p>
+and <b>C.4.2 [diff.cpp14.depr]</b>:
+</p>
 
 <blockquote>
 <h3><ins>C.4.x Clause 20: general utilities library [diff.cpp14.utilities]</ins></h3>
