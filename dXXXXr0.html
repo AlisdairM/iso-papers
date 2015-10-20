@@ -1,0 +1,211 @@
+<html>
+
+<head>
+<title>Remove 'not_fn' from Library Fundamentals 2</title>
+<style type="text/css">
+  p {text-align:justify}
+  li {text-align:justify}
+  blockquote.note
+  {
+    background-color:#E0E0E0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+  ins {background-color:#A0FFA0}
+  del {background-color:#FFA0A0}
+</style>
+</head>
+
+<body>
+<table>
+<tr>
+  <td align="left">Doc. no.</td>
+  <td align="left">DxxxxR0</td>
+</tr>
+<tr>
+  <td align="left">Date:</td>
+  <td align="left">2015-10-20</td>
+</tr>
+<tr>
+  <td align="left">Project:</td>
+  <td align="left">Programming Language C++</td>
+</tr>
+<tr>
+  <td align="left">Reply to:</td>
+  <td align="left">Alisdair Meredith &lt;<a href="mailto:ameredith1@bloomberg.net">ameredith1@bloomberg.net</a>&gt;</td>
+</tr>
+</table>
+
+<h1>Remove <tt>not_fn</tt> from Library Fundamentals</tt></h1>
+
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#0.0">Revision History</a></li>
+  <ul>
+  <li><a href="#0.1">Revision 0</a></li>
+  </ul>
+<li><a href="#1.0">Introduction</a></li>
+<li><a href="#2.0">Rationale</a></li>
+<li><a href="#3.0">Proposed Wording</a></li>
+<li><a href="#4.0">References</a></li>
+</ul>
+
+
+<h2><a name="1.0">Introduction</h2>
+<p>
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0005r2.html">P0005R2</a>
+adopts the <tt>not_fn</tt> library from the Library Fundamentals 2 draft, which
+has not yet been sent to ballot.  This proposal removes that component from the
+draft.
+</p>
+
+
+<h2><a name="2.0">Rationale</h2>
+<p>
+Once the <tt>not_fn</tt> component is part of the C++17 draft, experience is
+that many standard libraries will provide early access in an experimental build
+mode, which would make the early availability in the TS redundant.  There is a
+mild risk from having multiple ways to access the same functionality, in particular
+making code using the feature detect macro un-necessarily complicated.  The
+preference is to avoid raising the potential problem in the first place.
+</p>
+
+
+<h2><a name="3.0">Proposed Wording</h2>
+<p>
+The following edits are all relative to the Library Fundmantals 2 draft
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4529.html">N4529</a>.
+</p>
+
+<p>
+Strike the reference to <tt>not_fn</tt> from Table 2:
+</p>
+<blockquote>
+<table>
+<tr>
+  <td><b>Doc. No.</b></td>
+  <td><b>Title</b></td>
+  <td><b>Primary Section</b></td>
+  <td><b>Macro Name Suffix</b></td>
+  <td><b>Value</b></td>
+  <td><b>Header</b></td>
+</tr>
+<tr><td>...</td></tr>
+<tr>
+  <td>N3905</td>
+  <td>Extending <tt>std::search</tt> to use Additional Searching Algorithms</td>
+  <td>4.3</td>
+  <td><tt>boyer_moore_searching</tt></td>
+  <td>201411</td>
+  <td><tt>&lt;experimental/functional&gt;</tt></td>
+</tr>
+<tr>
+  <td><del>N4076</del></td>
+  <td><del>A proposal to add a generalized callable negator</del></td>
+  <td><del>4.4</del></td>
+  <td><del><tt>not_fn</tt></del></td>
+  <td><del>201406</del></td>
+  <td><del><tt>&lt;experimental/functional&gt;</tt></del></td>
+</tr>
+<tr>
+  <td>N3672, N3793</td>
+  <td>A utility class to represent optional objects</td>
+  <td>5</td>
+  <td><tt>optional</tt></td>
+  <td>201411</td>
+  <td><tt>&lt;experimental/optional&gt;</tt></td>
+</tr>
+<tr><td>...</td></tr>
+
+</table>
+</blockquote>
+
+
+<p>
+Strike the reference to <tt>not_fn</tt> from the
+<tt>&lt;experimental/functional&gt;</tt> header synopsis:
+</p>
+<blockquote><pre>
+#include &lt;functional&gt;
+
+namespace std {
+  namespace experimental {
+  inline namespace fundamentals_v2 {
+
+    <i>// ...</i>
+
+    <del><i>// 4.4, Function template not_fn</i></del>
+    <del>template &lt;class F&gt; unspecified not_fn(F&amp;&amp; f);</del>
+
+  } <i>// namespace fundamentals_v2</i>
+  } <i>// namespace experimental</i>
+
+  template&lt;class R, class... ArgTypes, class Alloc&gt;
+  struct uses_allocator&lt;experimental::function&lt;R(ArgTypes...)&gt;, Alloc&gt;;
+
+} <i>// namespace std</i>
+</pre></blockquote>
+
+
+<p>
+Strike clause <b>4.4 [func.not_fn]</b>:
+</p>
+<blockquote>
+<h3><del>4.4 Function template not_fn [func.not_fn]</del></h3>
+<p><pre>
+<del>1 template &lt;class F&gt; <i>unspecified</i> not_fn(F&amp;&amp; f);</del>
+</pre></p>
+<blockquote>
+<p><del>
+2 In the text that follows:
+</del><p>
+<ul>
+<li><del><tt>FD</tt> is the type <tt>decay_t&lt;F&gt;</tt>,</li></del>
+<li><del><tt>fd</tt> is an lvalue of type <tt>FD</tt> constructed from <tt>std::forward&lt;F&gt;(f)</tt>,</li></del>
+<li><del><tt>fn</tt> is a forwarding call wrapper created as a result of <tt>not_fn(f)</tt>,</li></del>
+</ul>
+
+<p><del>
+3 <i>Requires:</i>
+<tt>is_constructible&lt;FD, F&gt;::value</tt> shall be <tt>true</tt>.
+<tt>fd</tt> shall be a callable object (C++14 §20.9.1).
+</del></p>
+<p><del>
+4 <i>Returns:</i>
+A forwarding call wrapper <tt>fn</tt> such that the expression
+<tt>fn(a1, a2, ..., aN)</tt> is equivalent to
+<tt>!<i>INVOKE</i>(fd, a1, a2, ..., aN)</tt> (C++14 §20.9.2).
+</del></p>
+<p><del>
+5 <i>Throws:</i>
+Nothing unless the construction of <tt>fd</tt> throws an exception.
+</del></p>
+<p><del>
+6 <i>Remarks:</i>
+The return type shall satisfy the requirements of <tt>MoveConstructible</tt>.
+If <tt>FD</tt> satisfies the requirements of <tt>CopyConstructible</tt>, then
+the return type shall satisfy the requirements of <tt>CopyConstructible</tt>.
+[ <i>Note:</i> This implies that <tt>FD</tt> is MoveConstructible. —
+<i>end note</i> ]
+</del></p>
+<p><del>
+7 [ <i>Note:</i> Function template <tt>not_fn</tt> can usually provide a better
+solution than using the negators <tt>not1</tt> and <tt>not2</tt> — <i>end
+note</i> ]
+</del></p>
+</blockquote>
+</blockquote>
+
+
+
+<h2><a name="4.0">References</h2>
+<ul>
+ <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0005r2.html">P0005R2</a>
+     Adopt 'not_fn' from Library Fundamentals 2 for C++17, Alisdair Meredith, Stephan T. Lavavej, Tomasz Kamiński</li>
+</ul>
+
+
+</body>
+</html>

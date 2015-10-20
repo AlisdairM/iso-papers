@@ -316,10 +316,10 @@ standardization: <tt>auto_ptr</tt>, <tt>bind1st</tt>, <tt>bind2nd</tt>,
 <tt>random_shuffle</tt>, <tt>unary_function</tt>, and <tt>binary_function</tt>.
 </ins></p>
 <p><ins>
-It is <del>implementation-defined</del><ins>unspecified</ins> whether function
-objects in the C++ standard library additionally provide the following
-typedefs: <tt>result_type</tt>, <tt>argument_type</tt>,
-<tt>first_argument_type</tt>, and <tt>second_argument_type</tt>.
+It is unspecified whether function objects in the C++ standard library
+additionally provide the following typedefs: <tt>result_type</tt>,
+<tt>argument_type</tt>, <tt>first_argument_type</tt>, and
+<tt>second_argument_type</tt>.
 </ins></p>
 </blockquote>
 
@@ -899,7 +899,7 @@ respectively, and return their complements (5.3.1).
 </ins><p>
 <ul>
 <li><ins><tt>FD</tt> is the type <tt>decay_t&lt;F&gt;</tt>,</li></ins>
-<li><ins><tt>fd</tt> is an lvalue of type FD constructed from <tt>std::forward&lt;F&gt;(f)</tt>,</li></ins>
+<li><ins><tt>fd</tt> is an lvalue of type <tt>FD</tt> constructed from <tt>std::forward&lt;F&gt;(f)</tt>,</li></ins>
 <li><ins><tt>fn</tt> is a forwarding call wrapper created as a result of <tt>not_fn(f)</tt>,</li></ins>
 </ul>
 
@@ -982,8 +982,8 @@ Strike the unnecessary typedefs from the unspecified return-type of
 template&lt;class R, class T&gt; <i>unspecified</i> mem_fn(R T::* pm);
 </pre></blockquote>
 <p>
-1 <i>Returns:</i> A simple call wrapper (20.9.1) fn such that the expression
-<tt>fn(t, a2, ..., aN)</tt> is equivalent to
+1 <i>Returns:</i> A simple call wrapper (20.9.1) <tt>fn</tt> such that the
+expression <tt>fn(t, a2, ..., aN)</tt> is equivalent to
 <tt><i>INVOKE</i> (pm, t, a2, ..., aN)</tt> (20.9.2). <del><tt>fn</tt> shall
 have a nested type <tt>result_type</tt> that is a synonym for the return type
 of <tt>pm</tt> when <tt>pm</tt> is a pointer to member function.</del>
@@ -1170,8 +1170,8 @@ and <b>C.4.2 [diff.cpp14.depr]</b>:
 
 <p><ins>
 <b>Change:</b> The typedefs <tt>result_type</tt>, <tt>argument_type</tt>,
-<tt>first_argument_type</tt>, and <tt>second_argument_type</tt> are not defined
-by function objects.
+<tt>first_argument_type</tt>, and <tt>second_argument_type</tt> might not be
+defined some by function objects.
 </ins></p>
 <p><ins>
 <b>Rationale:</b> Superseded by new features, including <tt>decltype</tt> and
@@ -1199,6 +1199,8 @@ Standard.
 </blockquote>
 
 
+
+<h4>DRAFT THIS SEPARATELY</tt>
 <p>
 Optionally excise clause 3 from the Library Fundamentals 2 TS, as it is no
 longer required (section numbering per
