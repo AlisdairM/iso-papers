@@ -38,13 +38,33 @@
 </tr>
 </table>
 
+<h2><a name="0.0">Revision History</a></h2>
+
+<h3><a name="0.1">Revision 0</a></h3>
+<p>
+Original version of the paper for the 2015 pre-Kona mailing.
+</p>
+
+<h3><a name="0.2">Revision 1</a></h3>
+<p>
+Revisions following core wording review:
+</p>
+<ul>
+  <li>C++14 compatibility clause should refer to an lvalue, not an xvalue.</li>
+</ul>
+
+
 <h1>Remove Deprecated <tt>operator++(bool)</tt></h1>
 
 <h2>I. Table of Contents</h2>
 
 <h2><a name="1.0">I. Table of Contents</a></h2>
 <ul>
-<li><a href="#1.0">I. Table of Contents</a></li>
+<li><a href="#0.0">Revision History</a></li>
+<ul>
+  <li><a href="#0.1">Revision 0</a></li>
+  <li><a href="#0.2">Revision 1</a></li>
+</ul>
 <li><a href="#2.0">II. Introduction</a></li>
 <li><a href="#3.0">III. Motivation and Scope</a></li>
 <li><a href="#4.0">IV. Impact On the Standard</a></li>
@@ -98,6 +118,12 @@ feature, and we must already accomodate the fact that the <tt>--</tt> operator h
 supported for <tt>bool</tt>.
 </p>
 
+<p>
+It was noted that this might affect compatiblity with C when the <tt>&lt;stdbool.h</tt> header
+is included, but there is already a compability concern that <tt>operator--</tt> was never
+supported for <tt>bool<tt> so we defer any discussion of updating the C compatiblity Annex to
+a pending Core issue that will be opened for this topic.
+</p>
 
 <h2><a name="5.0">V. Design Decisions</a></h2>
 
@@ -164,12 +190,6 @@ Make the following edits:
     <i>VQ T</i>&amp; operator++(<i>VQ T</i>&amp;);
     <i>T</i> operator++(<i>VQ T</i>&amp;, int);
 </tt></pre>
-
-<h3><ins><a name="6.4">C??? compatibility features [diff.???.depr]</a></ins></h3>
-<note>
-C99/11 introduces <tt>operator--</tt> for <tt>_Bool</tt> that flips the state (rather than
-sets to <tt>false</tt>) and adds the C++ <tt>operator++</tt>
-</note>
 
 <h3><ins><a name="6.4">C.4.2 Annex D: compatibility features [diff.cpp14.depr]</a></ins></h3>
 <p><ins>D.1</ins></p>
