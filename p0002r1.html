@@ -22,11 +22,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0002R0</td>
+  <td align="left">P0002R1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2015-09-28</td>
+  <td align="left">2015-10-21</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -38,13 +38,35 @@
 </tr>
 </table>
 
+<h2><a name="0.0">Revision History</a></h2>
+
+<h3><a name="0.1">Revision 0</a></h3>
+<p>
+Original version of the paper for the 2015 pre-Kona mailing.
+</p>
+
+<h3><a name="0.2">Revision 1</a></h3>
+<p>
+Revisions following core wording review:
+</p>
+<ul>
+  <li>operator++ should is not available for <i>cv</i> qualified <tt>bool</tt></li>
+  <li>C++14 compatibility clause should refer to an lvalue, not an xvalue.</li>
+  <li>Editorial nits</li>
+</ul>
+
+
 <h1>Remove Deprecated <tt>operator++(bool)</tt></h1>
 
 <h2>I. Table of Contents</h2>
 
 <h2><a name="1.0">I. Table of Contents</a></h2>
 <ul>
-<li><a href="#1.0">I. Table of Contents</a></li>
+<li><a href="#0.0">Revision History</a></li>
+<ul>
+  <li><a href="#0.1">Revision 0</a></li>
+  <li><a href="#0.2">Revision 1</a></li>
+</ul>
 <li><a href="#2.0">II. Introduction</a></li>
 <li><a href="#3.0">III. Motivation and Scope</a></li>
 <li><a href="#4.0">IV. Impact On the Standard</a></li>
@@ -98,6 +120,12 @@ feature, and we must already accomodate the fact that the <tt>--</tt> operator h
 supported for <tt>bool</tt>.
 </p>
 
+<p>
+It was noted that this might affect compatiblity with C when the <tt>&lt;stdbool.h&gt;</tt> header
+is included, but there is already a compability concern that <tt>operator--</tt> was never
+supported for <tt>bool</tt> so we defer any discussion of updating the C compatiblity Annex to
+a pending Core issue that will be opened for this topic.
+</p>
 
 <h2><a name="5.0">V. Design Decisions</a></h2>
 
@@ -134,8 +162,8 @@ Make the following edits:
 1 The value of a postfix <tt>++</tt> expression is the value of its operand.
  [<i>Note:</i> the value obtained is a copy of the original value <i>—end note</i>]
  The operand shall be a modifiable lvalue.
- The type of the operand shall be an arithmetic type <ins>other than <tt>bool</tt>,</ins> or a pointer to a complete object type.
- The value of the operand object is modified by adding 1 to it<ins>.</ins>
+ The type of the operand shall be an arithmetic type <ins>other than <i>cv</i> <tt>bool</tt>,</ins>
+ or a pointer to a complete object type. The value of the operand object is modified by adding 1 to it<ins>.</ins>
  <del>, unless the object is of type <tt>bool</tt>, in which case it is set to <tt>true</tt>.
  [<i>Note:</i> this use is deprecated, see Annex D. <i>—end note</i>]</del>
  The value computation of the <tt>++</tt> expression is sequenced before the modification of the operand object.
@@ -151,13 +179,18 @@ Make the following edits:
 <h3><a name="6.2">5.3.2 Increment and decrement [expr.pre.incr]</a></h3>
 <p>
 1 The operand of prefix <tt>++</tt> is modified by adding 1<del>, or set to true if it is bool (this use is deprecated)</del>.
-  The operand shall be a modifiable lvalue. The type of the operand shall be an arithmetic type <ins>other than <tt>bool</tt>,</ins>
-  or a pointer to a completely-defined object type.
+  The operand shall be a modifiable lvalue. The type of the operand shall be an arithmetic type
+  <ins>other than <i>cv</i> <tt>bool</tt>,</ins> or a pointer to a completely-defined object type.
+</p>
+<p>
+2 The operand of prefix <tt>--</tt> is modified by subtracting 1. <del>The operand shall not be of type <tt>bool</tt>.</del>
+  The requirements on the operand of prefix <tt>--</tt> and the properties of its result are otherwise the same as those of
+  prefix <tt>++</tt>. [ <i>Note:</i> For postfix increment and decrement, see 5.2.6. <i>— end note</i> ]
 </p>
 
 <h3><a name="6.3">13.6 Built-in operators [over.built]</a></h3>
 <p>
-3 For every pair <i>(T, VQ)</i>, where <i>T</i> is an arithmetic type<ins> other than <i>bool</i></ins>,
+3 For every pair <i>(T, VQ)</i>, where <i>T</i> is an arithmetic type<ins> other than <tt>bool</tt></ins>,
   and <i>VQ</i> is either <tt>volatile</tt> or empty, there exist candidate operator functions of the form
 </p>
 <pre><tt>
@@ -168,10 +201,10 @@ Make the following edits:
 <h3><ins><a name="6.4">C.4.2 Annex D: compatibility features [diff.cpp14.depr]</a></ins></h3>
 <p><ins>D.1</ins></p>
 <p><ins><b>Change:</b> Remove increment operator with <tt>bool</tt> operand [depr.incr.bool].</ins></p>
-<p><ins><b>Rationale:</b> Obsolete feature with occassionally surprising semantics.</ins></p>
+<p><ins><b>Rationale:</b> Obsolete feature with occasionally surprising semantics.</ins></p>
 <p><ins><b>Effect on original feature:</b> A valid C++ 2014 expression utilizing the increment operator
-on a <tt>bool</tt> xvalue is ill-formed in this International Standard.  Note that this might occur
-when the xvalue has a type given by a template parameter.</ins></p>
+on a <tt>bool</tt> lvalue is ill-formed in this International Standard.  Note that this might occur
+when the lvalue has a type given by a template parameter.</ins></p>
 
 <h3><a name="6.5"><del>
 D.1 Increment operator with <tt>bool</tt> operand [depr.incr.bool]</b></del></a></h3>

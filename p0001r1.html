@@ -22,11 +22,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0001R0</td>
+  <td align="left">P0001R1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2015-09-28</td>
+  <td align="left">2015-10-21</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -38,10 +38,34 @@
 </tr>
 </table>
 
+<h2><a name="0.0">Revision History</a></h2>
+
+<h3><a name="0.1">Revision 0</a></h3>
+<p>
+Original version of the paper for the 2015 pre-Kona mailing.
+</p>
+
+<h3><a name="0.2">Revision 1</a></h3>
+<p>
+Revisions following core wording review:
+</p>
+<ul>
+  <li>Added compatibility-with-C clause.</li>
+  <li>C++14 compatibility rationale explicitly mentions why the deprecated feature
+      is removed, rather than why the keyword is preserved (it is obviously preserved
+      if it is not removed!)</li>
+</ul>
+
+
 <h1>Remove Deprecated Use of the <tt>register</tt> Keyword</tt></h1>
 
 <h2><a name="1.0">I. Table of Contents</a></h2>
 <ul>
+<li><a href="#0.0">Revision History</a></li>
+<ul>
+  <li><a href="#0.1">Revision 0</a></li>
+  <li><a href="#0.2">Revision 1</a></li>
+</ul>
 <li><a href="#1.0">I. Table of Contents</a></li>
 <li><a href="#2.0">II. Introduction</a></li>
 <li><a href="#3.0">III. Motivation and Scope</a></li>
@@ -62,8 +86,9 @@
   <li><a href="#6.5">8.3 Meaning of declarators [dcl.meaning]</a></li>
   <li><a href="#6.6">9.2 Class members [class.mem]</a></li>
   <li><a href="#6.7">A.6 Declarations [gram.dcl]</a></li>
-  <li><a href="#6.8">C.4.2 Clause 7: declarations [diff.cpp14.dcl.dcl]</a></li>
-  <li><a href="#6.9">D.2 <tt>register</tt> keyword [depr.register]</a></li>
+  <li><a href="#6.8">C.1.6 Clause 7: declarations [diff.dcl]</a></h3>
+  <li><a href="#6.9">C.4.2 Clause 7: declarations [diff.cpp14.dcl.dcl]</a></li>
+  <li><a href="#6.10">D.2 <tt>register</tt> keyword [depr.register]</a></li>
 </ul>
 <li><a href="#7.0">VII. Acknowledgements</a></li>
 <li><a href="#8.0">VIII. References</a></li>
@@ -350,15 +375,27 @@ the <tt>thread_local</tt> <i>storage-class-specifier</i> unless also declared <t
             mutable</tt>
 </pre>
 
-<h3><ins><a name="6.8">C.4.2 Clause 7: declarations [diff.cpp14.dcl.dcl]</a></ins></h3>
+<h3><ins><a name="6.8">C.1.6 Clause 7: declarations [diff.dcl]</a></ins></h3>
+<p><ins>7.1.1</ins></p>
+<p><ins><b>Change:</b> In C++, <tt>register</tt> is not a storage class specifier.</ins></p>
+<p><ins><b>Rationale:</b> The storage class specifier had no effect in C++.</ins></p>
+<p><ins><b>Effect on original feature:</b> Deletion of semantically well-defined feature.</ins></p>
+<p><ins><b>Difficulty of converting:</b> Syntactic transformation.</ins></p>
+<p><ins><b>How widely used:</b> Common.</ins></p>
+
+
+<h3><ins><a name="6.9">C.4.2 Clause 7: declarations [diff.cpp14.dcl.dcl]</a></ins></h3>
+
 <p><ins>7.1.1</ins></p>
 <p><ins><b>Change:</b> Remove <tt>register</tt> <i>storage-class-specifier</i>.</ins></p>
-<p><ins><b>Rationale:</b> Preserve unused keyword for future revisions of this International Standard.</ins></p>
+<p><ins><b>Rationale:</b> Enable repurposing of deprecated keyword in future revisions of
+    this International Standard.</ins></p>
 <p><ins><b>Effect on original feature:</b> A valid C++ 2014 declaration utilizing the
 <tt>register</tt> <i>storage-class-specifier</i> is ill-formed in this International Standard.
 The specifier can simply be removed to retain the original meaning.</ins></p>
 
-<h3><del><a name="6.9">D.2 <tt>register</tt> keyword [depr.register]</a></del></h3>
+
+<h3><del><a name="6.10">D.2 <tt>register</tt> keyword [depr.register]</a></del></h3>
 <p><del>
 1 The use of the <tt>register</tt> keyword as a <i>storage-class-specifier</i> (7.1.1) is deprecated.
 </del></p>
