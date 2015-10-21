@@ -100,8 +100,14 @@ period of deprecation.
 
 <h3><a name="0.3">Revision 2</a></h3>
 <p>
-LEWG review recommends we should keep the <tt>result_type</tt> typedef for
-<tt>std::hash</tt> and <tt>std::function</tt>.
+LEWG review recommended we should keep the <tt>result_type</tt> typedef for
+<tt>std::function</tt>.
+</p>
+<p>
+At LWG recommendation, renamed the <tt>fn</tt> term used in the specification
+of <tt>not_fn</tt> with <tt>g</tt>, the same name used in the <tt>bind</tt>
+specification, to minimize confusion with the term <tt>fd</tt> used in the
+same paragraphs.
 </p>
 
 
@@ -207,7 +213,10 @@ and recommend the removal <i>weak result type</i> and related uses of
 One final wrinkle is that, based on review in Library Evolution, and feedback
 from those still actively using the feature, the <tt>result_type</tt> typedef
 should be retained for the two class templates <tt>std::hash</tt> and
-<tt>std::function</tt>.
+<tt>std::function</tt>.  After further review, noting that the <tt>Hash</tt>
+concept for user-supplied hashing functors makes no requirement for
+<tt>result_type</tt>, it was recommended that <tt>result_type</tt> be retained
+for only <tt>std::function</tt>.
 </p>
 
 <h3><a name="3.3">Allow Vendors to Support Customers</a></h3>
@@ -900,7 +909,7 @@ respectively, and return their complements (5.3.1).
 <ul>
 <li><ins><tt>FD</tt> is the type <tt>decay_t&lt;F&gt;</tt>,</li></ins>
 <li><ins><tt>fd</tt> is an lvalue of type <tt>FD</tt> constructed from <tt>std::forward&lt;F&gt;(f)</tt>,</li></ins>
-<li><ins><tt>fn</tt> is a forwarding call wrapper created as a result of <tt>not_fn(f)</tt>,</li></ins>
+<li><ins><tt>g</tt> is a forwarding call wrapper created as a result of <tt>not_fn(f)</tt>,</li></ins>
 </ul>
 
 <p><ins>
@@ -910,8 +919,8 @@ respectively, and return their complements (5.3.1).
 </ins></p>
 <p><ins>
 3 <i>Returns:</i>
-A forwarding call wrapper <tt>fn</tt> such that the expression
-<tt>fn(a1, a2, ..., aN)</tt> is equivalent to
+A forwarding call wrapper <tt>g</tt> such that the expression
+<tt>g(a1, a2, ..., aN)</tt> is equivalent to
 <tt>!<i>INVOKE</i>(fd, a1, a2, ..., aN)</tt> (§20.9.2).
 </ins></p>
 <p><ins>
@@ -990,10 +999,10 @@ of <tt>pm</tt> when <tt>pm</tt> is a pointer to member function.</del>
 </p>
 <p><del>
 2 The simple call wrapper shall define two nested types named
-<tt>argument_type</tt> and <tt>result_type</tt> as synonyms for <tt><i>cv</i>
-T*</tt> and <tt>Ret</tt>, respectively, when <tt>pm</tt> is a pointer to member
-function with <i>cv</i>-qualifier <i>cv</i> and taking no arguments, where
-<tt>Ret</tt> is <tt>pm</tt>'s return type.
+<tt>argument_type</tt> and <tt>result_type</tt> as synonyms for
+<tt><i>cv</i> T*</tt> and <tt>Ret</tt>, respectively, when <tt>pm</tt> is a
+pointer to member function with <i>cv</i>-qualifier <i>cv</i> and taking no
+arguments, where <tt>Ret</tt> is <tt>pm</tt>'s return type.
 </del></p>
 <p><del>
 3 The simple call wrapper shall define three nested types named
@@ -1056,15 +1065,14 @@ the function call argument type, the <tt>DefaultConstructible</tt> requirements
 <p>
 (1.2) — be swappable (17.6.3.2) for lvalues,
 </p>
+<p><del>
+(1.3) — provide two nested types <tt>result_type</tt> and
+<tt>argument_type</tt> which shall be synonyms for <tt>size_t</tt> and
+<tt>Key</tt>, respectively,
+</del></p>
 <p>
-(1.3) — provide <del>two</del><ins>the</ins> nested type<del>s</del>
-<tt>result_type</tt> <del>and <tt>argument_type</tt></del> which shall be
-<ins>a</ins> synonym<del>s</del> for <tt>size_t</tt><del> and <tt>Key</tt>,
-respectively</del>,
-</p>
-<p>
-(1.4) — satisfy the requirement that if <tt>k1 == k2</tt> is true, <tt>h(k1) ==
-h(k2)</tt> is also true, where <tt>h</tt> is an object of type
+(1.4) — satisfy the requirement that if <tt>k1 == k2</tt> is true,
+<tt>h(k1) == h(k2)</tt> is also true, where <tt>h</tt> is an object of type
 <tt>hash&lt;Key&gt;</tt> and <tt>k1</tt> and <tt>k2</tt> are objects of type
 <tt>Key</tt>;
 </p>
@@ -1171,7 +1179,7 @@ and <b>C.4.2 [diff.cpp14.depr]</b>:
 <p><ins>
 <b>Change:</b> The typedefs <tt>result_type</tt>, <tt>argument_type</tt>,
 <tt>first_argument_type</tt>, and <tt>second_argument_type</tt> might not be
-defined some by function objects.
+defined by some function objects.
 </ins></p>
 <p><ins>
 <b>Rationale:</b> Superseded by new features, including <tt>decltype</tt> and
@@ -1185,7 +1193,7 @@ may fail to compile in this International Standard.
 <p><ins>
 <b>Change:</b> The class templates <tt>unary_negate</tt> and
 <tt>binary_negate</tt> and the function templates <tt>not1</tt> and
-<tt>not2</tt> are not defined.
+<tt>not2</tt> might not be defined.
 </ins></p>
 <p><ins>
 <b>Rationale:</b> Superseded by new features, including generic lambdas and the
@@ -1197,15 +1205,6 @@ templates and function templates may fail to compile in this International
 Standard.
 </ins></p>
 </blockquote>
-
-
-
-<h4>DRAFT THIS SEPARATELY</tt>
-<p>
-Optionally excise clause 3 from the Library Fundamentals 2 TS, as it is no
-longer required (section numbering per
-<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4481.html">n4481</a>).
-</p>
 
 
 <h2><a name="7.0">References</h2>
