@@ -308,7 +308,7 @@ between 20.2.4 // foward/move, and 20.2.5 // declval:
 </p>
 <p><pre>
     <ins>template &lt;class T&gt; constexpr add_const_t&lt;T&gt;&amp; as_const(T&amp; t) noexcept;</ins>
-    <ins>template &lt;class T&gt; constexpr void as_const(const T&amp;&amp; t) = delete;</ins>
+    <ins>template &lt;class T&gt; void as_const(const T&amp;&amp; t) = delete;</ins>
 </pre></p>
 
 <p>
@@ -316,7 +316,7 @@ Insert the following subclause between <b>20.2.4 forward/move helpers [forward]<
 <b>20.2.5 Function template declval [declval]</b>:
 <p>
 
-<h3><ins>20.2.x <tt>const</tt>-casting utility   [utility.const.cast]</ins></h3>
+<h3><ins>20.2.x Function template <tt>as_const</tt>   [utility.as_const]</ins></h3>
 <p><pre>
     <ins>template &lt;class T&gt; constexpr add_const_t&lt;T&gt;&amp; as_const(T&amp; t) noexcept;</ins>
 </pre></p>
@@ -324,7 +324,12 @@ Insert the following subclause between <b>20.2.4 forward/move helpers [forward]<
 1 <i>Returns:</i>  <tt>t</tt>.
 </ins></p>
 
-<h2><a name="9.0">IX. Further Discussion</h2>
+<h2><a name="9.0">IX. Feature Detection Macros</h2>
+<p>
+For the purposes of SD-6, we recommend the feature detection macro <tt>__cpp_lib_as_const_function</tt>.
+</p>
+
+<h2><a name="10.0">X. Further Discussion</h2>
 
 <p>The above implementation only supports safely re-casting an l-value as <tt>const</tt>
 (even if it may have already been <tt>const</tt>).  It is probably desirable to have
