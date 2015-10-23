@@ -22,11 +22,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0007D1</td>
+  <td align="left">P0007R1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2015-10-19</td>
+  <td align="left">2015-10-22</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -304,11 +304,11 @@ namespace std
 <h2><a name="8.0">VIII. Proposed Wording</h2>
 <p>
 Insert the following signature into the <tt>&lt;utility&gt;</tt> synopsis,
-between 20.2.4 // foward/move, and 20.2.5 // declval:
+between 20.2.4 // forward/move, and 20.2.5 // declval:
 </p>
 <p><pre>
     <ins>template &lt;class T&gt; constexpr add_const_t&lt;T&gt;&amp; as_const(T&amp; t) noexcept;</ins>
-    <ins>template &lt;class T&gt; void as_const(const T&amp;&amp; t) = delete;</ins>
+    <ins>template &lt;class T&gt; void as_const(const T&amp;&amp;) = delete;</ins>
 </pre></p>
 
 <p>
@@ -329,45 +329,5 @@ Insert the following subclause between <b>20.2.4 forward/move helpers [forward]<
 For the purposes of SD-6, we recommend the feature detection macro <tt>__cpp_lib_as_const_function</tt>.
 </p>
 
-<h2><a name="10.0">X. Further Discussion</h2>
-
-<p>The above implementation only supports safely re-casting an l-value as <tt>const</tt>
-(even if it may have already been <tt>const</tt>).  It is probably desirable to have
-xvalues and prvalues also be usable with <code>as_const</code>, but there are some issues
-to consider.  Some examples of contexts we'd like to consider for an expanded
-proposal are:</p>
-
-<pre><code>std::string getString();
-auto &amp;x= as_const( getString() );
-auto &amp;x= const_cast&lt; const std::string &amp; &gt;( getString() );
-
-
-void function( std::string &amp; );
-void function( const std::string &amp; );
-
-function( as_const( getString() ) );
-</code></pre>
-
-<p>An alternative implementation which would support all of the forms used above,
-would be:</p>
-
-<pre><code>template&lt; typename T &gt;
-inline const T &amp;
-as_const( const T&amp; t ) noexcept
-{
-    return t;
-}
-
-template&lt; typename T &gt;
-inline const T
-as_const( T &amp;&amp;t ) noexcept( noexcept( T( t ) ) )
-{
-    return t;
-}
-</code></pre>
-
-<p>We believe that such an implementation helps to deal with lifetime extension
-issues for temporaries which are captured by <code>as_const</code>, but we have not fully
-examined all of the implications of these forms.  We are open to expanding
-the scope of this proposal, but we feel that the utility of a simple-to-use
-<code>as_const</code> is sufficient even without the expanded semantics.</p>
+</body>
+</html>
