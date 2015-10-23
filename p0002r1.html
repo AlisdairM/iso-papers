@@ -26,7 +26,7 @@
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2015-10-21</td>
+  <td align="left">2015-10-23</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -73,6 +73,7 @@ Revisions following core wording review:
 <li><a href="#5.0">V. Design Decisions</a></li>
 <li><a href="#6.0">VI. Technical Specification</a></li>
 <ul>
+  <li><a href="#6.00">5 Expressions [expr]</a></li>
   <li><a href="#6.1">5.2.6 Increment and decrement [expr.post.incr]</a></li>
   <li><a href="#6.2">5.3.2 Increment and decrement [expr.pre.incr]</a></li>
   <li><a href="#6.3">13.6 Built-in operators [over.built]</a></li>
@@ -155,6 +156,19 @@ the author, deferring final choice to the Core wording review.
 
 <p>
 Make the following edits:
+</p>
+
+<h3><a name="6.00">5 Expressions [expr]</a></h3>
+<p>
+2 [ <i>Note</i>: Operators can be overloaded, that is, given meaning when
+applied to expressions of class type (Clause 9) or enumeration type (7.2). Uses
+of overloaded operators are transformed into function calls as described in
+13.5.  Overloaded operators obey the rules for syntax specified in Clause 5,
+but the requirements of operand type, value category, and evaluation order are
+replaced by the rules for function call. Relations between operators, such as
+<tt>++a</tt> meaning <tt>a+=1</tt>, are not guaranteed for overloaded operators
+(13.5)<del>, and are not guaranteed for operands of type <tt>bool</tt></del>.
+<i>- end note</i> ]
 </p>
 
 <h3><a name="6.1">5.2.6 Increment and decrement [expr.post.incr]</a></h3>
