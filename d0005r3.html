@@ -55,23 +55,47 @@
   <li><a href="#0.1">Revision 0</a></li>
   <li><a href="#0.2">Revision 1</a></li>
   <li><a href="#0.3">Revision 2</a></li>
+  <li><a href="#0.4">Revision 3</a></li>
   </ul>
 <li><a href="#1.0">Introduction</a></li>
 <li><a href="#2.0">Recommended for Immediate Adoption</a></li>
-<li><a href="#3.0">Remove Support for the Adaptable Function Protocol</a></li>
+<li><a href="#3.0">Deprecate Support for the Adaptable Function Protocol</a></li>
   <ul>
-  <li><a href="#3.1">Remove the Classic <tt>not1</tt> and <tt>not2</tt> Negators</a></li>
-  <li><a href="#3.2">Remove the <tt>typedef</tt>s that Support Adaptable Functions</a></li>
+  <li><a href="#3.1">Deprecate the Classic <tt>not1</tt> and <tt>not2</tt> Negators</a></li>
+  <li><a href="#3.2">Deprecate the <tt>typedef</tt>s that Support Adaptable Functions</a></li>
   <li><a href="#3.3">Allow Vendors to Support Customers</a></li>
-  <li><a href="#3.4">Precedents for Immediate Removal</a></li>
   </ul>
-<li><a href="#4.0">Future Extensions</a></li>
+ <li><a href="#4.0">Deprecate vs. Immediate Removal</a></li>
+ <li><a href="#5.0">Future Extensions</a></li>
   <ul>
-  <li><a href="#4.1"><tt>reference_wrapper</tt> for Incomplete Types</a></li>
-  <li><a href="#4.2">Negated <tt>bind</tt> Expressions</a></li>
+  <li><a href="#5.1"><tt>reference_wrapper</tt> for Incomplete Types</a></li>
+  <li><a href="#5.2">Negated <tt>bind</tt> Expressions</a></li>
   </ul>
-<li><a href="#5.0">Established Experience</a></li>
 <li><a href="#6.0">Proposed Wording</a></li>
+  <ul>
+  <li><a href="#6.0">Proposed Wording</a></li>
+  <li><a href="#6.1">17.6.4.3.x Zombie names [zombie.names]</a></li>
+  <li><a href="#6.2">20.8.2.4 Class template <tt>owner_less</tt>   [util.smartptr.ownerless]</a></li>
+  <li><a href="#6.3">20.9.2 Requirements [func.require]</a></li>
+  <li><a href="#6.4">20.9.4 Class template reference_wrapper   [refwrap]</a></li>
+  <li><a href="#6.5">20.9.5 Arithmetic operations [arithmetic.operations]</a></li>
+  <li><a href="#6.6">20.9.6 Comparisons   [comparisons]</a></li>
+  <li><a href="#6.7">20.9.7 Logical operations [logical.operations]</a></li>
+  <li><a href="#6.8">20.9.8 Bitwise operations [bitwise.operations]</a></li>
+  <li><a href="#6.9">20.9.9 Negators [negators]</a></li>
+  <li><a href="#6.10">20.9.9 Function template not_fn [func.not_fn]</a></h3>
+  <li><a href="#6.11">20.9.11 Function template <tt>mem_fn</tt>   [func.memfn]</a></li>
+  <li><a href="#6.12">20.9.12.2 Class template function   [func.wrap.func]</a></li>
+  <li><a href="#6.13">20.9.13 Class template hash  [unord.hash]</a></li>
+  <li><a href="#6.14">23.4.4.1 Class template <tt>map</tt> overview   [map.overview]</a></li>
+  <li><a href="#6.15">23.4.5.1 Class template <tt>multimap</tt> overview   [multimap.overview]</a></li>
+  <li><a href="#6.16">D.x Old Adaptable Function Bindings  [depr.func.adaptor.binding]</a></li>
+    <ul>
+    <li><a href="#6.16.1">D.x.1 Weak Result Types [depr.weak.result_type]</a></li>
+    <li><a href="#6.16.2">D.x.2 Typedefs to Support Function Binders [depr.func.adaptor.typedefs]</a></li>
+    <li><a href="#6.16.3">D.x.3 Negators [depr.negators]</a></li>
+    </ul>
+  </ul>
 <li><a href="#7.0">References</a></li>
 </ul>
 
@@ -113,58 +137,69 @@ same paragraphs.
 
 <h3><a name="0.4">Revision 3</a></h3>
 <p>
-Committee requested the old facility be deprecated rather than removed.
-Followed the precedent for deprecating member names set by
-<b>D.6 Old iostreams members [depr.ios.members]</b> in the preceding
-versions of the standard.
+Deprecate the remnants of the old adaptable function facility rather than
+remove it.  Drafting follows the precedent for deprecating member names set by
+<b>D.6 Old iostreams members [depr.ios.members]</b> in the preceding versions
+of the standard.
+</p>
+<p>
+Drop the paragraphs added to the compatiblity annex, and prune the list of names
+in the Zombie Names clause, as this revision does not remove any old names, and
+so creates no compatibility concerns.
 </p>
 
 
 <h2><a name="1.0">Introduction</a></h2>
 <p>
-This paper recommends moving the <tt>not_fn</tt> function binder immediately
-out of Library Fundamentals 2 TS, into the C++17 Working paper.  There are no
-parts of the Fundamentals TS that depend on this new component, and it serves a
-bigger purpose in the main standard, allowing the deprecation and removal of
-the last of the legacy function binder APIs.  It further recommends removing
-any remaining infrastructure to support the C++98 adaptable function binder
-protocol, that was mostly removed at the 2014 Urbana meeting.  </p>
+This paper recommends adopting the <tt>not_fn</tt> function binder from the
+Library Fundamentals TS v2 as a replacement for the old negators, <tt>not1</tt>
+and <tt>not2</tt>.  This enable the deprecation (and eventual removal) of
+the last parts of the legacy function binder APIs. 
+</p>
 <p>
 In the same mailing as revision 0 of this paper, Stephan Lavavej proposed
 removing the same typedefs, along with the <i>weak result type</i> wording that
 completed support for the deprecated (and removed) binders.  This paper agrees
 with that direction and merges his wording to form a single, votable paper.
-Stephan's proposal remains available if the committee prefer to remove the
-binder components without (yet) adopting the <tt>not_fn</tt> replacement.
+However, following review at the eKona meeting, this paper now advocates
+deprecation, rather than removal.
 </p>
-
+<p>
+Finally, Stephan's paper proposed a clause reserving names that are removed
+from the standard for <i>previous</i> standarization.  This allows vendors
+to continue supporting the features removed at the April 2015 meeting in
+Lenexa until a time of their own choosing, to better support their customers
+without violating a strict interpretation of the standard.
+</p>
 
 <h2><a name="2.0">Recommendation for Immediate Adoption</a></h2>
 <p>
-The function template <tt>not_fn</tt> is first proposed by Tomasz Kamiński for
-Library Fundamentals 2, and so has not yet been published.  However, there is
-extensive experience of this feature through the Boost library.  The main
-reason cited for putting this into Fundamentals 2, rather than directly into
-C++17, was to give users early access to the feature.  However, we are already
-seeing new C++17 library features available in the main standard library
-distributions, typically guarded by an experimental C++17 build mode flag.
+The function template <tt>not_fn</tt> was first proposed by Tomasz Kamiński for
+Library Fundamentals 2.  However, there is extensive experience of this feature
+through the Boost library.  The main reason cited for putting this into the
+Fundamentals TS v2, rather than directly into the C++ working draft, was to
+give users early access to the feature.  However, we are already seeing new
+C++17 library features available in the main standard library distributions,
+typically guarded by an experimental C++17 build mode flag, so barring any
+unexpected design issues, there is a strong argument to ship this library in
+both the Fundamentals TS and the draft standard.
 </p>
 <p>
-The benefit of adopting this library directly into the C++ Standard is that it
-is the necessary missing component to allow us to deprecate the legacy negator
-types, <tt>unary_negate</tt> and <tt>binary_negate</tt>, and the factory
-functions <tt>not1</tt> and <tt>not2</tt>.  These are the last two library
-components that depend on the adaptable function protocol of embedding typedefs
-in functor classes to support adaption.  The remaining facilities such as
-<tt>bind1st</tt> have already been removed, following their deprecation in
-C++11, and adopting <tt>not_fn</tt> would allow us to deprecate, and ultimately
-remove, this final legacy.
+The immediate benefit of adopting this library directly into the C++ Standard
+is that it is the necessary missing component to allow us to deprecate the
+legacy negator types, <tt>unary_negate</tt> and <tt>binary_negate</tt>, and the
+factory functions <tt>not1</tt> and <tt>not2</tt>.  These are the last two
+library components that depend on the adaptable function protocol of embedding
+typedefs in functor classes to support adaption.  The other such components
+from early standards (e.g., <tt>bind1st</tt>) have already been removed,
+following their deprecation in C++11.  Adopting <tt>not_fn</tt> would allow
+us to deprecate, and ultimately remove, this final legacy.
 </p>
 
 
-<h2><a name="3.0">Remove Support for the Adaptable Function Protocol</a></h2>
+<h2><a name="3.0">Deprecate Support for the Adaptable Function Protocol</a></h2>
 
-<h3><a name="3.1">Remove the Classic <tt>not1</tt> and <tt>not2</tt> Negators</a></h3>
+<h3><a name="3.1">Deprecate the Classic <tt>not1</tt> and <tt>not2</tt> Negators</a></h3>
 <p>
 Traditionally we would start a long deprecation process before removing
 supported library features such as <tt>not1</tt> and <tt>not2</tt>.  However,
@@ -181,7 +216,7 @@ older code in one transition, rather than making each new version of the
 standard a risk.
 </p>
 
-<h3><a name="3.2">Remove the <tt>typedef</tt>s that Support Adaptable Functions</a></h3>
+<h3><a name="3.2">Deprecate the <tt>typedef</tt>s that Support Adaptable Functions</a></h3>
 <p>
 Once the last of the classic binders are removed, then all of the support
 machinery created only for them should also be removed.  That means removing
@@ -241,17 +276,9 @@ of their choosing, rather than immediately on the release of the new standard.
 This will mitigate the previous removal of deprecated features like
 <tt>auto_ptr</tt>.
 </p>
-<p>
-This paper adopts Stephan's wording with the minor alteration that continued
-support of the adaptable function typedefs is unspecified, rather than
-implementation defined.  Stephan has a preference for his original wording,
-while Alisdair is concerned about mandating documentation for something outside
-the standard, so there should be at least some explicit LEWG guidance on which
-direction is preferred.
-</p>
 
 
-<h3><a name="3.4">Precedents for Immediate Removal</a></h3>
+<h2><a name="4.0">Deprecate vs. Immediate Removal</a></h2>
 <p>
 Removing a feature directly from the standard without a period of deprecation
 is unusual, but not without precedent.  C++11 removed exported templates and
@@ -259,11 +286,21 @@ the original meaning of the keyword <tt>auto</tt>.  C++14 removed <tt>gets</tt>
 and the implicit <tt>const</tt> on <tt>constexpr</tt> functions.  The C++17
 working draft has already removed support for trigraphs.
 </p>
+<p>
+It is not clear that the features proposed for deprecation in this paper reach
+the same bar of minimal impact on existing code.  For example, <tt>export</tt>
+was not implemented by most of the available compilers at the time of its
+immediate removal; code surveys of open source projects and large code bases
+confirmed that <tt>auto</tt> was not in widespread use; the removal of
+<tt>gets</tt> was deliberately intended to break existing usage of an unsafe
+function; code using trigraphs could easily be rewritten to not use trigraphs
+on the majority of known systems at the time of their removal.
+</p>
 
 
-<h2><a name="4.0">Future Extensions</a></h2>
+<h2><a name="5.0">Future Extensions</a></h2>
 
-<h3><a name="4.1"><tt>reference_wrapper</tt> for Incomplete Types</a></h3>
+<h3><a name="5.1"><tt>reference_wrapper</tt> for Incomplete Types</a></h3>
 <p>
 Removing the <tt>result_type</tt> typedefs would enable support for incomplete
 types in <tt>reference_wrapper</tt>.  That is not possible today due to the
@@ -289,38 +326,31 @@ auto my_tie(T&amp; t, U&amp; u) {
 }
 </pre></blockquote>
 
-<h3><a name="4.2">Negated <tt>bind</tt> Expressions</a></h3>
+<h3><a name="5.2">Negated <tt>bind</tt> Expressions</a></h3>
 <p>
-Another feature of the Boost library that contributed the original design for
-<tt>not_fn</tt> is an expansion of the <tt>bind</tt> language to return a bind
-expression that negates its result when called as
+A long-standing feature of the Boost library that contributed the original
+design for <tt>not_fn</tt> is an expansion of the <tt>bind</tt> language to
+return a bind expression that negates its result when called as
 <tt>!bind(a1, a2, ..., aN)</tt>.
 </p>
 <p>
 While this feature is desirable, it has not yet been through the LEWG process,
-and is slightly trickier to word than implement as the result of a 'bind'
-expression is unspecified, and the interaction works by providing an
-<tt>operator!</tt> overload for the unspecified bind-object type.  Therefore,
-this is left as an extension to be proposed for the Library Fundamentals 3 TS.
-</p>
-
-
-<h2><a name="5.0">Established Experience</a></h2>
-<p>
-The <tt>not_fn</tt> library, and its interaction with <tt>bind</tt>, have been
-popular parts of the Boost library distribution for over a decade now.  The
-interface and specification are mature.
+and is slightly trickier to specify than implement as the result of a
+<tt>bind</tt> expression is unspecified, and the interaction works by providing
+an <tt>operator!</tt> overload for the unspecified bind-object type.
+Therefore, this is left as an extension to be proposed for the Library
+Fundamentals 3 TS.
 </p>
 
 
 <h2><a name="6.0">Proposed Wording</a></h2>
-
-
+<p>
 Insert a new section under <b>17.6.4.3 [reserved.names]</b>, between
 <b>17.6.4.3.1 [macro.names]</b> and <b>17.6.4.3.2 [extern.names]</b>:
+</p>
 
 <blockquote>
-<h3><ins>17.6.4.3.x Zombie names [zombie.names]</ins></h3>
+<h3><a name="6.1"><ins>17.6.4.3.x Zombie names [zombie.names]</ins></a></h3>
 
 <p><ins>
 In namespace <tt>std</tt>, the following names are reserved for previous
@@ -328,16 +358,9 @@ standardization: <tt>auto_ptr</tt>, <tt>bind1st</tt>, <tt>bind2nd</tt>,
 <tt>binder1st</tt>, <tt>binder2nd</tt>, <tt>mem_fun</tt>, <tt>mem_fun_ref</tt>,
 <tt>mem_fun_t</tt>, <tt>mem_fun1_t</tt>, <tt>mem_fun_ref_t</tt>,
 <tt>mem_fun1_ref_t</tt>, <tt>const_mem_fun_t</tt>, <tt>const_mem_fun1_t</tt>,
-<tt>const_mem_fun_ref_t</tt>, <tt>const_mem_fun1_ref_t</tt>, <tt>not1</tt>,
-<tt>not2</tt>, <tt>unary_negate</tt>, <tt>binary_negate</tt>, <tt>ptr_fun</tt>,
+<tt>const_mem_fun_ref_t</tt>, <tt>const_mem_fun1_ref_t</tt>, <tt>ptr_fun</tt>,
 <tt>pointer_to_unary_function</tt>, <tt>pointer_to_binary_function</tt>,
 <tt>random_shuffle</tt>, <tt>unary_function</tt>, and <tt>binary_function</tt>.
-</ins></p>
-<p><ins>
-It is unspecified whether function objects in the C++ standard library
-additionally provide the following typedefs: <tt>result_type</tt>,
-<tt>argument_type</tt>, <tt>first_argument_type</tt>, and
-<tt>second_argument_type</tt>.
 </ins></p>
 </blockquote>
 
@@ -367,7 +390,7 @@ Strike the <tt>result_type</tt>, <tt>first_argument_type</tt>, and
 </p>
 
 <blockquote>
-<h3>20.8.2.4 Class template <tt>owner_less</tt>   [util.smartptr.ownerless]</h3>
+<h3><a name="6.2">20.8.2.4 Class template <tt>owner_less</tt>   [util.smartptr.ownerless]</a></h3>
 <p>
 1 The class template owner_less allows ownership-based mixed comparisons of
 shared and weak pointers.
@@ -419,7 +442,7 @@ Strike the definition of <i>weak result type</i> from 20.9.2:
 </p>
 
 <blockquote>
-<h3>20.9.2 Requirements [func.require]</h3>
+<h3><a name="6.3">20.9.2 Requirements [func.require]</a></h3>
 <ol>
   <li>Define <tt><i>INVOKE</i> (f, t1, t2, ..., tN)</tt> as follows:</li>
   <ol>
@@ -458,14 +481,14 @@ Strike the definition of <i>weak result type</i> from 20.9.2:
     <li><del>otherwise <tt>result_type</tt> shall not be defined.</del></li>
   </ol>
   <li>
-Every call wrapper (20.9.1) shall be <tt>MoveConstructible</tt>. A <i>simple
-call wrapper</i> is a call wrapper that is <tt>CopyConstructible</tt> and
-<tt>CopyAssignable</tt> and whose copy constructor, move constructor, and
-assignment operator do not throw exceptions. A <i>forwarding call wrapper</i>
-is a call wrapper that can be called with an arbitrary argument list and
-delivers the arguments to the wrapped callable object as references.  This
-forwarding step shall ensure that rvalue arguments are delivered as rvalue
-references and lvalue arguments are delivered as lvalue references.
+Every call wrapper (20.9.1) shall be <tt>MoveConstructible</tt>.  A
+<i>forwarding call wrapper</i> is a call wrapper that can be called with an
+arbitrary argument list and delivers the arguments to the wrapped callable
+object as references.  This forwarding step shall ensure that rvalue arguments
+are delivered as rvalue references and lvalue arguments are delivered as lvalue
+references.  A <i>simple call wrapper</i> is a forwarding call wrapper that is
+<tt>CopyConstructible</tt> and <tt>CopyAssignable</tt> and whose copy
+constructor, move constructor, and assignment operator do not throw exceptions.
 [<i>Note:</i> In a typical implementation forwarding call wrappers have an
 overloaded function call operator of the form
 <blockquote><pre>
@@ -484,7 +507,7 @@ Simplify the definition of <tt>reference_wrapper</tt>:
 </p>
 
 <blockquote>
-<h3>20.9.4 Class template reference_wrapper   [refwrap]</h3>
+<h3><a name="6.4">20.9.4 Class template reference_wrapper   [refwrap]</a></h3>
 <p><pre><blockquote>
 namespace std {
   template &lt;class T&gt; class reference_wrapper {
@@ -578,7 +601,7 @@ Strike the <tt>result_type</tt>, <tt>argument_type</tt>,
 </p>
 
 <blockquote>
-<h3>20.9.5 Arithmetic operations [arithmetic.operations]</h3>
+<h3><a name="6.5">20.9.5 Arithmetic operations [arithmetic.operations]</a></h3>
 <p>
 1 The library provides basic function object classes for all of the arithmetic
 operators in the language (5.6, 5.7).  </p>
@@ -657,7 +680,7 @@ Strike the <tt>result_type</tt>, <tt>first_argument_type</tt>, and
 
 <blockquote>
 
-<h3>20.9.6 Comparisons   [comparisons]</h3>
+<h3><a name="6.6">20.9.6 Comparisons   [comparisons]</a></h3>
 <p>
 1 The library provides basic function object classes for all of the comparison
 operators in the language (5.9, 5.10).  </p>
@@ -742,7 +765,7 @@ Strike the <tt>result_type</tt>, <tt>argument_type</tt>,
 </p>
 
 <blockquote>
-<h3>20.9.7 Logical operations [logical.operations]</h3>
+<h3><a name="6.7">20.9.7 Logical operations [logical.operations]</a></h3>
 <p>
 1 The library provides basic function object classes for all of the logical
 operators in the language (5.14, 5.15, 5.3.1).
@@ -791,7 +814,7 @@ Strike the <tt>result_type</tt>, <tt>argument_type</tt>,
 </p>
 
 <blockquote>
-<h3>20.9.8 Bitwise operations [bitwise.operations]</h3>
+<h3><a name="6.8">20.9.8 Bitwise operations [bitwise.operations]</a></h3>
 <p>
 1 The library provides basic function object classes for all of the bitwise
 operators in the language (5.11, 5.13, 5.12, 5.3.1).
@@ -852,7 +875,7 @@ than the struck-out note:
 </p>
 
 <blockquote>
-<h3><del>20.9.9 Negators [negators]</del></h3>
+<h3><a name="6.9"><del>20.9.9 Negators [negators]</del></a></h3>
 <p><del>
 1 Negators <tt>not1</tt> and <tt>not2</tt> take a unary and a binary predicate,
 respectively, and return their complements (5.3.1).
@@ -908,7 +931,7 @@ respectively, and return their complements (5.3.1).
 5 <i>Returns:</i> <tt>binary_negate&lt;Predicate&gt;(pred)</tt>.
 </del></p>
 
-<h3><ins>20.9.9 Function template not_fn [func.not_fn]</ins></h3>
+<h3><a name="6.10"><ins>20.9.9 Function template not_fn [func.not_fn]</ins></a></h3>
 <p><pre><blockquote>
 <ins>template &lt;class F&gt; <i>unspecified</i> not_fn(F&amp;&amp; f);</ins>
 </blockquote></pre></p>
@@ -995,7 +1018,7 @@ Strike the unnecessary typedefs from the unspecified return-type of
 </p>
 
 <blockquote>
-<h3>20.9.11 Function template <tt>mem_fn</tt>   [func.memfn]</h3>
+<h3><a name="6.11">20.9.11 Function template <tt>mem_fn</tt>   [func.memfn]</a></h3>
 <blockquote><pre>
 template&lt;class R, class T&gt; <i>unspecified</i> mem_fn(R T::* pm);
 </pre></blockquote>
@@ -1032,7 +1055,7 @@ Strike the relevant typedefs from the class definition of <tt>function</tt>:
 </p>
 
 <blockquote>
-<h3>20.9.12.2 Class template function   [func.wrap.func]</h3>
+<h3><a name="6.12">20.9.12.2 Class template function   [func.wrap.func]</a></h3>
 <p><pre><blockquote>
 namespace std {
 template&lt;class&gt; class function; <i>// undefined</i>
@@ -1058,7 +1081,7 @@ Strike bullet (1.3), on the definition of standard <tt>hash</tt> functors:
 </p>
 
 <blockquote>
-<h3>20.9.13 Class template hash  [unord.hash]</h3>
+<h3><a name="6.13">20.9.13 Class template hash  [unord.hash]</a></h3>
 <p>
 1 The unordered associative containers defined in 23.5 use specializations of
 the class template <tt>hash</tt> as the default hash function. For all object
@@ -1104,7 +1127,7 @@ member-class of <tt>map</tt> in <b>23.4.4.1 [map.overview]</b>.
 <blockquote>
 
 <h3>23.4.4 Class template <tt>map</tt>              [map]</h3>
-<h3>23.4.4.1 Class template <tt>map</tt> overview   [map.overview]</h3>
+<h3><a name="6.14">23.4.4.1 Class template <tt>map</tt> overview   [map.overview]</a></h3>
 <blockquote><pre>
 namespace std {
   template &lt;class Key, class T, class Compare = less&lt;Key&gt;,
@@ -1145,7 +1168,7 @@ member-class of <tt>multimap</tt> in <b>23.4.5.1 [multimap.overview]</b>.
 <blockquote>
 
 <h3>23.4.5 Class template <tt>multimap</tt>              [multimap]</h3>
-<h3>23.4.5.1 Class template <tt>multimap</tt> overview   [multimap.overview]</h3>
+<h3><a name="6.15">23.4.5.1 Class template <tt>multimap</tt> overview   [multimap.overview]</a></h3>
 <blockquote><pre>
 namespace std {
   template &lt;class Key, class T, class Compare = less&lt;Key&gt;,
@@ -1182,10 +1205,9 @@ Insert a new clause into Annex D:
 </p>
 
 <blockquote>
-<h3><ins>D.x Old Adaptable Function Bindings  [depr.func.adaptor.binding]</ins></h3>
+<h3><a name="6.16"><ins>D.x Old Adaptable Function Bindings  [depr.func.adaptor.binding]</ins></a></h3>
 
-<h4><ins>D.x.1 Weak Result Types [depr.weak.result_type]</ins></h4>
-
+<h4><a name="6.16.1"><ins>D.x.1 Weak Result Types [depr.weak.result_type]</ins></a></h4>
 <ol>
   <li><ins>If a call wrapper (20.9.1) has a <i>weak result type</i>, the type of its member
       type <tt>result_type</tt> is based on the type <tt>T</tt> of the wrapper's target object
@@ -1203,7 +1225,7 @@ Insert a new clause into Annex D:
 </ol>
 
 
-<h4><ins>D.x.2 Typedefs to Support Function Binders [depr.func.adaptor.typedefs]</ins></h4>
+<h4><a name="6.16.2"><ins>D.x.2 Typedefs to Support Function Binders [depr.func.adaptor.typedefs]</ins></a></h4>
 
 <ol>
 <li><ins>
@@ -1216,7 +1238,7 @@ that take two arguments.
 </ins></li>
 
 <li><ins>
-The following member names are in addition to names specified in Clause 20:
+The following member names are defined in addition to names specified in Clause 20:
 </ins>
 
 <blockquote><pre>
@@ -1431,9 +1453,9 @@ The forwarding call wrapper <tt>g</tt> returned by a call to
 </ins></li>
 <li><ins>
 The simple call wrapper <ins><tt>fn</tt> returned from a call to
-<tt>mem_fn</tt> shall have a nested type <tt>result_type</tt> that is a synonym
-for the return type of <tt>pm</tt> when <tt>pm</tt> is a pointer to member
-function.
+<tt>mem_fn(pm)</tt> shall have a nested type <tt>result_type</tt> that is a
+synonym for the return type of <tt>pm</tt> when <tt>pm</tt> is a pointer to
+member function.
 </ins></li>
 <li><ins>
 The simple call wrapper shall define two nested types named
@@ -1451,7 +1473,7 @@ with <i>cv</i>-qualifier <i>cv</i> and taking one argument of type <tt>T1</tt>,
 where <tt>Ret</tt> is <tt>pm</tt>'s return type.
 </ins></li>
 <li><ins>
-The following member names are in addition to names specified in Clause 23:
+The following member names are defined in addition to names specified in Clause 23:
 </ins>
 <blockquote><pre>
 <ins>namespace std {</ins>
@@ -1484,12 +1506,13 @@ The following member names are in addition to names specified in Clause 23:
 </li>
 </ol>
 
-<h4><ins>D.x.3 Negators [depr.negators]</ins></h4>
+<h4><a name="6.16.3"><ins>D.x.3 Negators [depr.negators]</ins></a></h4>
 <ol>
 <li><ins>
 The header <tt>&lt;functional&gt;</tt> has the following additional declarations:</ins>
 <blockquote><pre>
 <ins>namespace std {</ins>
+  <ins>template &lt;class Predicate&gt; class unary_negate;</ins>
   <ins>template &lt;class Predicate&gt;</ins>
     <ins>constexpr unary_negate&lt;Predicate&gt; not1(const Predicate&amp;);</ins>
   <ins>template &lt;class Predicate&gt; class binary_negate;</ins>
@@ -1533,10 +1556,10 @@ respectively, and return their complements (5.3.1).
   <ins>public:</ins>
     <ins>constexpr explicit binary_negate(const Predicate&amp; pred);</ins>
     <ins>constexpr bool operator()(const typename Predicate::first_argument_type&amp; x,</ins>
-        <ins>const typename Predicate::second_argument_type&amp; y) const;</ins>
-  <ins>typedef typename Predicate::first_argument_type first_argument_type;</ins>
-  <ins>typedef typename Predicate::second_argument_type second_argument_type;</ins>
-  <ins>typedef bool result_type;</ins>
+                              <ins>const typename Predicate::second_argument_type&amp; y) const;</ins>
+    <ins>typedef typename Predicate::first_argument_type first_argument_type;</ins>
+    <ins>typedef typename Predicate::second_argument_type second_argument_type;</ins>
+    <ins>typedef bool result_type;</ins>
   <ins>};</ins>
 </blockquote></pre></p>
 
