@@ -1,0 +1,508 @@
+<html>
+
+<head>
+<title>Remove Deprecated Adaptable Function Support from C++20</title>
+<style type="text/css">
+  p {text-align:justify}
+  li {text-align:justify}
+  blockquote.note
+  {
+    background-color:#E0E0E0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+  ins {background-color:#A0FFA0}
+  del {background-color:#FFA0A0}
+</style>
+</head>
+
+<body>
+<table>
+<tr>
+  <td align="left">Doc. no.</td>
+  <td align="left">D0TBDR0</td>
+</tr>
+<tr>
+  <td align="left">Date:</td>
+  <td align="left">2015-10-26</td>
+</tr>
+<tr>
+  <td align="left">Project:</td>
+  <td align="left">Programming Language C++</td>
+</tr>
+<tr>
+  <td align="left">Reply to:</td>
+  <td align="left">Alisdair Meredith &lt;<a href="mailto:ameredith1@bloomberg.net">ameredith1@bloomberg.net</a>&gt;</td>
+</tr>
+<tr>
+  <td/>
+  <td align="left">Stephan T. Lavavej &lt;<a href="mailto:stl@microsoft.com">stl@microsoft.com</a>&gt;</td>
+</tr>
+<tr>
+  <td/>
+   <td align="left">Tomasz Kamiński &lt;tomaszkam at gmail dot com&gt;</td>
+</tr>
+</table>
+
+<h1>Adopt <tt>not_fn</tt> from Library Fundamentals 2 for C++17</tt></h1>
+
+<h2>Table of Contents</h2>
+
+<h2>Proposed Wording</h2>
+<p>
+Ammend clause 17.6.4.3.x [zombie.names]:
+</p>
+
+<blockquote>
+<h3><ins>17.6.4.3.x Zombie names [zombie.names]</ins></h3>
+
+<p>
+In namespace <tt>std</tt>, the following names are reserved for previous
+standardization: <tt>auto_ptr</tt>, <tt>bind1st</tt>, <tt>bind2nd</tt>,
+<tt>binder1st</tt>, <tt>binder2nd</tt>, <tt>mem_fun</tt>, <tt>mem_fun_ref</tt>,
+<tt>mem_fun_t</tt>, <tt>mem_fun1_t</tt>, <tt>mem_fun_ref_t</tt>,
+<tt>mem_fun1_ref_t</tt>, <tt>const_mem_fun_t</tt>, <tt>const_mem_fun1_t</tt>,
+<tt>const_mem_fun_ref_t</tt>, <tt>const_mem_fun1_ref_t</tt>, <ins><tt>not1</tt>,
+<tt>not2</tt>, <tt>unary_negate</tt>, <tt>binary_negate</tt>,</ins> <tt>ptr_fun</tt>,
+<tt>pointer_to_unary_function</tt>, <tt>pointer_to_binary_function</tt>,
+<tt>random_shuffle</tt>, <tt>unary_function</tt>, and <tt>binary_function</tt>.
+</p>
+<p><ins>
+It is unspecified whether function objects in the C++ standard library
+additionally provide the following typedefs: <tt>result_type</tt>,
+<tt>argument_type</tt>, <tt>first_argument_type</tt>, and
+<tt>second_argument_type</tt>.
+</ins></p>
+</blockquote>
+
+<p>
+Add a new section to Annex C</b>:
+</p>
+
+<blockquote>
+<h3><ins>C.5 C++ and ISO C++ 2014 [diff.cpp17]</ins></h3>
+<p><ins>
+This subclause lists the differences between C++ and ISO C++ 2017 (ISO/IEC
+14882:2017, Programming Languages — C++), by the chapters of this document.
+</p></ins>
+
+<h3><ins>C.5.x Annex D: compatibility features [diff.cpp17.depr]</ins></h3>
+
+<p><ins>
+<b>Change:</b> The typedefs <tt>result_type</tt>, <tt>argument_type</tt>,
+<tt>first_argument_type</tt>, and <tt>second_argument_type</tt> might not be
+defined by some function objects.
+</ins></p>
+<p><ins>
+<b>Rationale:</b> Superseded by new features, including <tt>decltype</tt> and
+forwarding references.  These typedefs are no longer a reliable technique in
+all cases, as they are unsupported by lambda expressions, generic functors,
+and functors having more than two arguments.
+</ins></p>
+<p><ins>
+<b>Effect on original feature:</b> Valid C++ 2014 code that uses these typedefs
+may fail to compile in this International Standard.
+</ins></p>
+<br/>
+<p><ins>
+<b>Change:</b> The class templates <tt>unary_negate</tt> and
+<tt>binary_negate</tt> and the function templates <tt>not1</tt> and
+<tt>not2</tt> might not be defined.
+</ins></p>
+<p><ins>
+<b>Rationale:</b> Superseded by new features, including generic lambdas and the
+function template <tt>not_fn</tt>.
+</ins></p>
+<p><ins>
+<b>Effect on original feature:</b> Valid C++ 2014 code that uses these class
+templates and function templates may fail to compile in this International
+Standard.
+</ins></p>
+</blockquote>
+
+<p>
+Strike Annex D.6 [depr.func.adaptor.binding]:
+</p>
+
+<blockquote>
+<h3><a name="6.16"><del>D.x Old Adaptable Function Bindings  [depr.func.adaptor.binding]</del></a></h3>
+
+<h4><a name="6.16.1"><del>D.x.1 Weak Result Types [depr.weak.result_type]</del></a></h4>
+<ol>
+  <li><del>If a call wrapper (20.9.1) has a <i>weak result type</i>, the type of its member
+      type <tt>result_type</tt> is based on the type <tt>T</tt> of the wrapper's target object
+      (20.9.1):</del></li>
+  <ol>
+    <li><del>if <tt>T</tt> is a pointer to function type, <tt>result_type</tt> shall be a
+        synonym for the return type of <tt>T</tt>;</del></li>
+    <li><del>if <tt>T</tt> is a pointer to member function, <tt>result_type</tt> shall be a
+        synonym for the return type of <tt>T</tt>;</del></li>
+    <li><del>if <tt>T</tt> is a class type and the qualified-id <tt>T::result_type</tt> is
+        valid and denotes a type (14.8.2), then <tt>result_type</tt> shall be a synonym for
+        <tt>T::result_type</tt>;</del></li>
+    <li><del>otherwise <tt>result_type</tt> shall not be defined.</del></li>
+  </ol>
+</ol>
+
+
+<h4><a name="6.16.2"><del>D.x.2 Typedefs to Support Function Binders [depr.func.adaptor.typedefs]</del></a></h4>
+
+<ol>
+<li><del>
+To enable old function adaptors to manipulate function objects that take one or
+two arguments, many of the function objects in this standard correspondingly
+provide typedefs <tt>argument_type</tt> and <tt>result_type</tt> for function
+objects that take one argument and <tt>first_argument_type</tt>,
+<tt>second_argument_type</tt>, and <tt>result_type</tt> for function objects
+that take two arguments.
+</del></li>
+
+<li><del>
+The following member names are defined in addition to names specified in Clause 20:
+</del>
+
+<blockquote><pre>
+<del>namespace std {</del>
+  <del>template&lt;class T&gt; struct owner_less&lt;shared_ptr&lt;T&gt; &gt; {</del>
+    <del>typedef bool result_type;</del>
+    <del>typedef shared_ptr&lt;T&gt; first_argument_type;</del>
+    <del>typedef shared_ptr&lt;T&gt; second_argument_type;</del>
+  <del>};</del>
+
+  <del>template&lt;class T&gt; struct owner_less&lt;weak_ptr&lt;T&gt; &gt; {</del>
+    <del>typedef bool result_type;</del>
+    <del>typedef weak_ptr&lt;T&gt; first_argument_type;</del>
+    <del>typedef weak_ptr&lt;T&gt; second_argument_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T&gt; class reference_wrapper {</del>
+  <del>public :</del>
+    <del>typedef <i>see below</i> result_type;              <i>// not always defined</i></del>
+    <del>typedef <i>see below</i> argument_type;            <i>// not always defined</i></del>
+    <del>typedef <i>see below</i> first_argument_type;      <i>// not always defined</i></del>
+    <del>typedef <i>see below</i> second_argument_type;     <i>// not always defined</i></del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct plus {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct minus {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct multiplies {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct divides {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct modulus {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct negate {</del>
+    <del>typedef T argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct equal_to {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct not_equal_to {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct greater {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct less {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct greater_equal {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct less_equal {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct logical_and {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct logical_or {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct logical_not {</del>
+    <del>typedef T argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct bit_and {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct bit_or {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct bit_xor {</del>
+    <del>typedef T first_argument_type;</del>
+    <del>typedef T second_argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct bit_not {</del>
+    <del>typedef T argument_type;</del>
+    <del>typedef T result_type;</del>
+  <del>};</del>
+
+  <del>template&lt;class R, class... ArgTypes&gt;</del>
+  <del>class function&lt;R(ArgTypes...)&gt; {</del>
+  <del>public:</del>
+    <del>typedef T1 argument_type;          <i>// only if sizeof...(ArgTypes) == 1 and</i></del>
+                                       <del><i>// the type in ArgTypes is T1</i></del>
+    <del>typedef T1 first_argument_type;    <i>// only if sizeof...(ArgTypes) == 2 and</i></del>
+                                       <del><i>// ArgTypes contains T1 and T2</i></del>
+    <del>typedef T2 second_argument_type;   <i>// only if sizeof...(ArgTypes) == 2 and</i></del>
+                                       <del><i>// ArgTypes contains T1 and T2</i></del>
+  <del>};</del>
+<del>}</del>
+</blockquote></pre>
+</li>
+
+<li><del><tt>reference_wrapper&lt;T&gt;</tt> has a weak result type (D.x.1). If
+<tt>T</tt> is a function type, <tt>result_type</tt> shall be a synonym for the
+return type of <tt>T</tt>.
+</del></li>
+<li><del>
+The template specialization <tt>reference_wrapper&lt;T&gt;</tt> shall define
+a nested type named <tt>argument_type</tt> as a synonym for <tt>T1</tt> only if
+the type <tt>T</tt> is any of the following:
+</del>
+<ol>
+<li><del>
+- a function type or a pointer to function type taking one argument of
+type <tt>T1</tt>
+</del></li>
+<li><del>
+- a pointer to member function <tt>R T0::f <i>cv</i></tt> (where
+<tt><i>cv</i></tt> represents the member function's <i>cv</i>-qualifiers); the
+type <tt>T1</tt> is <tt><i>cv</i> T0*</tt>
+</del></li>
+<li><del>
+- a class type where the qualified-id <tt>T::argument_type</tt> is valid
+and denotes a type (14.8.2); the type <tt>T1</tt> is <tt>T::argument_type</tt>.
+</del></li>
+</ol></li>
+<li><del>
+The template instantiation <tt>reference_wrapper&lt;T&gt;</tt> shall define
+two nested types named <tt>first_argument_type</tt> and
+<tt>second_argument_type</tt> as synonyms for <tt>T1</tt> and <tt>T2</tt>,
+respectively, only if the type <tt>T</tt> is any of the following:
+</del>
+<ol>
+<li><del>
+- a function type or a pointer to function type taking two arguments of
+types <tt>T1</tt> and <tt>T2</tt>
+</del></li>
+<li><del>
+- a pointer to member function <tt>R T0::f(T2) <i>cv</i></tt> (where
+<tt><i>cv</i></tt> represents the member function's <i>cv</i>-qualifiers); the
+type <tt>T1</tt> is <tt><i>cv</i> T0*</tt>
+</del></li>
+<li><del>
+- a class type where the qualified-ids <tt>T::first_argument_type</tt>
+and <tt>T::second_argument_type</tt> are both valid and both denote types
+(14.8.2); the type <tt>T1</tt> is <tt>T::first_argument_type</tt> and the type
+<tt>T2</tt> is <tt>T::second_argument_type</tt>.
+</li>
+</ol></li>
+<li><del>
+For all object types <tt>Key</tt> for which there exists a specialization
+<tt>hash&lt;Key&gt;</tt>, and for all enumeration types (7.2) <tt>Key</tt>, the
+instantiation <tt>hash&lt;Key&gt;</tt> shall provide two nested types,
+<tt>result_type</tt> and <tt>argument_type</tt>, which shall be synonyms for
+<tt>size_t</tt> and <tt>Key</tt>, respectively.
+</del></li>
+<li><del>
+The forwarding call wrapper <tt>g</tt> returned by a call to
+<tt>bind(f, bound_args...)</tt> (20.9.10.3) shall have a weak result type (D.x.1).
+</del></li>
+<li><del>
+The forwarding call wrapper <tt>g</tt> returned by a call to
+<tt>bind&lt;R&gt;(f, bound_args...)</tt> (20.9.10.3) shall have a nested type
+<tt>result_type</tt> defined as a synonym for <tt>R</tt>.
+</del></li>
+<li><del>
+The simple call wrapper <del><tt>fn</tt> returned from a call to
+<tt>mem_fn(pm)</tt> shall have a nested type <tt>result_type</tt> that is a
+synonym for the return type of <tt>pm</tt> when <tt>pm</tt> is a pointer to
+member function.
+</del></li>
+<li><del>
+The simple call wrapper shall define two nested types named
+<tt>argument_type</tt> and <tt>result_type</tt> as synonyms for
+<tt><i>cv</i> T*</tt> and <tt>Ret</tt>, respectively, when <tt>pm</tt> is a
+pointer to member function with <i>cv</i>-qualifier <i>cv</i> and taking no
+arguments, where <tt>Ret</tt> is <tt>pm</tt>'s return type.
+</del></li>
+<li><del>
+The simple call wrapper shall define three nested types named
+<tt>first_argument_type</tt>, <tt>second_argument_type</tt>, and
+<tt>result_type</tt> as synonyms for <tt>cv T*</tt>, <tt>T1</tt>, and
+<tt>Ret</tt>, respectively, when <tt>pm</tt> is a pointer to member function
+with <i>cv</i>-qualifier <i>cv</i> and taking one argument of type <tt>T1</tt>,
+where <tt>Ret</tt> is <tt>pm</tt>'s return type.
+</del></li>
+<li><del>
+The following member names are defined in addition to names specified in Clause 23:
+</del>
+<blockquote><pre>
+<del>namespace std {</del>
+  <del>template &lt;class Key, class T, class Compare = less&lt;Key&gt;,</del>
+            <del>class Allocator = allocator&lt;pair&lt;const Key, T&gt;&gt;&gt;</del>
+  <del>class map {</del>
+  <del>public:</del>
+     <del>class value_compare {</del>
+     <del>public:</del>
+       <del>typedef bool result_type;</del>
+       <del>typedef value_type first_argument_type;</del>
+       <del>typedef value_type second_argument_type;</del>
+       <del>}</del>
+    <del>};</del>
+  <del>};</del>
+
+  <del>template &lt;class Key, class T, class Compare = less&lt;Key&gt;,</del>
+            <del>class Allocator = allocator&lt;pair&lt;const Key, T&gt;&gt;&gt;</del>
+  <del>class multimap {</del>
+  <del>public:</del>
+     <del>class value_compare {</del>
+     <del>public:</del>
+       <del>typedef bool result_type;</del>
+       <del>typedef value_type first_argument_type;</del>
+       <del>typedef value_type second_argument_type;</del>
+    <del>};</del>
+  <del>};</del>
+<del>}</del>
+</pre></blockquote>
+</li>
+</ol>
+
+<h4><a name="6.16.3"><del>D.x.3 Negators [depr.negators]</del></a></h4>
+<ol>
+<li><del>
+The header <tt>&lt;functional&gt;</tt> has the following additional declarations:</del>
+<blockquote><pre>
+<del>namespace std {</del>
+  <del>template &lt;class Predicate&gt; class unary_negate;</del>
+  <del>template &lt;class Predicate&gt;</del>
+    <del>constexpr unary_negate&lt;Predicate&gt; not1(const Predicate&amp;);</del>
+  <del>template &lt;class Predicate&gt; class binary_negate;</del>
+  <del>template &lt;class Predicate&gt;</del>
+    <del>constexpr binary_negate&lt;Predicate&gt; not2(const Predicate&amp;);</del>
+<del>}</del>
+</pre></blockquote>
+</li>
+<li><del>
+Negators <tt>not1</tt> and <tt>not2</tt> take a unary and a binary predicate,
+respectively, and return their complements (5.3.1).
+</del></li>
+
+<p><pre><blockquote>
+   <del>template &lt;class Predicate&gt;</del>
+     <del>class unary_negate {</del>
+   <del>public:</del>
+     <del>constexpr explicit unary_negate(const Predicate&amp; pred);</del>
+     <del>constexpr bool operator()(const typename Predicate::argument_type&amp; x) const;</del>
+     <del>typedef typename Predicate::argument_type argument_type;</del>
+     <del>typedef bool result_type;</del>
+   <del>};</del>
+</blockquote></pre></p>
+
+<li><del>
+<tt>operator()</tt> returns <tt>!pred(x)</tt>.
+</del></li>
+
+<p><pre><blockquote>
+ <del>template &lt;class Predicate&gt;</del>
+     <del>constexpr unary_negate&lt;Predicate&gt; not1(const Predicate&amp; pred);</del>
+</blockquote></pre></p>
+
+<li><del>
+<i>Returns:</i> <tt>unary_negate&lt;Predicate&gt;(pred)</tt>.
+</del></li>
+
+<p><pre><blockquote>
+  <del>template &lt;class Predicate&gt;</del>
+  <del>class binary_negate {</del>
+  <del>public:</del>
+    <del>constexpr explicit binary_negate(const Predicate&amp; pred);</del>
+    <del>constexpr bool operator()(const typename Predicate::first_argument_type&amp; x,</del>
+                              <del>const typename Predicate::second_argument_type&amp; y) const;</del>
+    <del>typedef typename Predicate::first_argument_type first_argument_type;</del>
+    <del>typedef typename Predicate::second_argument_type second_argument_type;</del>
+    <del>typedef bool result_type;</del>
+  <del>};</del>
+</blockquote></pre></p>
+
+<li><del>
+<tt>operator()</tt> returns <tt>!pred(x,y)</tt>.
+</del></li>
+
+<p><pre><blockquote>
+<del>template &lt;class Predicate&gt;</del>
+  <del>constexpr binary_negate&lt;Predicate&gt; not2(const Predicate&amp; pred);</del>
+</blockquote></pre></p>
+
+<li><del>
+<i>Returns:</i> <tt>binary_negate&lt;Predicate&gt;(pred)</tt>.
+</del></li>
+</ol>
+
+</ol>
+
+</blockquote>
+
+
+</body>
+</html>
