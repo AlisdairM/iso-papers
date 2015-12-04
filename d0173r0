@@ -1,0 +1,345 @@
+<html>
+
+<head>
+<title>Expression Aliases</title>
+<style type="text/css">
+  p {text-align:justify}
+  li {text-align:justify}
+  blockquote.note
+  {
+    background-color:#E0E0E0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+  ins {background-color:#A0FFA0}
+  del {background-color:#FFA0A0}
+</style>
+</head>
+
+<body>
+<table>
+<tr>
+  <td align="left">Doc. no.</td>
+  <td align="left">D0173R0</td>
+</tr>
+<tr>
+  <td align="left">Date:</td>
+  <td align="left">2015-12-04</td>
+</tr>
+<tr>
+  <td align="left">Project:</td>
+  <td align="left">Programming Language C++</td>
+</tr>
+<tr>
+  <td align="left">Reply to:</td>
+  <td align="left">Alisdair Meredith &lt;<a href="mailto:ameredith1@bloomberg.net">ameredith1@bloomberg.net</a>&gt;</td>
+</tr>
+</table>
+
+<h1>Expression Aliases</h1>
+
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#0.0">Revision History</a></li>
+  <ul>
+  <li><a href="#0.1">Revision 0</a></li>
+  </ul>
+<li><a href="#1.0">Introduction</a></li>
+<li><a href="#2.0">Problems with <tt>allocator_traits></tt></a></li>
+  <ul>
+  <li><a href="#2.1">Consistency of propagation traits</a></li>
+  </ul>
+<li><a href="#4.0">Acknowledgements</a></li>
+<li><a href="#5.0">References</a></li>
+</ol>
+
+
+<h2><a name="0.0">Revision History</a></h2>
+
+<h3><a name="0.1">Revision 0</a></h3>
+<p>
+Original version of the paper for the 2016 pre-Jacksonville mailing.
+</p>
+
+<h6>Sketch of ideas to be turned into paper</h6>
+<pre>
+   Expression, not statement, so no { compound; statements; }
+      but maybe lambdas can []{ do; work; then; return result; }()
+   participate in overload resolution
+
+   can be templates like alias templates
+      will SFINAE, unlike function-with-deduced result
+   'noexcept' comes directly from code, as code directly injected
+      'constexpr' just the same
+      essentially an always-inline function
+
+   cannot be forward declared, just like any other alias
+   cannot partially specialize, just like any other function-like deduction-context thing
+   cannot specialize at all, just like a regular alias template
+   *can* be defined locally within a function
+
+   not separately compiled
+      name lookup occurs within the context of the calling function, at point of use
+   name converts to a lambda with empty capture and matching signature
+     allows us to pass as a function argument and deduce as predicate etc. in STL
+     gives meaning to sizeof, alignof, decltype and typeid
+     probably not allowed in a global/namespace or class scope?
+   no operator names
+
+  problems:
+    using plus(auto a, auto b) = a + b + c;
+      is use of 'c' an error, or do we assume it will be valid at the call site?
+      if we defer, then we lose much checking of the well-formedness of the alias
+      if we disallow, the must we also check function lookup?  we are in the wrong namespace for that
+         lookup at alias definition not at all guaranteed to find same names from point of use
+</pre>
+
+
+<h2><a name="1.0">Introduction</a></h2>
+<p>
+The C++11 standard introduced <tt>allocator_traits</tt> as a way to easily support
+a variety of allocator models, especially those where allocators hold some kind of
+state that might affect allocator, such as a pointer to a memory resource,
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3916">N3916</a>.
+One of the problems that had to be tackled was the effect of calling <tt>swap</tt>
+on containers (or other allocator-aware types) that have allocators that do not
+compare equal.  The committee at the time took the conservative option of simply
+making this undefined behavior, and a couple of issues have since been filed
+regarding some of the problems this causes:
+<a href="http://cplusplus.github.io/LWG/lwg-active.html#2152">LWG #2152</a>,
+<a href="http://cplusplus.github.io/LWG/lwg-active.html#2153">LWG #2153</a>.
+The last time the Library Working Group looked at these issues, it called for a
+paper to better describe the issues and propose a solution (with wording!)  This
+is that paper.
+</p>
+
+<h2><a name="2.0">Stating the problem</a></h2>
+<p>
+</p>
+
+<h3><a name="2.0">Stating the problem</a></h3>
+<p>
+Sample code:
+</p>
+<pre>
+template &lt;typename T, typename U&gt;
+constexpr inline
+auto plus(T t, U u) noexcept(noexcept(t+u)) -&gt; decltype(t+u) {
+   return t + u;
+}
+</pre>
+
+
+<pre>
+template &lt;typename ...ARGS&gt;
+constexpr inline
+auto delegate(ARGS&amp;&amp;... args)
+     noexcept(noexcept(expression(std::forward&lt;ARGS&gt;(args)...)))
+  -&gt; decltype(expression(std::forward&lt;ARGS&gt;(args)...)) {
+   return expression(std::forward&lt;ARGS&gt;(args)...);
+}
+</pre>
+
+<p>
+Macro workaround:
+</p>
+<pre>
+#define RESULT_EXPRESSION(__VA_ARGS__) \
+        noexcept(noexcept(__VA_ARGS__)) -&gt; decltype(__VA_ARGS__) { return __VA_ARGS__; }
+
+template &lt;typename T, typename U&gt;
+constexpr inline
+auto plus(T t, U u) RESULT_EXPRESSION(t + u)
+
+
+template &lt;typename ...ARGS&gt;
+constexpr inline
+auto delegate(ARGS&amp;&amp;... args) RESULT_EXPRESSION(expression(std::forward&lt;ARGS&gt;(args)...))
+</pre>
+
+<p>
+Deduced return type is only a partial solution:
+</p>
+<pre>
+template &lt;typename T, typename U&gt;
+constexpr inline
+decltyp(auto) plus(T t, U u) noexcept(noexcept(t+u)) {
+   return t + u;
+}
+
+template &lt;typename ...ARGS&gt;
+constexpr inline
+decltype(auto) delegate(ARGS&amp;&amp;... args)
+     noexcept(noexcept(expression(std::forward&lt;ARGS&gt;(args)...))) {
+   return expression(std::forward&lt;ARGS&gt;(args)...);
+}
+</pre>
+
+<p>
+Proposed syntax:
+</p>
+<pre>
+using plus(auto t, auto u) = t + u;
+
+template &lt;typename ...ARGS&gt;
+using delegate(ARGS&amp;&amp;... args) = expression(std::forward&lt;ARGS&gt;(args)...);
+</pre>
+
+
+<p>
+Terser syntax:
+</p>
+<pre>
+using plus({t}, {u}) = t + u;
+
+using delegate(...args) = expression(std::forward&lt;decltype(args)&gt;(args)...);
+</pre>
+
+
+<p>
+Tersest syntax, with implicit stdforward&lt;decltype()&gt;:
+</p>
+<pre>
+using plus({t}, {u}) = t + u;
+
+using delegate({...args}) = expression(args...);
+</pre>
+
+
+
+<p>
+Ugly example from the standard (originally lacks exception specifications, constexpr):
+</p>
+<pre>
+template&lt;class F, class Tuple, std::size_t... I&gt;
+<ins>constexpr</ins>
+decltype(auto) apply_impl(F&amp;&amp; f, Tuple&amp;&amp; t, std::index_sequence&lt;I...&gt;)
+   <ins>noexcept(noexcept(std::forward&lt;F&gt;(f)(std::get&lt;I&gt;(std::forward&lt;Tuple&gt;(t))...)))</ins>
+{
+   return std::forward&lt;F&gt;(f)(std::get&lt;I&gt;(std::forward&lt;Tuple&gt;(t))...);
+}
+
+template&lt;class F, class Tuple&gt;
+<ins>constexpr</ins>
+decltype(auto) apply(F&amp;&amp; f, Tuple&amp;&amp; t)
+   <ins>noexcept(noexcept(apply_impl(std::forward&lt;F&gt;(f),</ins>
+                                <ins>std::forward&lt;Tuple&gt;(t),</ins>
+                                <ins>make_index_sequence&lt;std::tuple_size_v&lt;std::decay_t&lt;Tuple&gt;&gt;&gt;())))</ins>
+{
+   using Indices = make_index_sequence&lt;std::tuple_size_v&lt;std::decay_t&lt;Tuple&gt;&gt;&gt;;
+   return apply_impl(std::forward&lt;F&gt;(f), std::forward&lt;Tuple&gt;(t), Indices());
+}
+</pre>
+
+<p>
+Cleaned-up standard example (note deliberate use of both <tt>decltype(auto)</tt> and <tt>auto</tt>):
+</p>
+<pre>
+template &lt;typename ...TYPES&gt;
+using tuple_index_sequence&lt;std::tuple&lt;TYPES...&gt;&gt; = std::index_sequence_for&lt;TYPES...&gt;();
+
+template &lt;typename ...TYPES&gt;
+constexpr
+auto make_tuple_index(std::tuple&lt;TYPES...&gt; const &amp;) {
+   return std::index_sequence_for&lt;TYPES...&gt;();
+}
+
+template&lt;class F, class Tuple, std::size_t ...I&gt;
+decltype(auto) apply_impl(F&amp;&amp; f, Tuple&amp;&amp; t, index_sequence&lt;I...&gt;)
+   noexcept(noexcept(std::forward&lt;F&gt;(f)(std::get&lt;I&gt;(std::forward&lt;Tuple&gt;(t))...)))
+{
+   return std::forward&lt;F&gt;(f)(std::get&lt;I&gt;(std::forward&lt;Tuple&gt;(t))...);
+}
+
+template&lt;class F, class Tuple&gt;
+decltype(auto) apply(F&amp;&amp; f, Tuple&amp;&amp; t)
+   noexcept(noexcept(apply_impl(std::forward&lt;F&gt;(f), std::forward&lt;Tuple&gt;(t), make_tuple_index(t))))
+{
+   return apply_impl(std::forward&lt;F&gt;(f), std::forward&lt;Tuple&gt;(t), make_tuple_index(t));
+}
+</pre>
+
+<p>
+As expression alias:
+</p>
+<pre>
+template &lt;typename ...TYPES&gt;
+using tuple_index_sequence(std::tuple&lt;TYPES...&gt; const &amp;) = std::index_sequence_for&lt;TYPES...&gt;();
+
+template&lt;class F, class Tuple, std::size_t ...I&gt;
+using apply_impl(F&amp;&amp; f, Tuple&amp;&amp; t, std::index_sequence&lt;I...&gt;) =
+      std::forward&lt;F&gt;(f)(std::get&lt;I&gt;(std::forward&lt;Tuple&gt;(t))...);
+
+template&lt;class F, class Tuple&gt;
+using apply(F&amp;&amp; f, Tuple&amp;&amp; t) =
+      apply_impl(std::forward&lt;F&gt;(f), std::forward&lt;Tuple&gt;(t), tuple_index_sequence(t));
+</pre>
+
+
+<p>
+As terse expression alias:
+</p>
+<pre>
+template &lt;typename ...TYPES&gt;
+using tuple_index_sequence(std::tuple&lt;TYPES...&gt; const &amp;) = std::index_sequence_for&lt;TYPES...&gt;();
+
+template&lt;std::size_t ...I&gt;
+using apply_impl({f}, {t}, std::index_sequence&lt;I...&gt;) =
+      std::forward&lt;decltype(f)&gt;(f)(std::get&lt;I&gt;(std::forward&lt;decltype(t)&gt;(t))...);
+
+using apply({func}, {tpl}) =
+      apply_impl(std::forward&lt;decltype(func)&gt;(func), std::forward&lt;decltype(tpl)&gt;(tpl), tuple_index_sequence(tpl));
+</pre>
+
+<p>
+And buying into implicit perfect forwarding notion (as written up in the old inheriting constructors syntax) terse expression alias:
+</p>
+<pre>
+template &lt;typename ...TYPES&gt;
+using tuple_index_sequence(std::tuple&lt;TYPES...&gt; const &amp;) = std::index_sequence_for&lt;TYPES...&gt;();
+
+template&lt;std::size_t ...I&gt;
+using apply_impl({func}, {tpl}, std::index_sequence&lt;I...&gt;) = func(std::get&lt;I&gt;(tpl)...);
+
+using apply({func}, {tpl}) = apply_impl(func, tpl, tuple_index_sequence(tpl));
+</pre>
+
+<h2><a name="3.0">Alternative Proposals</a></h2>
+<h3><a name="3.0">noexcept(auto)</a></h3>
+
+
+<p>SAMPLE CODE FOR COPY/PASTE LATER</p>
+
+<blockquote>
+
+<h4>D.x Deprecated allocator traits bits [depr.alloc.traits]</h4>
+<blockquote><pre>
+<ins>namespace std {</ins>
+  <ins>template &lt;class Alloc&gt; struct allocator_traits {</ins>
+    <ins>typedef propagate_on_container_swap propagate_on_container_copy_assignment;</ins>
+    <ins>typedef propagate_on_container_swap propagate_on_container_move_assignment;</ins>
+  <ins>};</ins>
+<ins>}</ins>
+</pre></blockquote>
+
+</blockquote>
+
+<h2><a name="4.0">Acknowledements</h2>
+<p>
+</p>
+
+
+<h2><a name="5.0">References</h2>
+<ul>
+  <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2151">LWG #2151</a> <tt>basic_string&lt;&gt;::swap</tt> semantics ignore allocators</li>
+  <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2152">LWG #2152</a> Instances of standard container types are not swappable</li>
+  <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2153">LWG #2153</a> Narrowing of the non-member <tt>swap</tt> contract</li>
+
+  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4511">N4511</a> Adding [nothrow-]swappable traits, Daniel Krügler</li>
+</ul>
+
+
+</body>
+</html>
