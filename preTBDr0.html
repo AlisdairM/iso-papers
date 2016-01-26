@@ -1,0 +1,414 @@
+<html>
+
+<head>
+<title>Allocating shared_ptrs</title>
+<style type="text/css">
+  p {text-align:justify}
+  li {text-align:justify}
+  blockquote.note
+  {
+    background-color:#E0E0E0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+  ins {background-color:#A0FFA0}
+  del {background-color:#FFA0A0}
+</style>
+</head>
+
+<body>
+<table>
+<tr>
+  <td align="left">Doc. no.</td>
+  <td align="left">D0TBDR0</td>
+</tr>
+<tr>
+  <td align="left">Date:</td>
+  <td align="left">2016-01-25</td>
+</tr>
+<tr>
+  <td align="left">Project:</td>
+  <td align="left">Programming Language C++</td>
+</tr>
+<tr>
+  <td align="left">Reply to:</td>
+  <td align="left">Alisdair Meredith &lt;<a href="mailto:ameredith1@bloomberg.net">ameredith1@bloomberg.net</a>&gt;</td>
+</tr>
+</table>
+
+<h1>Allocating <tt>shared_ptr</tt>s</h1>
+
+<h3><a href="#0.0">Revision History</a></h3>
+<ul>
+<li><a href="#0.1">Revision 0</a></li>
+</ul>
+  
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1.0">Introduction</a></li>
+<li><a href="#2.0">Problems to be addressed</a></li>
+  <ul>
+  <li><a href="#2.1">First problem</a></li>
+  </ul>
+<li><a href="#3.0">Proposed Resolution</a></li>
+<li><a href="#4.0">Alternatives Considered</a></li>
+<li><a href="#5.0">Formal Wording</a></li>
+<li><a href="#6.0">References</a></li>
+<li><a href="#7.0">Acknowledgements</a></li>
+</ol>
+
+
+<h2><a name="0.0">Revision History</a></h2>
+
+<h3><a name="0.1">Revision 0</a></h3>
+<p>
+Original version of the paper for the 2016 pre-Jacksonville mailing.
+</p>
+
+<h6>Sketch of ideas to be turned into paper</h6>
+<pre>
+LWG #2070 proposed an observably breaking change to 'shared_ptr'
+	does not address 'destroy' or allocators returning fancy pointers
+Bloomberg experience drew bug reports both ways
+Recommend adding another 'allocator_arg_t' overload to do the allocator_traits::construct thing
+Recommend disallowing allocators that do not return 'T *'
+
+Fix up proposed wording, stolen from current issues list
+
+Existing wording issues:
+p6 remark may be confusing if 'T' performs it own allocations
+
+Observations for 2/3:
+	propagation traits are irrelevant, as allocator never propagates
+	construct is there to interact with propagation traits
+	can clean up duplicate requirements, e.g., allocators are not permitted to throw on copy/destroy anyway
+</pre>
+
+
+<h2><a name="1.0">1. Introduction</a></h2>
+<p>
+Single paragraph, high-level statement of the problem and proposed resolution
+(if any).  We may cite other papers like so:
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4462">N4462</a>,
+and might call out issues from various issues lists like so:
+<a href="http://cplusplus.github.io/LWG/lwg-active.html#2070">LWG #2070</a>.
+</p>
+
+<h2><a name="2.0">2. Problems to be addressed</a></h2>
+<p>
+State the problem this paper addresses, the whole problem, and nothing but
+the problem.
+</p>
+
+<h3><a name="2.1">2.1 First problem</a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+<p>
+We will occasionally want sample code:
+</p>
+<pre>
+template &lt;typename T, typename U&gt;
+constexpr inline
+auto plus(T t, U u) noexcept(noexcept(t+u)) -&gt; decltype(t+u) {
+   return t + u;
+}
+</pre>
+
+
+<h2><a name="3.0">3. Proposed Resolution</a></h2>
+
+<h3><a name="3.1">3.1 Restrict all use of allocators in <tt>shared_ptr</tt> to those returning raw pointers</a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+<h3><a name="3.2">3.2 Define <tt>make_shared</tt> in terms of <tt>allocate_shared</tt></a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+<h3><a name="3.3">3.3 Use <tt>allocate</tt> and <tt>deallocate</tt> to manage (only) the control block</a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+<h3><a name="3.4">3.4 Add another overload: <tt>allocate_shared(allocator_arg_t, A, Args...)</tt></a></h3>
+<p>
+This extra overload will further use <tt>construct</tt> and <tt>destroy</tt> to
+create the shared object (but <b>not</b> the deleter).
+</p>
+
+<h3><a name="3.5">3.5 Apply N4462 to the form of initialization</a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+<h3><a name="3.6">3.6 Clean up duplication of allocator requirements</a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+
+<h2><a name="4.0">4. Alternatives Considered</a></h2>
+
+<h3><a name="4.1">4.1 Do nothing</a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+<h3><a name="4.2">4.2 Always use <tt>construct</tt>/<tt>destroy</tt></a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+<h3><a name="4.3">4.3 Blah...</a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+<h3><a name="4.4">4.4 Blah...</a></h3>
+<p>
+Where possible, break the problem out into a fine-grained list of sub-problems.
+</p>
+
+<h2><a name="5.0">5. Formal Wording</a></h2>
+
+<p>This wording is relative to the N4567.</p>
+
+<blockquote>
+<h4>20.8.2.2.1 shared_ptr constructors [util.smartptr.shared.const]</h4>
+<pre>
+template &lt;class Y, class D&gt; shared_ptr(Y* p, D d);
+template &lt;class Y, class D, class A&gt; shared_ptr(Y* p, D d, A a);
+template &lt;class D&gt; shared_ptr(nullptr_t p, D d);
+template &lt;class D, class A&gt; shared_ptr(nullptr_t p, D d, A a);
+</pre>
+<ol type="1" start="7">
+<li>
+<i>Requires:</i> <tt>p</tt> shall be convertible to <tt>T*</tt>. <tt>D</tt>
+shall be <tt>CopyConstructible</tt>. The copy constructor and destructor of
+<tt>D</tt> shall not throw exceptions. The expression <tt>d(p)</tt> shall be
+well formed, shall have well defined behavior, and shall not throw exceptions.
+<tt>A</tt> shall be an allocator (17.6.3.5)<ins>, whose <tt>pointer_type</tt>
+shall be a native pointer</ins>.  <del>The copy constructor and destructor of
+<tt>A</tt> shall not throw exceptions.</del>
+</li>
+<li>
+<i>Effects:</i> Constructs a <tt>shared_ptr</tt> object that owns the object
+<tt>p</tt> and the deleter <tt>d</tt>. The second and fourth constructors shall
+use a copy of <tt>a</tt> to allocate memory for internal use<ins>, and to
+deallocate memory when the last weak reference is destroyed</ins>. If an
+exception is thrown, <tt>d(p)</tt> is called.
+</li>
+<li>
+<i>Postconditions:</i> <tT>use_count() == 1 && get() == p</tt>.
+</li>
+<li>
+<i>Throws:</i> <tt>bad_alloc</tt>, or an implementation-defined exception when a resource other than memory
+could not be obtained.
+</li>
+</ol>
+</blockquote>
+
+
+<p>
+No changes are necessary for the <tt>reset</tt> member taking an
+allocator.
+</p>
+
+<blockquote>
+<h4>20.8.2.2.4 shared_ptr modifiers [util.smartptr.shared.mod]</h4>
+<pre>
+template<class Y, class D, class A> void reset(Y* p, D d, A a);
+</pre>
+<ol type="1" start="5">
+<li>
+<i>Effects</i>: Equivalent to <tt>shared_ptr(p, d, a).swap(*this)</tt>.
+</li>
+</ol>
+</blockquote>
+
+<p>
+Revise the sub-clause on <tt>shared_ptr</tt> creation functions:
+</p>
+
+<blockquote>
+<h4>20.8.2.2.6 shared_ptr creation [util.smartptr.shared.create]</h4>
+
+<pre>
+<ins>template<class T, class... Args> shared_ptr<T> make_shared(Args&amp;&amp;... args);</ins>
+</pre>
+<ol type="1">
+<li><ins>
+<i>Effects</i>: Equivalent to
+<tt>return allocate_shared&lt;T&gt;(allocator&lt;T&gt;(), std::forward&lt;Args&gt;(args)...);</tt>
+</ins></li>
+<li><ins>
+<i>Remarks</i>: An implementation may meet the effects (and the implied guarantees)
+without creating the allocator object [<i>Note</i>: That is, user-provided
+specializations of <tt>std::allocator</tt> might not be instantiated, the
+expressions <tt>::new (pv) T(std::forward&lt;Args&gt;(args)...)</tt> and 
+<tt>pv-&gt;~T()</tt> may be evaluated directly - <i>end note</i>].
+</ins></li>
+</ol>
+
+<pre>
+<del>template<class T, class... Args> shared_ptr<T> make_shared(Args&amp;&amp;... args);</del>
+template<class T, class A, class... Args> shared_ptr<T> allocate_shared(const A& a, Args&amp;&amp;... args);
+</pre>
+<ol type="1" start="3">
+<li>
+<i>Requires:</i> The expression <tt>::new (pv) T(std::forward<Args>(args)...)</tt>,
+where <tt>pv</tt> has type <tt>void*</tt> and points to storage suitable to
+hold an object of type <tt>T</tt>, shall be well formed.  <tt>A</tt> shall be
+an allocator (17.6.3.5)<ins>, whose <tt>pointer_type</tt> shall be a native
+pointer</ins>.  <del>The copy constructor and destructor of <tt>A</tt> shall
+not throw exceptions.</del>
+</li>
+<li>
+<i>Effects:</i> Allocates memory suitable for an object of type <tt>T</tt> and
+constructs an object in that memory via the placement new-expression
+<tt>::new (pv) T(std::forward<Args>(args)...)</tt>. The template
+<tt>allocate_shared</tt> uses a copy of <tt>a</tt> to allocate memory. If an
+exception is thrown, the functions have no effect.
+</li>
+<li>
+<i>Returns:</i> A <tt>shared_ptr</tt> instance that stores and owns the address
+of the newly constructed object of type <tt>T</tt>.
+</li>
+<li>
+<i>Postconditions:</i> <tt>get() != 0 && use_count() == 1</tt>
+</li>
+<li>
+<i>Throws:</i> <tt>bad_alloc</tt>, or an exception thrown from <tt>A::allocate</tt>
+or from the constructor of <tt>T</tt>.
+</li>
+<li>
+<i>Remarks:</i> Implementations should perform no more than one memory allocation.
+[ <i>Note:</i> This provides efficiency equivalent to an intrusive smart pointer.
+- <i>end note</i> ]
+</li>
+<li>
+[ <i>Note:</i> These functions will typically allocate more memory than
+<tt>sizeof(T)</tt> to allow for internal bookkeeping structures such as the
+reference counts. - <i>end note</i> ]
+</li>
+</ol>
+</blockquote>
+
+
+<ol>
+<li><p>Change the following paragraphs of 20.8.2.2.6 [util.smartptr.shared.create] as indicated:
+</p>
+<blockquote><pre>
+template&lt;class T, class... Args&gt; shared_ptr&lt;T&gt; make_shared(Args&amp;&amp;... args);
+<del>template&lt;class T, class A, class... Args&gt;
+  shared_ptr&lt;T&gt; allocate_shared(const A&amp; a, Args&amp;&amp;... args);</del>
+</pre></blockquote>
+<p>
+<del>-1- <i>Requires</i>: The expression <tt>::new (pv) T(std::forward&lt;Args&gt;(args)...)</tt>, where <tt>pv</tt> 
+has type <tt>void*</tt> and points to storage suitable to hold an object of type <tt>T</tt>, shall be well 
+formed. <tt>A</tt> shall be an allocator (17.6.3.5 [allocator.requirements]). The copy constructor 
+and destructor of <tt>A</tt> shall not throw exceptions.</del>
+<p/>
+-2- <i>Effects</i>: <ins>Equivalent to</ins>
+</p>
+<blockquote><pre> 
+<ins>return allocate_shared&lt;T&gt;(allocator&lt;T&gt;(), std::forward&lt;Args&gt;(args)...);</ins>
+</pre></blockquote>
+<p>
+<del>Allocates memory suitable for an object of type <tt>T</tt> 
+and constructs an object in that memory via the placement new expression 
+<tt>::new (pv) T(std::forward&lt;Args&gt;(args)...)</tt>. The template <tt>allocate_shared</tt> uses a copy 
+of <tt>a</tt> to allocate memory. If an exception is thrown, the functions have no effect.</del>
+<p/>
+<ins>-?- <i>Remarks</i>: An implementation may meet the effects (and the implied guarantees) without 
+creating the allocator object [<i>Note</i>: That is, user-provided specializations of <tt>std::allocator</tt>
+may not be instantiated, the expressions <tt>::new (pv) T(std::forward&lt;Args&gt;(args)...)</tt> and 
+<tt>pv-&gt;~T()</tt> may be evaluated directly &mdash; <i>end note</i>].</ins>
+<p/>
+<del>-3- <i>Returns</i>: A <tt>shared_ptr</tt> instance that stores and owns the address of the newly constructed 
+object of type <tt>T</tt>.</del>
+<p/>
+<del>-4- <i>Postconditions</i>: <tt>get() != 0 &amp;&amp; use_count() == 1</tt></del>
+<p/>
+<del>-5- <i>Throws</i>: <tt>bad_alloc</tt>, or an exception thrown from <tt>A::allocate</tt> or from the 
+constructor of <tt>T</tt>.</del>
+<p/>
+<del>-6- <i>Remarks</i>: Implementations are encouraged, but not required, to perform no more than one memory
+allocation. [<i>Note</i>: This provides efficiency equivalent to an intrusive smart pointer. &mdash; <i>end note</i>]</del>
+<p/>
+<del>-7- [<i>Note</i>: These functions will typically allocate more memory than <tt>sizeof(T)</tt> to allow 
+for internal bookkeeping structures such as the reference counts. &mdash; <i>end note</i>]</del>
+</p>
+</li>
+<li><p>
+Add the following set of <ins>new paragraphs</ins> immediately following the previous paragraph 7 of
+20.8.2.2.6 [util.smartptr.shared.create]:
+</p>
+<blockquote><pre>
+template&lt;class T, class A, class... Args&gt;
+  shared_ptr&lt;T&gt; allocate_shared(const A&amp; a, Args&amp;&amp;... args);
+</pre></blockquote>
+<p>
+-?- <i>Requires</i>: The expressions 
+<tt>allocator_traits&lt;A&gt;::construct(b, pt, std::forward&lt;Args&gt;(args)...)</tt> and
+<tt>allocator_traits&lt;A&gt;::destroy(b, pt)</tt> shall be well-formed and well-defined, 
+where <tt>b</tt> has type <tt>A</tt> and is a copy of <tt>a</tt> and where <tt>pt</tt> 
+has type <tt>T*</tt> and points to storage suitable to hold an object of type <tt>T</tt>. 
+<tt>A</tt> shall meet the allocator requirements (17.6.3.5 [allocator.requirements]). 
+<p/>
+-?- <i>Effects</i>: Uses an object <tt>a2</tt> 
+of type <tt>allocator_traits&lt;A&gt;::rebind_alloc&lt;<i>unspecified</i>&gt;</tt> that compares equal to 
+<tt>a</tt> to allocate memory suitable for an object of type <tt>T</tt>. 
+Uses a copy <tt>b</tt> of type <tt>A</tt> from <tt>a</tt> to construct an object of type <tt>T</tt> in 
+that memory by calling <tt>allocator_traits&lt;A&gt;::construct(b, pt, std::forward&lt;Args&gt;(args)...)</tt>. 
+If an exception is thrown, the function has no effect.
+<p/>
+-?- <i>Returns</i>: A <tt>shared_ptr</tt> instance that stores and owns the address of the newly constructed 
+object of type <tt>T</tt>. When ownership is given up, the effects are as follows: Uses a copy <tt>b2</tt> 
+of type <tt>A</tt> from <tt>a</tt> to destruct an object of type <tt>T</tt> by calling 
+<tt>allocator_traits&lt;A&gt;::destroy(b2, pt2)</tt> where <tt>pt2</tt> has type <tt>T*</tt> 
+and refers to the newly constructed object. Then uses an object of type
+<tt>allocator_traits&lt;A&gt;::rebind_alloc&lt;<i>unspecified</i>&gt;</tt> that compares equal to 
+<tt>a</tt> to deallocate the allocated memory.
+<p/>
+-?- <i>Postconditions</i>: <tt>get() != 0 &amp;&amp; use_count() == 1</tt>
+<p/>
+-?- <i>Throws</i>: Nothing unless memory allocation or <tt>allocator_traits&lt;A&gt;::construct</tt> 
+throws an exception.
+<p/>
+-?- <i>Remarks</i>: Implementations are encouraged, but not required, to perform no more than one memory 
+allocation. [<i>Note</i>: Such an implementation provides efficiency equivalent to an intrusive smart 
+pointer. &mdash; <i>end note</i>]
+<p/>
+-?- [<i>Note</i>: This function will typically allocate more memory than <tt>sizeof(T)</tt> to allow for internal
+bookkeeping structures such as the reference counts. &mdash; <i>end note</i>]
+</p>
+</li>
+</ol>
+
+
+<h2><a name="6.0">6. Acknowledements</h2>
+<p>
+</p>
+
+
+<h2><a name="7.0">7. References</h2>
+<ul>
+  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4462">N4462</a> LWG 2089, Towards more perfect forwarding</li>
+  <li>
+    <a href="http://cplusplus.github.io/LWG/lwg-active.html#2070">LWG #2070</a>
+    <tt>allocate_shared</tt> should use <tt>allocator_traits&lt;A&gt;::construct</tt>
+  </li>
+  <li>
+    <a href="http://cplusplus.github.io/LWG/lwg-active.html#2070">LWG #2089</a>
+    <tt>std::allocator::construct</tt> should use uniform initialization
+  </li>
+</ul>
+
+</body>
+</html>
