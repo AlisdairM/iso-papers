@@ -204,7 +204,7 @@ deallocate memory when the last weak reference is destroyed</ins>. If an
 exception is thrown, <tt>d(p)</tt> is called.
 </li>
 <li>
-<i>Postconditions:</i> <tT>use_count() == 1 && get() == p</tt>.
+<i>Postconditions:</i> <tT>use_count() == 1 &amp;&amp; get() == p</tt>.
 </li>
 <li>
 <i>Throws:</i> <tt>bad_alloc</tt>, or an implementation-defined exception when a resource other than memory
@@ -257,7 +257,7 @@ expressions <tt>::new (pv) T(std::forward&lt;Args&gt;(args)...)</tt> and
 
 <pre>
 <del>template<class T, class... Args> shared_ptr<T> make_shared(Args&amp;&amp;... args);</del>
-template<class T, class A, class... Args> shared_ptr<T> allocate_shared(const A& a, Args&amp;&amp;... args);
+template<class T, class A, class... Args> shared_ptr<T> allocate_shared(const A&amp; a, Args&amp;&amp;... args);
 </pre>
 <ol type="1" start="3">
 <li>
@@ -280,7 +280,7 @@ exception is thrown, the functions have no effect.
 of the newly constructed object of type <tt>T</tt>.
 </li>
 <li>
-<i>Postconditions:</i> <tt>get() != 0 && use_count() == 1</tt>
+<i>Postconditions:</i> <tt>get() != 0 &amp;&amp; use_count() == 1</tt>
 </li>
 <li>
 <i>Throws:</i> <tt>bad_alloc</tt>, or an exception thrown from <tt>A::allocate</tt>
