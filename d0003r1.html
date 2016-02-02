@@ -74,51 +74,62 @@ blockquote.stdins { text-decoration: underline;
 <li><a href="#4.0">Motivation for Change</a></li>
 <li><a href="#5.0">Compatibility Concerns</a></li>
 <li><a href="#6.0">Review</a></li>
+<ul>
+  <li><a href="#6.1">Evolution Working Group Review</a></li>
+  <li><a href="#6.2">Design Choices</a></li>
+  <li><a href="#6.3">Interaction with issues</a></li>
+  <li><a href="#6.4">Drafting Choices</a></li>
+</ul>
 <li><a href="#7.0">Proposed Wording</a></li>
 <ul>
-<!--
-  <li><a href="#STD_3.3.7">3.3.7 Class scope [basic.scope.class]</a></li>
-  <li><a href="#STD_3.4.1">3.4.1 Unqualified name lookup [basic.lookup.unqual]</a></li>
--->
-  <li><a href="#STD_4.12">4.12 Function pointer conversions [conv.fctptr]</a></li>
-  <li><a href="#STD_8.3.5">8.3.5 Functions [dcl.fct]</a></li>
-  <li><a href="#STD_8.4.2">8.4.2 Explicitly-defaulted functions [dcl.fct.def.default]</a></li>
-<!--
-  <li><a href="#STD_9.2">9.2 Class members [class.mem]</a></li>
-  <li><a href="#STD_14.5">14.5 Template declarations [temp.decls]</a></li>
--->
-  <li><a href="#STD_14.5.3">14.5.3 Variadic templates [temp.variadic]</a></li>
-<!--
-  <li><a href="#STD_14.6">14.6 Name resolution [temp.res]</a></li>
-  <li><a href="#STD_14.6.4.1">14.6.4.1 Point of instantiation [temp.point]</a></li>
-  <li><a href="#STD_14.7.1">14.7.1 Implicit instantiation [temp.inst]</a></li>
-  <li><a href="#STD_14.7.2">14.7.2 Explicit instantiation [temp.explicit]</a></li>
-  <li><a href="#STD_14.8.2">14.8.2 Template argument deduction [temp.deduct]</a></li>
--->
-  <li><a href="#STD_15.3">15.3 Handling an exception [except.handle]</a></li>
-  <li><a href="#STD_15.4">15.4 Exception specifications [except.spec]</a></li>
-  <li><a href="#STD_15.5">15.5 Special functions [except.special]</a></li>
+  <li><a href="#7.1">First cut, using current set-based wording</a></li>
   <ul>
-    <li><a href="#STD_15.5.1">15.5.1 The std::terminate() function [except.terminate]</a></li>
-    <li><a href="#STD_15.5.2">15.5.2 The <tt>std::unexpected()</tt> function [except.unexpected]</a></li>
+  <!--
+    <li><a href="#STD_3.3.7">3.3.7 Class scope [basic.scope.class]</a></li>
+    <li><a href="#STD_3.4.1">3.4.1 Unqualified name lookup [basic.lookup.unqual]</a></li>
+    <li><a href="#STD_9.2">9.2 Class members [class.mem]</a></li>
+    <li><a href="#STD_14.5">14.5 Template declarations [temp.decls]</a></li>
+    <li><a href="#STD_14.6">14.6 Name resolution [temp.res]</a></li>
+    <li><a href="#STD_14.6.4.1">14.6.4.1 Point of instantiation [temp.point]</a></li>
+    <li><a href="#STD_14.7.1">14.7.1 Implicit instantiation [temp.inst]</a></li>
+    <li><a href="#STD_14.7.2">14.7.2 Explicit instantiation [temp.explicit]</a></li>
+    <li><a href="#STD_14.8.2">14.8.2 Template argument deduction [temp.deduct]</a></li>
+  -->
+    <li><a href="#STD_4.12">4.12 Function pointer conversions [conv.fctptr]</a></li>
+    <li><a href="#STD_8.3.5">8.3.5 Functions [dcl.fct]</a></li>
+    <li><a href="#STD_8.4.2">8.4.2 Explicitly-defaulted functions [dcl.fct.def.default]</a></li>
+    <li><a href="#STD_14.5.3">14.5.3 Variadic templates [temp.variadic]</a></li>
+    <li><a href="#STD_15.3">15.3 Handling an exception [except.handle]</a></li>
+    <li><a href="#STD_15.4">15.4 Exception specifications [except.spec]</a></li>
+    <li><a href="#STD_15.5">15.5 Special functions [except.special]</a></li>
+    <ul>
+      <li><a href="#STD_15.5.1">15.5.1 The std::terminate() function [except.terminate]</a></li>
+      <li><a href="#STD_15.5.2">15.5.2 The <tt>std::unexpected()</tt> function [except.unexpected]</a></li>
+    </ul>
+    <li><a href="#STD_17.6.4.8">17.6.4.7 Handler functions [handler.functions]</a></li>
+    <li><a href="#STD_17.6.4.8">17.6.4.8 Other functions [res.on.functions]</a></li>
+    <li><a href="#STD_17.6.5.12">17.6.5.12 Restrictions on exception handling [res.on.exception.handling]</a></li>
+    <li><a href="#STD_18.8">18.8 Exception Handling [support.exception]</a></li>
+    <ul>
+      <li><a href="#STD_18.8_synopsis">Header &lt;exception&gt; synopsis</a></li>
+      <li><a href="#STD_18.8.3">18.8.3 Class <tt>bad_exception</tt> [bad.exception]</a></li>
+    </ul>
+    <li><a href="#STD_23.3.7.8">23.3.7.8 Zero sized arrays [array.zero]</a></li>
+    <li><a href="#STD_B">Annex B (informative) Implementation quantities [implimits]</a></li>
+    <li><a href="#STD_D.2">D.2 Dynamic exception specifications [depr.except.spec]</a></li>
+    <li><a href="#STD_D.5">D.5 Violating <i>exception-specifications</i> [exception.unexpected]</a></li>
+    <ul>
+      <li><a href="#STD_D.5.1">D.5.1 Type <tt>unexpected_handler</tt> [unexpected.handler]</a></li>
+      <li><a href="#STD_D.5.2">D.5.2 <tt>set_unexpected</tt> [set.unexpected]</a></li>
+      <li><a href="#STD_D.5.3">D.5.3 <tt>get_unexpected</tt> [get.unexpected]</a></li>
+      <li><a href="#STD_D.5.4">D.5.4 <tt>unexpected</tt> [unexpected]</a></li>
+    </ul>
   </ul>
-  <li><a href="#STD_17.6.4.8">17.6.4.7 Handler functions [handler.functions]</a></li>
-  <li><a href="#STD_17.6.4.8">17.6.4.8 Other functions [res.on.functions]</a></li>
-  <li><a href="#STD_17.6.5.12">17.6.5.12 Restrictions on exception handling [res.on.exception.handling]</a></li>
-  <li><a href="#STD_18.8">18.8 Exception Handling [support.exception]</a></li>
+  <li><a href="#7.2">Second cut: simplified wording</li>
   <ul>
-    <li><a href="#STD_18.8_synopsis">Header &lt;exception&gt; synopsis</a></li>
-    <li><a href="#STD_18.8.3">18.8.3 Class <tt>bad_exception</tt> [bad.exception]</a></li>
-  </ul>
-  <li><a href="#STD_23.3.7.8">23.3.7.8 Zero sized arrays [array.zero]</a></li>
-  <li><a href="#STD_B">Annex B (informative) Implementation quantities [implimits]</a></li>
-  <li><a href="#STD_D.2">D.2 Dynamic exception specifications [depr.except.spec]</a></li>
-  <li><a href="#STD_D.5">D.5 Violating <i>exception-specifications</i> [exception.unexpected]</a></li>
-  <ul>
-    <li><a href="#STD_D.5.1">D.5.1 Type <tt>unexpected_handler</tt> [unexpected.handler]</a></li>
-    <li><a href="#STD_D.5.2">D.5.2 <tt>set_unexpected</tt> [set.unexpected]</a></li>
-    <li><a href="#STD_D.5.3">D.5.3 <tt>get_unexpected</tt> [get.unexpected]</a></li>
-    <li><a href="#STD_D.5.4">D.5.4 <tt>unexpected</tt> [unexpected]</a></li>
+    <li><a href="#STD.2_5.3.7">5.3.7 noexcept operator [expr.unary.noexcept]</a></li>
+    <li><a href="#STD.2_8.4.2">8.4.2 Explicitly-defaulted functions [dcl.fct.def.default]</a></li>
+    <li><a href="#STD.2_15.5">15.5 Special functions [except.special]</a></li>
   </ul>
 </ul>
 <li><a href="#8.0">Acknowledgements</a></li>
@@ -316,7 +327,7 @@ level of usage, if any, remains in large, easily accessible codebases.
 
 <h2><a name="6.0">Review</a></h2>
 
-<h3><a name="6.2">Evolution Working Group Review</a></h3>
+<h3><a name="6.1">Evolution Working Group Review</a></h3>
 <p>
 The first version of this paper was presented to the Evolution Working Group at
 the Kona 2015 meeting, and was recommended to advance to Core 'as written'.
@@ -340,7 +351,33 @@ alternate spelling of <tt>noexcept(true)</tt>:
 </tr>
 </table>
 
-<h3><a name="6.2">Drafting Choices</a></h3>
+<h3><a name="6.2">Design Choices</a></h3>
+<p>
+By choosing to keep the <tt>throw()</tt> specification, we look to retain
+source compatibility with a large body of existing code that has used this
+specification to indicate code that should not throw.  However, we also
+change the meaning of that specification to be exactly the same as a plain
+<tt>noexcept</tt> specification, which means that an implementation is no
+longer permitted to call <tt>unexpected</tt> when a violation is detected
+(which was required in all previous standards) and the previously mnadated
+stack unwinding might no longer occur.  This means that a conforming C++17
+implementation is not permitted to simply retain the C++14 semantics while
+issuing an &quot;extension&quot; diagnostic.
+</p>
+
+<h3><a name="6.3">Interaction with issues</a></h3>
+<ul>
+  <li>Core issue 596: (Open) NAD as the subclause is eliminated</li>
+  <li>Core issue 1604: (wrong issue number, lost my reference?)</li>
+  <li>Core issue 2039: (Tentatively Ready) Proposed resolution should apply on top of this wording</li>
+  <li>Core issue 2047: (Ready) Proposed resolution incorporated into wording</li>
+  <li>Core issue 2183: (Open) Must be resolved in this paper's re-wording</li>
+  <li></li>
+  <li>Core issue 1912: (Extension) No direct impact</li>
+  <li>Core issue 1934: (Extension) Redraft issue as underlying wording changes significantly</li>
+</ul>
+
+<h3><a name="6.4">Drafting Choices</a></h3>
 <p>
 As the author is not a regular drafter of Core wording, a quick rationale
 for some of the most obvious wording decisions seems helpful, especially
@@ -437,8 +474,17 @@ this decision to make no changes is:
   <li>14.8.2   p7                [temp.deduct]</li>
 </ul>
 
+<h4><i>exception specification</i> vs. <i>exception-specification</i></h4>
+<p>
+Sometimes the wording refers to an <i>exception specification</i>,
+and at other times it refers to an <i>exception-specification</i>.
+This is generally intentional, where the former refers to the notion
+of an exception specification, which includes implicit exception
+specifications, where the latter refers to explicit use of the grammar
+production.
+</p>
 
-<h3><a name="6.3">Open Questions</a></h3>
+<h3><a name="6.4">Open Questions</a></h3>
 
 <h4>
 Where is the update for Compatibility Annex C?
@@ -470,9 +516,28 @@ Are there other relevant references that have been missed?
 
 
 <h2><a name="7.0">Proposed Wording</a></h2>
+<p>
+Two attempts are made at drafting new wording.<p>
+</p>
+<p>
+The first stays as close as possible to the original wording, retaining the
+idea of sets of types that may pass through an exception specification, but
+simplifiying the idea so that only two sets exist in practice: the empty set,
+and the set of all types.  The intent is to provide a basis for stable wording
+that can be adopted with confidence, at the earliest opportunity.
+</p>
+<p>
+The second attempts to simplify the notion of exception specifications to those
+that allow exceptions, and those that do not allow exceptions.  This removes
+the notion of set algebra from the standard, and talks much more directly to
+the topic of propagating exceptions.  It is more of a rewrite though, and might
+be considered riskier as a consequence, even if it would be the preferred long
+term approach.
+</p>
 
+<h3><a name="7.1">First cut, using current set-based wording</a></h3>
 <!--
-<h3><a name="STD_3.3.7">3.3.7 Class scope [basic.scope.class]</a></h3>
+<h4><a name="STD_3.3.7">3.3.7 Class scope [basic.scope.class]</a></h4>
 <p>
 1 The following rules describe the scope of names declared in classes.
 </p>
@@ -483,7 +548,7 @@ and <i>brace-or-equal-initializers</i> of non-static data members in that class
 (including such things in nested classes).
 </p>
 
-<h3><a name="STD_3.4.1">3.4.1 Unqualified name lookup [basic.lookup.unqual]</a></h3>
+<h4><a name="STD_3.4.1">3.4.1 Unqualified name lookup [basic.lookup.unqual]</a></h4>
 <p>
 7 A name used in the definition of a class <tt>X</tt> outside of a member
 function body, default argument, <del><i>exception-specification</i>,</del>
@@ -504,59 +569,9 @@ following ways:
 31) That is, an unqualified name that occurs, for instance, in a type in the
 <i>parameter-declaration-clause</i> <del>or in the <i>exception-specification</i></del>.
 </p>
--->
-
-<h3><a name="STD_4.12">4.12 Function pointer conversions [conv.fctptr]</a></h3>
-<p>
-1 A prvalue of type “pointer to <tt>noexcept</tt> function” can be converted to
-a prvalue of type “pointer to function”. The result is a pointer to the
-function.  A prvalue of type “pointer to member of type <tt>noexcept</tt>
-function” can be converted to a prvalue of type “pointer to member of type
-function”. The result points to the member function.
-[ <i>Example:</i>
-<blockquote><pre>
-void (*p)() <del>throw(int)</del>;
-void (**pp)() noexcept = &p; <i>// error: cannot convert to pointer to noexcept function</i>
-
-struct S { typedef void (*p)(); operator p(); };
-void (*q)() noexcept = S(); <i>// error: cannot convert to pointer to noexcept function</i>
-</pre></blockquote>
-&mdash; <i>end example</i> ]
-
-<h3><a name="STD_8.3.5">8.3.5 Functions [dcl.fct]</a></h3>
-<p>
-8 The return type, the <i>parameter-type-list</i>, the </i>ref-qualifier</i>,
-the <i>cv-qualifier-seq</i>, and whether the function has a non-throwing
-<i>exception-specification</i>, but not the default arguments (8.3.6) <del>or
-the exception specification (15.4)</del>, are part of the function type.
-[<i>Note:</i> Function types are checked during the assignments and
-initializations of pointers to functions, references to functions, and pointers
-to member functions. &mdash; <i>end note</i> ]
-</p>
-
-<h3><a name="STD_8.4.2">8.4.2 Explicitly-defaulted functions [dcl.fct.def.default]</a></h3>
-<p>
-4 [ <i>Example:</i>
-</p>
-<pre>
-   struct S {
-     constexpr S() = default;            // ill-formed: implicit S() is not constexpr
-     S(int a = 0) = default;             // ill-formed: default argument
-     void operator=(const S&amp;) = default; // ill-formed: non-matching return type
-     ~S() <ins>noexcept(false)</ins><del>throw(int)</del> = default;          // deleted: exception specification does not match
-   private:
-     int i;
-     S(S&amp;);                              // OK: private copy constructor
-   };
-   S::S(S&amp;) = default;                   // OK: defines copy constructor
-</pre>
-<p>
-&mdash; <i>end example</i> ]
-</p>
 
 
-<!--
-<h3><a name="STD_9.2">9.2 Class members [class.mem]</a></h3>
+<h4><a name="STD_9.2">9.2 Class members [class.mem]</a></h4>
 <p>
 2 A class is considered a completely-defined object type (3.9) (or complete
 type) at the closing <tt>}</tt> of the <i>class-specifier</i>. Within the class
@@ -579,19 +594,9 @@ shall not directly or indirectly cause the implicit definition of a defaulted
 default constructor for the enclosing class <del>or the exception specification
 of that constructor</del>.
 </p>
--->
 
 
-<h3><a name="STD_14.5.3">14.5.3 Variadic templates [temp.variadic]</a></h3>
-<p>
-<del>
-(4.7) &mdash; In a <i>dynamic-exception-specification</i> (15.4); the pattern is a <i>type-id</i>.
-</del>
-</p>
-
-
-<!--
-<h3><a name="STD_14.5">14.5 Template declarations [temp.decls]</a></h3>
+<h4><a name="STD_14.5">14.5 Template declarations [temp.decls]</a></h4>
 <p>
 2 For purposes of name lookup and instantiation, default arguments <del>and
 <i>exception-specification</i>s</del> of function templates and default
@@ -602,7 +607,7 @@ unrelated to the function template definition or to any other default
 arguments<del> or <i>exception-specification</i>s</del>.
 </p>
 
-<h3><a name="STD_14.6">14.6 Name resolution [temp.res]</a></h3>
+<h4><a name="STD_14.6">14.6 Name resolution [temp.res]</a></h4>
 <p>
 11 [<i>Note:</i> For purposes of name lookup, default arguments <del>and
 <i>exception-specification</i>s</del> of function templates and default
@@ -611,7 +616,7 @@ class templates are considered definitions(14.5). &mdash; <i>end note</i> ]
 </p>
 
 
-<h3><a name="STD_14.6.4.1">14.6.4.1 Point of instantiation [temp.point]</a></h3>
+<h4><a name="STD_14.6.4.1">14.6.4.1 Point of instantiation [temp.point]</a></h4>
 <p>
 <del>
 3 For an <i>exception-specification</i> of a function template specialization
@@ -627,7 +632,7 @@ declaration or definition that requires the <i>exception-specification</i>.
 </p>
 
 
-<h3><a name="STD_14.7.1">14.7.1 Implicit instantiation [temp.inst]</a></h3>
+<h4><a name="STD_14.7.1">14.7.1 Implicit instantiation [temp.inst]</a></h4>
 <p>
 1 Unless a class template specialization has been explicitly instantiated
 (14.7.2) or explicitly specialized (14.7.3), the class template specialization
@@ -666,7 +671,7 @@ instantiating the declaration of the specialization at that point.
 </p>
 
 
-<h3><a name="STD_14.7.2">14.7.2 Explicit instantiation [temp.explicit]</a></h3>
+<h4><a name="STD_14.7.2">14.7.2 Explicit instantiation [temp.explicit]</a></h4>
 <p>
 12 The usual access checking rules do not apply to names used to specify
 explicit instantiations.  [ <i>Note:</i> In particular, the template arguments
@@ -677,7 +682,7 @@ be accessible and the template may be a member template or member function
 which would not normally be accessible.  &mdash; <i>end note</i> ]
 </p>
 
-<h3><a name="STD_14.8.2">14.8.2 Template argument deduction [temp.deduct]</a></h3>
+<h4><a name="STD_14.8.2">14.8.2 Template argument deduction [temp.deduct]</a></h4>
 <p>
 7 The substitution occurs in all types and expressions that are used in the
 function type and in template parameter declarations. The expressions include
@@ -694,7 +699,65 @@ expression.  &mdash; <i>end note</i> ]
 -->
 
 
-<h3><a name="STD_15.3">15.3 Handling an exception [except.handle]</a></h3>
+<h4><a name="STD_4.12">4.12 Function pointer conversions [conv.fctptr]</a></h4>
+<p>
+1 A prvalue of type “pointer to <tt>noexcept</tt> function” can be converted to
+a prvalue of type “pointer to function”. The result is a pointer to the
+function.  A prvalue of type “pointer to member of type <tt>noexcept</tt>
+function” can be converted to a prvalue of type “pointer to member of type
+function”. The result points to the member function.
+[ <i>Example:</i>
+<blockquote><pre>
+void (*p)() <del>throw(int)</del>;
+void (**pp)() noexcept = &p; <i>// error: cannot convert to pointer to noexcept function</i>
+
+struct S { typedef void (*p)(); operator p(); };
+void (*q)() noexcept = S(); <i>// error: cannot convert to pointer to noexcept function</i>
+</pre></blockquote>
+&mdash; <i>end example</i> ]
+
+<h4><a name="STD_8.3.5">8.3.5 Functions [dcl.fct]</a></h4>
+<p>
+8 The return type, the <i>parameter-type-list</i>, the </i>ref-qualifier</i>,
+the <i>cv-qualifier-seq</i>, and whether the function has a non-throwing
+<i>exception-specification</i>, but not the default arguments (8.3.6) <del>or
+the exception specification (15.4)</del>, are part of the function type.
+[<i>Note:</i> Function types are checked during the assignments and
+initializations of pointers to functions, references to functions, and pointers
+to member functions. &mdash; <i>end note</i> ]
+</p>
+
+<h4><a name="STD_8.4.2">8.4.2 Explicitly-defaulted functions [dcl.fct.def.default]</a></h4>
+<p>
+4 [ <i>Example:</i>
+</p>
+<pre>
+   struct S {
+     constexpr S() = default;            // ill-formed: implicit S() is not constexpr
+     S(int a = 0) = default;             // ill-formed: default argument
+     void operator=(const S&amp;) = default; // ill-formed: non-matching return type
+     ~S() <ins>noexcept(false)</ins><del>throw(int)</del> = default;          // deleted: exception specification does not match
+   private:
+     int i;
+     S(S&amp;);                              // OK: private copy constructor
+   };
+   S::S(S&amp;) = default;                   // OK: defines copy constructor
+</pre>
+<p>
+&mdash; <i>end example</i> ]
+</p>
+
+
+
+<h4><a name="STD_14.5.3">14.5.3 Variadic templates [temp.variadic]</a></h4>
+<p>
+<del>
+(4.7) &mdash; In a <i>dynamic-exception-specification</i> (15.4); the pattern is a <i>type-id</i>.
+</del>
+</p>
+
+
+<h4><a name="STD_15.3">15.3 Handling an exception [except.handle]</a></h4>
 <p>
 7 A handler is considered active when initialization is complete for the
 parameter (if any) of the catch clause. [ <i>Note:</i> The stack will have been
@@ -705,7 +768,7 @@ longer considered active when the catch clause exits<del> or when
 <tt>std::unexpected()</tt> exits after being entered due to a throw</del>.
 </p>
 
-<h3><a name="STD_15.4">15.4 Exception specifications [except.spec]</a></h3>
+<h4><a name="STD_15.4">15.4 Exception specifications [except.spec]</a></h4>
 <p>
 1 The <i>exception specification</i> of a function is a (possibly empty) set of
 types, indicating that the function might exit via an exception <del>that
@@ -895,26 +958,27 @@ function’s type; see 8.3.5.  &mdash; <i>end note</i> ]
 </del></p>
 
 <p>
-12 A <i>potential exception</i> of a given context is <del>either</del> a type
-that might be thrown as an exception <del>or a pseudo-type, denoted by
-&quot;any&quot;, that represents the situation where an exception of an
-arbitrary type might be thrown</del>.  A subexpression <tt>e1</tt> of an
-expression <tt>e</tt> is an immediate subexpression if there is no
+12 <del>A</del><ins>The set of</ins> <i>potential exception<ins>s</ins></i> of
+a given context is <del>either a type</del><ins>a set of types</ins> that might
+be thrown as an exception <del>or a pseudo-type, denoted by &quot;any&quot;,
+that represents the situation where an exception of an arbitrary type might be
+thrown</del><ins>; the (conceptual) set of all types is used to denote that an
+exception of arbitrary type might be thrown</ins>.  A subexpression <tt>e1</tt>
+of an expression <tt>e</tt> is an immediate subexpression if there is no
 subexpression <tt>e2</tt> of <tt>e</tt> such that <tt>e1</tt> is a
 subexpression of <tt>e2</tt>.
 </p>
 
-<p>
-13 The <i>set of potential exceptions of a function, function pointer, or
-member function pointer</i> <tt>f</tt> is <ins>the set denoted by the exception
-specification of <tt>f</tt>.</ins><del>defined as follows:</del>
-</p>
 <p><del>
-(14.1) &mdash; If the exception specification of <tt>f</tt> is the set of all
+13 The <i>set of potential exceptions of a function, function pointer, or
+member function pointer</i> <tt>f</tt> is defined as follows:
+</p></del>
+<p><del>
+(13.1) &mdash; If the exception specification of <tt>f</tt> is the set of all
 types, the set consists of the pseudo-type &quot;any&quot;.
 </del></p>
 <p><del>
-(14.2) &mdash; Otherwise, the set consists of every type in the exception
+(13.2) &mdash; Otherwise, the set consists of every type in the exception
 specification of <tt>f</tt>.
 </del></p>
 
@@ -1024,10 +1088,11 @@ function’s type is declared to be <tt>T</tt>, is instead considered to be of
 type &quot;<tt>noexcept T</tt>&quot;.
 </p>
 <p>
-16 Given an implicitly declared special member function <tt>f</tt> of some
-class <tt>X</tt>, the <i>set of potential exceptions of the implicitly-declared
-special member function</i> <tt>f</tt> consists of all the members from the
-following sets:
+16 <del>Given an</del><ins>An</ins> implicitly declared special member function
+<tt>f</tt> of some class <tt>X</tt></del>, the <i>set of potential exceptions
+of the implicitly-declared special member function</i> <tt>f</tt></del> <ins>is
+considered to have an implicit exception specification that</ins> consists of
+all the members from the following sets:
 </p>
 <p>
 (16.1) &mdash; if <tt>f</tt> is a constructor,
@@ -1071,23 +1136,24 @@ of the destructor invocations for <tt>X</tt>'s non-variant non-static data
 members and for <tt>X</tt>'s virtual and direct base classes.
 </p>
 
-<p>
+<p><del>
 17 An implicitly-declared special member function (Clause 12) is considered to
 have an implicit exception specification, as follows, where <tt>S</tt> is the
 set of potential exceptions of the implicitly-declared member function:
-</p>
-<p>
-(17.1) &mdash; if <tt>S</tt> <ins>is the set of all types</ins><del>contains
-the pseudo-type &quot;any&quot;</del>, the implicit exception specification is
-the set of all types;
-</p>
-<p>
+</del></p>
+<p><del>
+(17.1) &mdash; if <tt>S</tt> contains the pseudo-type &quot;any&quot;, the
+implicit exception specification is the set of all types;
+</del></p>
+<p><del>
 (17.2) &mdash; otherwise, the implicit exception specification contains all the
 types in <tt>S</tt>.  </p>
+</del><p>
 <p>
-[ <i>Note:</i> An instantiation of an inheriting constructor template has an
+<ins>17</ins>[ <i>Note:</i> An instantiation of an inheriting constructor template has an
 implied exception specification as if it were a non-template inheriting
 constructor. &mdash; <i>end note</i> ]
+</p>
 [ <i>Example:</i>
 </p><pre>
    struct A {
@@ -1173,7 +1239,7 @@ deprecated (see Annex D).  &mdash; <i>end note</i> ]
 </del></p>
 
 
-<h3><a name="STD_15.5">15.5 Special functions [except.special]</a></h3>
+<h4><a name="STD_15.5">15.5 Special functions [except.special]</a></h4>
 <p>
 1 The function<del>s</del> <tt>std::terminate()</tt> (15.5.1) <del>and
 <tt>std::unexpected()</tt> (15.5.2) are</del><ins>is</ins> used by the
@@ -1183,7 +1249,7 @@ handling mechanism itself. The function <tt>std::current_exception()</tt>
 program to capture the currently handled exception.
 </p>
 
-<h3><a name="STD_15.5.1">15.5.1 The std::terminate() function [except.terminate]</a></h3>
+<h4><a name="STD_15.5.1">15.5.1 The std::terminate() function [except.terminate]</a></h4>
 <p>
 1 In some situations exception handling must be abandoned for less subtle error
 handling techniques.  [ <i>Note:</i> These situations are:
@@ -1271,7 +1337,7 @@ that the unwind process will eventually cause a call to
 </p>
 
 
-<h3><a name="STD_15.5.2"><del>15.5.2 The <tt>std::unexpected()</tt> function [except.unexpected]</del></a></h3>
+<h4><a name="STD_15.5.2"><del>15.5.2 The <tt>std::unexpected()</tt> function [except.unexpected]</del></a></h4>
 <p><del>
 1 If a function with a <i>dynamic-exception-specification</i> exits via an
 exception of a type that is not allowed by its exception specification, the
@@ -1308,7 +1374,7 @@ replaced by <tt>std::bad_exception</tt> within the function
 </del></p>
 
 
-<h3><a name="STD_17.6.4.8">17.6.4.7 Handler functions [handler.functions]</a></h3>
+<h4><a name="STD_17.6.4.8">17.6.4.7 Handler functions [handler.functions]</a></h4>
 <p>
 1 The C++ standard library provides default versions of the following handler
 function<del>s</del> (Clause 18):
@@ -1360,7 +1426,7 @@ subsequent calls to the same <tt>set_*</tt> function and to the corresponding
 </p>
 
 
-<h3><a name="STD_17.6.4.8">17.6.4.8 Other functions [res.on.functions]</a></h3>
+<h4><a name="STD_17.6.4.8">17.6.4.8 Other functions [res.on.functions]</a></h4>
 <p>
 (2.2) &mdash; for handler functions (18.6.3.3, 18.8.4.1<del>, D.5.1</del>), if the
 installed handler function does not implement the semantics of the applicable
@@ -1368,13 +1434,13 @@ installed handler function does not implement the semantics of the applicable
 </p>
 
 
-<h3><a name="STD_17.6.5.12">17.6.5.12 Restrictions on exception handling [res.on.exception.handling]</a></h3>
+<h4><a name="STD_17.6.5.12">17.6.5.12 Restrictions on exception handling [res.on.exception.handling]</a></h4>
 <p>
 1 Any of the functions defined in the C++ standard library can report a failure
 by throwing an exception of a type described in its <b>Throws:</b> paragraph.
-An implementation may strengthen the exception specification for a non-virtual
-function by adding a non-throwing
-<i><ins>exception</ins><del>noexcept</del>-specification</i>.
+<del>An implementation may strengthen the exception specification for a
+non-virtual function by adding a non-throwing
+<i>noexcept-specification</i>.</del>
 </p>
 <p>
 2 A function may throw an object of a type not listed in its <b>Throws</b>
@@ -1392,10 +1458,15 @@ exceptions. Every destructor in the C++ standard library shall behave as if it
 had a non-throwing exception specification. Any other functions defined in the
 C++ standard library that do not have an <i>exception-specification</i> may
 throw implementation-defined exceptions unless otherwise
-specified.<sup>190</sup> An implementation may strengthen this implicit
+specified.<sup>190</sup> <del>An implementation may strengthen this implicit
 <i>exception-specification</i> by adding an explicit
-one.<sup><del>191</del></sup>
+one</del>.<sup><del>191</del></sup>
 </p>
+<p><ins>
+5 An implementation may strengthen the exception specification for a non-virtual
+function by adding an <i>exception-specification</i> that does not allow
+exceptions.
+</ins></p>
 <p><del>
 191) That is, an implementation may provide an explicit
 <i>exception-specification</i> that defines the subset of &quot;any&quot;
@@ -1403,10 +1474,10 @@ exceptions thrown by that function. This implies that the implementation may
 list implementation-defined types in such an <i>exception-specification</i>.
 </del></p>
 
-<h3><a name="STD_18.8">18.8 Exception Handling [support.exception]</a></h3>
+<h4><a name="STD_18.8">18.8 Exception Handling [support.exception]</a></h4>
 <p>
-1 The header <tt>&lt;exception&gt;</tt> defines several types and functions related to the handling
-of exceptions in a C++ program.
+1 The header <tt>&lt;exception&gt;</tt> defines several types and functions
+related to the handling of exceptions in a C++ program.
 </p>
 
 <h4><a name="STD_18.8_synopsis">Header &lt;exception&gt; synopsis</a></h4>
@@ -1430,7 +1501,7 @@ of exceptions in a C++ program.
        <i>// D.<del>9</del><ins>X</ins>, uncaught_exception (deprecated)</i>
        bool uncaught_exception() noexcept;
 
-       typedef unspecified exception_ptr;
+       typedef <i>unspecified</i> exception_ptr;
 
        exception_ptr current_exception() noexcept;
        [[noreturn]] void rethrow_exception(exception_ptr p);
@@ -1441,7 +1512,7 @@ of exceptions in a C++ program.
 </pre>
 
 
-<h3><a name="STD_18.8.3">18.8.3 Class <tt>bad_exception</tt> [bad.exception]</a></h3>
+<h4><a name="STD_18.8.3">18.8.3 Class <tt>bad_exception</tt> [bad.exception]</a></h4>
 <p>
 1 The class <tt>bad_exception</tt> defines the type of object<del>s</del>
 <ins>referenced by the <tt>exception_ptr</tt> returned from a call to
@@ -1450,15 +1521,16 @@ exception object fails to copy</ins><del>thrown as described in (15.5.2)</del>.
 </p>
 
 
-<h3><a name="STD_23.3.7.8">23.3.7.8 Zero sized arrays [array.zero]</a></h3>
+<h4><a name="STD_23.3.7.8">23.3.7.8 Zero sized arrays [array.zero]</a></h4>
 <p>
-4 Member function <tt>swap()</tt> shall have a<ins>n</ins>
-<i><ins>exception</ins><del>noexcept</del>-specification</i> which is
-equivalent to <tt>noexcept(true)</tt>.
+4 Member function <tt>swap()</tt> shall have <ins>an
+<i>exception-specification</i> that does not allow exceptions</ins> <del>a
+<i>noexcept-specification</i> which is equivalent to
+<tt>noexcept(true)</tt></del>.
 </p>
 
 
-<h3><a name="STD_B">Annex B (informative) Implementation quantities [implimits]</a></h3>
+<h4><a name="STD_B">Annex B (informative) Implementation quantities [implimits]</a></h4>
 <p>
 <del>
 (2.40) &mdash; Throw specifications on a single function declaration [256].
@@ -1466,16 +1538,16 @@ equivalent to <tt>noexcept(true)</tt>.
 </p>
 
 
-<h3><a name="STD_D.2">D.2 Dynamic exception specifications [depr.except.spec]</a></h3>
+<h4><a name="STD_D.2">D.2 Dynamic exception specifications [depr.except.spec]</a></h4>
 <p>
 1 The <ins><i>exception-specification</i> <tt>throw()</tt></ins><del>use of
 <i>dynamic-exception-specification</i>s</del> is deprecated.
 </p>
 
 
-<h3><a name="STD_D.5"><del>D.5 Violating <i>exception-specifications</i> [exception.unexpected]</del></a></h3>
+<h4><a name="STD_D.5"><del>D.5 Violating <i>exception-specifications</i> [exception.unexpected]</del></a></h4>
 
-<h3><a name="STD_D.5.1"><del>D.5.1 Type <tt>unexpected_handler</tt> [unexpected.handler]</del></a></h3>
+<h4><a name="STD_D.5.1"><del>D.5.1 Type <tt>unexpected_handler</tt> [unexpected.handler]</del></a></h4>
 <p><del>
 <tt>typedef void (*unexpected_handler)();</tt>
 </del></p>
@@ -1493,7 +1565,7 @@ See also 15.5.2.
 <tt>unexpected_handler</tt> calls <tt>std::terminate()</tt>.
 </del></p>
 
-<h3><a name="STD_D.5.2"><del>D.5.2 <tt>set_unexpected</tt> [set.unexpected]</del></a></h3>
+<h4><a name="STD_D.5.2"><del>D.5.2 <tt>set_unexpected</tt> [set.unexpected]</del></a></h4>
 <p><del>
 <tt>unexpected_handler set_unexpected(unexpected_handler f) noexcept;</tt>
 </del></p>
@@ -1509,7 +1581,7 @@ current <tt>unexpected_handler</tt>.
 3 <i>Returns:</i> The previous <tt>unexpected_handler</tt>.
 </del></p>
 
-<h3><a name="STD_D.5.3"><del>D.5.3 <tt>get_unexpected</tt> [get.unexpected]</del></a></h3>
+<h4><a name="STD_D.5.3"><del>D.5.3 <tt>get_unexpected</tt> [get.unexpected]</del></a></h4>
 <p><del>
 <tt>unexpected_handler get_unexpected() noexcept;</tt>
 </del></p>
@@ -1518,7 +1590,7 @@ current <tt>unexpected_handler</tt>.
 may be a null pointer value. &mdash; <i>end note</i> ]
 </del></p>
 
-<h3><a name="STD_D.5.4"><del>D.5.4 <tt>unexpected</tt> [unexpected]</del></a></h3>
+<h4><a name="STD_D.5.4"><del>D.5.4 <tt>unexpected</tt> [unexpected]</del></a></h4>
 <p><del>
 <tt>[[noreturn]] void unexpected();</tt>
 </del></p>
@@ -1533,6 +1605,800 @@ directly by the program.
 <i>Note:</i> A default <tt>unexpected_handler</tt> is always considered a
 callable handler in this context. &mdash; <i>end note</i> ]
 </del></p>
+
+
+
+<h3><a name="7.2">Second cut: simplified wording</h3>
+
+<p>
+In addition to the previously proposed edits, make the following changes, and
+completely replace clause 15.4 [except.spec] with the text below.
+</p>
+
+<p>
+Drafting notes:
+</p>
+<ul>
+  <li>Still missing Annex C: missing compatibility clause</li>
+</ul>
+
+
+<h4><a name="STD.2_5.3.7">5.3.7 noexcept operator [expr.unary.noexcept]</a></h4>
+<p>
+1 The <tt>noexcept</tt> operator determines whether the evaluation of its operand, which
+is an unevaluated operand (Clause 5), can throw an exception (15.1).
+</p>
+<blockquote>
+<i>noexcept-expression:</i>
+<blockquote>
+<tt>noexcept</tt> ( <i>expression</i> )
+</blockquote>
+</blockquote>
+<p>
+2 The result of the <tt>noexcept</tt> operator is a constant of type
+<tt>bool</tt> and is a prvalue.
+</p>
+<p>
+3 The result of the <tt>noexcept</tt> operator is <tt>true</tt> <ins>unless the
+expression allows exceptions (15.4)</ins><del> if the set of potential
+exceptions of the expression (15.4) is empty, and <tt>false</tt>
+otherwise</del>.
+</p>
+
+
+<h4><a name="STD.2_8.4.2">8.4.2 Explicitly-defaulted functions [dcl.fct.def.default]</a></h4>
+<p>
+3 If a function that is explicitly defaulted is declared with an
+<i>exception-specification</i> that <ins>allows exceptions that are not allowed
+by</ins><del>is not compatible (15.4) with</del> the exception specification of
+the implicit declaration, then
+</p>
+<p>
+(3.1) &mdash; if the function is explicitly defaulted on its first declaration,
+it is defined as deleted;
+</p>
+<p>
+(3.2) &mdash; otherwise, the program is ill-formed.
+</p>
+
+
+<h4><a name="STD.2_15.4">15.4 Exception specifications [except.spec]</a></h4>
+<p><del>
+1 The <i>exception specification</i> of a function is a (possibly empty)
+set of types, indicating that the function might exit via an exception
+that matches a handler of one of the types in the set; the
+(conceptual) set of all types is used to denote that the function might exit
+via an exception of arbitrary type. If the set is empty, the function is said
+to have a <i>non-throwing exception specification</i>.  The exception
+specification is either defined explicitly by using an
+<i>exception-specification</i> as a suffix of a function declaration's
+declarator (8.3.5) or implicitly.
+</del></p>
+<p>
+<pre>
+   <del><i>exception-specification:</i></del>
+      <del><i>dynamic-exception-specification</i></del>
+      <del><i>noexcept-specification</i></del>
+
+   <del><i>dynamic-exception-specification:</i></del>
+      <del>throw ( <i>type-id-list<sub>opt</sub></i> )</del>
+
+   <del><i>type-id-list:</i></del>
+      <del><i>type-id ...<sub>opt</sub></i></del>
+      <del><i>type-id-list , type-id ...<sub>opt</sub></i></del>
+
+   <del>noexcept-specification:</del>
+      <del>noexcept ( <i>constant-expression</i> )</del>
+      <del>noexcept</del>
+</pre>
+</p>
+<p><del>
+In a <i>noexcept-specification</i>, the <i>constant-expression</i>, if
+supplied, shall be a constant expression (5.20) that is contextually converted
+to <tt>bool</tt> (Clause 4).  A <tt>(</tt> token that follows <tt>noexcept</tt>
+is part of the <i>noexcept-specification</i> and does not commence an
+initializer (8.5).
+</del></p>
+
+<p><del>
+2 A type denoted in a <i>dynamic-exception-specification</i> shall not denote
+an incomplete type or an rvalue reference type. A type denoted in a
+<i>dynamic-exception-specification</i> shall not denote a pointer or reference
+to an incomplete type, other than “pointer to <i>cv</i> <tt>void</tt>”. A type
+<i>cv</i> <tt>T</tt> denoted in a <i>dynamic-exception-specification</i> is
+adjusted to type <tt>T</tt>. A type “array of <tt>T</tt>”, or function type
+<tt>T</tt> denoted in a <i>dynamic-exception-specification</i> is adjusted to
+type “pointer to <tt>T</tt>”. A <i>dynamic-exception-specification</i> denotes
+an exception specification that is the set of adjusted types specified thereby.
+</del></p>
+
+<p><del>
+3 The <i>exception-specification</i> <tt>noexcept</tt> or
+<tt>noexcept(<i>constant-expression</i>)</tt>, where the
+<i>constant-expression</i> yields <tt>true</tt>, denotes an exception
+specification that is the empty set. The <i>exception-specification</i>
+<tt>noexcept(<i>constant-expression</i>)</tt>, where the
+<i>constant-expression</i> yields <tt>false</tt>, or the absence of an
+<i>exception-specification</i> in a function declarator other than that for a
+destructor (12.4) or a deallocation function (3.7.4.2) denotes an exception
+specification that is the set of all types.
+</del></p>
+
+<p><del>
+4 Two <i>exception-specification</i>s are <i>compatible</i> if the sets of
+types they denote are the same.
+</del></p>
+
+<p><del>
+5 If any declaration of a function has an <i>exception-specification</i> that
+is not a <i>noexcept-specification</i> allowing all exceptions, all
+declarations, including the definition and any explicit specialization, of that
+function shall have a compatible <i>exception-specification</i>.  If any
+declaration of a pointer to function, reference to function, or pointer to
+member function has an <i>exception-specification</i>, all occurrences of that
+declaration shall have a compatible <i>exception-specification</i>.  If a
+declaration of a function has an implicit exception specification, other
+declarations of the function shall not specify an
+<i>exception-specification</i>.  In an explicit instantiation an
+<i>exception-specification</i> may be specified, but is not required. If an
+<i>exception-specification</i> is specified in an explicit instantiation
+directive, it shall be compatible with the <i>exception-specifications</i> of
+other declarations of that function. A diagnostic is required only if the
+<i>exception-specification</i>s are not compatible within a single translation
+unit.
+</del></p>
+
+<p><del>
+6 If a virtual function has an exception specification, all declarations,
+including the definition, of any function
+that overrides that virtual function in any derived class shall
+only allow exceptions that are allowed by the
+exception specification of the base class virtual function, unless the
+overriding function is defined as deleted. [ <i>Example:</i>
+</del></p>
+<pre>
+     <del>struct B {</del>
+       <del>virtual void f() throw (int, double);</del>
+       <del>virtual void g();</del>
+     <del>};</del>
+
+     <del>struct D: B {</del>
+       <del>void f();               <i>// ill-formed</i></del>
+       <del>void g() throw (int);   <i>// OK</i></del>
+     <del>};</del>
+</pre>
+<p><del>
+The declaration of <tt>D::f</tt> is ill-formed because it allows all
+exceptions, whereas <tt>B::f</tt> allows only <tt>int</tt> and <tt>double</tt>.
+&mdash; <i>end example</i>]
+</del></p>
+
+<p><del>
+7 An <i>exception-specification</i> can include the same type more than once
+and can include classes that are related by inheritance, even though doing so
+is redundant. [ <i>Note:</i> An <i>exception-specification</i> can also include
+the class <tt>std::bad_exception</tt> (18.8.3).  — <i>end note</i> ]
+</del></p>
+
+<p><del>
+8 A function is said to allow an exception of type <tt>E</tt> if its
+exception specification contains a type <tt>T</tt> for which a handler of type
+<tt>T</tt> would be a match (15.3) for an exception of type <tt>E</tt>.
+A function is said to allow all exceptions if its exception specification is
+the set of all types.
+</del></p>
+
+<p><del>
+9 Whenever an exception of type <tt>E</tt> is thrown and the search
+for a handler (15.3) encounters the outermost block of a function with an
+exception specification that does not allow <tt>E</tt>, then
+</del></p>
+<p><del>
+(9.1) &mdash; if the function definition has a
+<i>dynamic-exception-specification</i>, the function <tt>std::unexpected()</tt>
+is called (15.5.2),
+</del></p>
+<p><del>
+(9.2) &mdash; otherwise, the function <tt>std::terminate()</tt> is called (15.5.1).
+</del></p>
+<p><del>
+[ <i>Example:</i>
+</del></p>
+<pre>
+     <del>class X { };</del>
+     <del>class Y { };</del>
+     <del>class Z: public X { };</del>
+     <del>class W { };</del>
+
+     <del>void f() throw (X, Y) {</del>
+       <del>int n = 0;</del>
+       <del>if (n) throw X();  <i>// OK</i></del>
+       <del>if (n) throw Z();  <i>// also OK</i></del>
+       <del>throw W();         <i>// will call</i> <tt>std::unexpected()</tt></del>
+     <del>}</del>
+</pre>
+<p>
+<del>&mdash; <i>end example</i> ]
+</p>
+<p><del>
+[<i>Note:</i> A function can have multiple declarations with different
+non-throwing <i>exception-specifications</i>; for this purpose, the one on the
+function definition is used.  &mdash; <i>end note</i> ]
+</del></p>
+
+<p><del>
+10 An implementation shall not reject an expression merely because when
+executed it throws or might throw an exception that the containing function
+does not allow. [ <i>Example:</i>
+</del></p>
+<pre>
+     <del>extern void f() throw(X, Y);</del>
+     <del>void g() throw(X) {</del>
+       <del>f();     <i>// OK</i></del>
+     <del>}</del>
+</pre>
+<p><del>
+the call to <tt>f</tt> is well-formed even though when called, <tt>f</tt> might
+throw exception <tt>Y</tt> that <tt>g</tt> does not allow. &mdash; <i>end
+example</i> ]
+</del></p>
+
+<p><del>
+11 [ <i>Note:</i> An exception specification is not considered part of a
+function’s type; see 8.3.5.  &mdash; <i>end note</i> ]
+</del></p>
+
+<p><del>
+12 A <i>potential exception</i> of a given context is either a type
+that might be thrown as an exception or a pseudo-type, denoted by
+&quot;any&quot;, that represents the situation where an exception of an
+arbitrary type might be thrown.  A subexpression <tt>e1</tt> of an
+expression <tt>e</tt> is an immediate subexpression if there is no
+subexpression <tt>e2</tt> of <tt>e</tt> such that <tt>e1</tt> is a
+subexpression of <tt>e2</tt>.
+</del></p>
+
+<p><del>
+13 The <i>set of potential exceptions of a function, function pointer, or
+member function pointer</i> <tt>f</tt> is defined as follows:
+</del></p>
+<p><del>
+(13.1) &mdash; If the exception specification of <tt>f</tt> is the set of all
+types, the set consists of the pseudo-type &quot;any&quot;.
+</del></p>
+<p><del>
+(13.2) &mdash; Otherwise, the set consists of every type in the exception
+specification of <tt>f</tt>.
+</del></p>
+
+<p><del>
+14 The <i>set of potential exceptions of an expression</i> <tt>e</tt> is empty
+if <tt>e</tt> is a core constant expression (5.20). Otherwise, it is the union
+of the sets of potential exceptions of the immediate subexpressions of
+<tt>e</tt>, including default argument expressions used in a function call,
+combined with a set <tt>S</tt> defined by the form of <tt>e</tt>, as follows:
+</del></p>
+<p><del>
+(14.1) &mdash; If <tt>e</tt> is a function call (5.2.2):
+</del></p>
+</p><del>
+(14.1.1) &mdash; If its <i>postfix-expression</i> is a (possibly parenthesized)
+<i>id-expression</i> (5.1.1), class member access (5.2.5), or pointer-to-member
+operation (5.5) whose <i>cast-expression</i> is an <i>id-expression</i>,
+<tt>S</tt> is the set of potential exceptions of the entity selected by the
+contained <i>id-expression</i> (after overload resolution, if applicable).
+</del></p>
+<p><del>
+(14.1.2) &mdash; Otherwise, if the <i>postfix-expression</i> has type
+&quot;<tt>noexcept</tt> function&quot; or &quot;pointer to <tt>noexcept</tt>
+function&quot;, <tt>S</tt> is the empty set.
+</del></p>
+<p><del>
+(14.1.3) &mdash; Otherwise, <tt>S</tt> contains the pseudo-type &quot;any&quot;.
+</del></p>
+<p><del>
+(14.2) &mdash; If <tt>e</tt> implicitly invokes a function (such as an
+overloaded operator, an allocation function in a <i>new-expression</i>, or a
+destructor if <tt>e</tt> is a full-expression (1.9)), <tt>S</tt> is the set of
+potential exceptions of the function.
+</del></p>
+<p><del>
+(14.3) &mdash; If <tt>e</tt> initializes an object of type <tt>D</tt> using an
+inherited constructor for a class of type <tt>B</tt> (12.6.3), <tt>S</tt> also
+contains the sets of potential exceptions of the implied constructor
+invocations for subobjects of <tt>D</tt> that are not subobjects of <tt>B</tt>
+(including default argument expressions used in such invocations) as selected
+by overload resolution, and the sets of potential exceptions of the
+initialization of non-static data members from
+<i>brace-or-equal-initializers</i> (12.6.2).
+</del></p>
+<p><del>
+(14.4) &mdash; if <tt>e</tt> is a <i>throw-expression</i> (5.17), <tt>S</tt>
+consists of the type of the exception object that would be initialized by the
+operand, if present, or the pseudo-type &quot;any&quot; otherwise.
+</del></p>
+<p><del>
+(14.5) &mdash; if <tt>e</tt> is a <tt>dynamic_cast</tt> expression that casts
+to a reference type and requires a run-time check (5.2.7), <tt>S</tt> consists
+of the type <tt>std::bad_cast</tt>.
+</del></p>
+<p><del>
+(14.6) &mdash; if <tt>e</tt> is a typeid expression applied to a glvalue
+expression whose type is a polymorphic class type (5.2.8), <tt>S</tt> consists
+of the type <tt>std::bad_typeid</tt>.
+</del></p>
+<p><del>
+(14.7) &mdash; if <tt>e</tt> is a new-expression with a non-constant
+<i>expression</i> in the <i>noptr-new-declarator</i> (5.3.4), <tt>S</tt>
+consists of the type <tt>std::bad_array_new_length</tt>.
+</del></p>
+<p><del>
+[ <i>Example:</i> Given the following declarations
+</del></p>
+<pre>
+    <del>void f() throw(int);</del>
+    <del>void g();</del>
+    <del>struct A { A(); };</del>
+    <del>struct B { B() noexcept; };</del>
+    <del>struct D { D() throw (double); };</del>
+</pre>
+<p><del>
+the set of potential exceptions for some sample expressions is:
+</del></p>
+<p><del>
+(14.8) &mdash; for <tt>f()</tt>, the set consists of <tt>int</tt>;
+</del></p>
+<p><del>
+(14.9) &mdash; for <tt>g()</tt>, the set consists of &quot;any&quot;;
+</del></p>
+<p><del>
+(14.10) &mdash; for <tt>new A</tt>, the set consists of &quot;any&quot;;
+</del></p>
+<p><del>
+(14.11) &mdash; for <tt>B()</tt>, the set is empty;
+</del></p>
+<p><del>
+(14.12) &mdash; for <tt>new D</tt>, the set consists of &quot;any&quot; and
+<tt>double</tt>.
+</del></p>
+<p><del>
+&mdash; <i>end example</i> ]
+</del></p>
+
+<p><del>
+15 A function with an implied non-throwing exception specification, where the
+function’s type is declared to be <tt>T</tt>, is instead considered to be of
+type &quot;<tt>noexcept T</tt>&quot;.
+</del></p>
+<p><del>
+16 Given an implicitly declared special member function <tt>f</tt> of some
+class <tt>X</tt>, the <i>set of potential exceptions of the implicitly-declared
+special member function</i> <tt>f</tt> consists of all the members from the
+following sets:
+</del></p>
+<p><del>
+(16.1) &mdash; if <tt>f</tt> is a constructor,
+</del></p>
+<p><del>
+(16.1.1) &mdash; the sets of potential exceptions of the constructor invocations
+</del></p>
+<p><del>
+(16.1.1.1) &mdash; for <tt>X</tt>'s non-variant non-static data members,
+</del></p>
+<p><del>
+(16.1.1.2) &mdash; for <tt>X</tt>'s direct base classes, and
+</del></p>
+<p><del>
+(16.1.1.3) &mdash; if <tt>X</tt> is non-abstract (10.4), for <tt>X</tt>'s virtual base classes,
+</del></p>
+<p><del>
+(including default argument expressions used in such invocations) as selected
+by overload resolution for the implicit definition of <tt>f</tt> (12.1). [
+<i>Note:</i> Even though destructors for fully-constructed subobjects are
+invoked when an exception is thrown during the execution of a constructor
+(15.2), their exception specifications do not contribute to the exception
+specification of the constructor, because an exception thrown from such a
+destructor could never escape the constructor (15.1, 15.5.1). &mdash; <i>end
+note</i>]
+</del></p>
+<p><del>
+(16.1.2) &mdash; the sets of potential exceptions of the initialization of
+non-static data members from <i>brace-or-equal-initializer</i>s that are not
+ignored (12.6.2);
+</del></p>
+<p><del>
+(16.2) &mdash; if <tt>f</tt> is an assignment operator, the sets of potential
+exceptions of the assignment operator invocations for <tt>X</tt>'s non-variant
+non-static data members and for <tt>X</tt>'s direct base classes (including
+default argument expressions used in such invocations), as selected by overload
+resolution for the implicit definition of <tt>f</tt> (12.8);
+</del></p>
+<p><del>
+(16.3) &mdash; if <tt>f</tt> is a destructor, the sets of potential exceptions
+of the destructor invocations for <tt>X</tt>'s non-variant non-static data
+members and for <tt>X</tt>'s virtual and direct base classes.
+</del></p>
+
+<p><del>
+17 An implicitly-declared special member function (Clause 12) is considered to
+have an implicit exception specification, as follows, where <tt>S</tt> is the
+set of potential exceptions of the implicitly-declared member function:
+</del></p>
+<p><del>
+(17.1) &mdash; if <tt>S</tt> contains the pseudo-type &quot;any&quot;, the
+implicit exception specification is the set of all types;
+</del></p>
+<p><del>
+(17.2) &mdash; otherwise, the implicit exception specification contains all the
+types in <tt>S</tt>.  </p>
+</del><p>
+<p><del>
+[ <i>Note:</i> An instantiation of an inheriting constructor template has an
+implied exception specification as if it were a non-template inheriting
+constructor. &mdash; <i>end note</i> ]
+</del></p>
+<p><del>
+[ <i>Example:</i>
+</del></p>
+</p><pre>
+   <del>struct A {</del>
+     <del>A(int = (A(5), 0)) noexcept;</del>
+     <del>A(const A&amp;) throw();</del>
+     <del>A(A&amp;&amp;) throw();</del>
+     <del>~A() throw(X);</del>
+   <del>};</del>
+   <del>struct B {</del>
+     <del>B() throw();</del>
+     <del>B(const B&amp;) = default;  <i>// exception specification contains no types</i></del>
+     <del>B(B&amp;&amp;, int = (throw Y(), 0)) noexcept;</del>
+     <del>~B() throw(Y);</del>
+   <del>};</del>
+   <del>int n = 7;</del>
+   <del>struct D : public A, public B {</del>
+     <del>int * p = new (std::nothrow) int[n];</del>
+     <del><i>// exception specification of D::D() contains X and std::bad_array_new_length</i></del>
+     <del><i>// exception specification of D::D(const D&amp;) contains no types</i></del>
+     <del><i>// exception specification of D::D(D&amp;&amp;) contains Y</i></del>
+     <del><i>// exception specification of D::~D() contains X and Y</i></del>
+   <del>};</del>
+</pre>
+<p><del>
+Furthermore, if <tt>A::~A()</tt> or <tt>B::~B()</tt> were virtual,
+<tt>D::~D()</tt> would not be as restrictive as that of <tt>A::~A</tt>, and the
+program would be ill-formed since a function that overrides a virtual function
+from a base class shall have an <i>exception-specification</i> at least as
+restrictive as that in the base class. &mdash; <i>end example</i> ]
+</del></p>
+
+<p><del>
+18 A deallocation function (3.7.4.2) with no explicit
+<i>exception-specification</i> has an exception specification that is the empty set.
+</del></p>
+
+<p><del>
+19 An <i>exception-specification</i> is considered to be <i>needed</i> when:
+<del></p>
+<p><del>
+(19.1) &mdash; in an expression, the function is the unique lookup result or
+the selected member of a set of overloaded functions (3.4, 13.3, 13.4);
+<del></p>
+<p><del>
+(19.2) &mdash; the function is odr-used (3.2) or, if it appears in an
+unevaluated operand, would be odr-used if the expression were
+potentially-evaluated;
+<del></p>
+<p><del>
+(19.3) &mdash; the <i>exception-specification</i> is compared to that of
+another declaration (e.g., an explicit specialization or an overriding virtual
+function);
+<del></p>
+<p><del>
+(19.4) &mdash; the function is defined; or
+<del></p>
+<p><del>
+(19.5) &mdash; the <i>exception-specification</i> is needed for a defaulted
+special member function that calls the function. [ <i>Note:</i> A defaulted
+declaration does not require the <i>exception-specification</i> of a base
+member function to be evaluated until the implicit
+<i>exception-specification</i> of the derived function is needed, but an
+explicit <i>exception-specification</i> needs the implicit
+<i>exception-specification</i> to compare against.  &mdash; <i>end note</i> ]
+<del></p>
+<p><del>
+The <i>exception-specification</i> of a defaulted special member function is
+evaluated as described above only when needed; similarly, the
+<i>exception-specification</i> of a specialization of a function template or
+member function of a class template is instantiated only when needed.
+<del></p>
+
+<p><del>
+20 In a <i>dynamic-exception-specification</i>, a <i>type-id</i> followed by an
+ellipsis is a pack expansion (14.5.3).
+</del></p>
+
+<p><del>
+21 [ <i>Note:</i> The use of <i>dynamic-exception-specification</i>s is
+deprecated (see Annex D).  &mdash; <i>end note</i> ]
+</del></p>
+
+
+<p><ins>
+1 The <i>exception specification</i> of a function is a predicate indicating
+whether the function might exit via an exception. If the predicate evaluates as
+<tt>false</tt>, the function is said to have a <i>non-throwing exception
+specification</i>.  The exception specification is either defined explicitly by
+using an <i>exception-specification</i> as a suffix of a function declaration's
+declarator (8.3.5) or implicitly.
+</ins></p>
+<p>
+<pre>
+   <ins><i>exception-specification:</i></ins>
+      <ins>noexcept ( <i>constant-expression</i> )</ins>
+      <ins>noexcept</ins>
+      <ins>throw ( )</ins>
+</pre>
+</p>
+<p><ins>
+2 In an <i>exception-specification</i>, the <i>constant-expression</i>, if
+supplied, shall be a constant expression (5.20) that is contextually converted
+to <tt>bool</tt> (Clause 4).  A <tt>(</tt> token that follows <tt>noexcept</tt>
+is part of the <i>exception-specification</i> and does not commence an
+initializer (8.5).  The <i>exception-specification</i> <tt>noexcept</tt>
+(without a <i>const-expression</i>) is equivalent to the
+<i>exception-specification</i> <tt>noexcept(true)</tt>.  The
+<i>exception-specification</i> <tt>throw()</tt> is deprecated (see Annex D),
+and equivalent to the <i>exception-specification</i> <tt>noexcept(true)</tt>.
+</ins></p>
+
+<p><ins>
+3 An <i>exeption specification</i> is said to allow exceptions if the predicate
+evaluates to <tt>false</tt>.  Otherwise, it does not allow exceptions.
+</ins></p>
+
+<p><ins>
+4 If any declaration of a function has an <i>exception specification</i> that
+does not allow exceptions, all declarations, including the definition and any
+explicit specialization, of that function shall have an <i>exception
+specification</i> that does not allow exceptions.  If any declaration of a
+pointer to function, reference to function, or pointer to member function has
+an <i>exception specification</i> that does not allow exceptions, all
+occurrences of that declaration shall have an <i>exception-specification</i>
+that does not allow exceptions.  If a declaration of a function has an implicit
+exception specification, other declarations of the function shall not specify
+an <i>exception-specification</i>.  In an explicit instantiation an
+<i>exception-specification</i> may be specified, but is not required. If an
+<i>exception-specification</i> is specified in an explicit instantiation
+directive, it shall allows exceptions only if the <i>exception-specification</i>s
+of all other declarations of that function allow exceptions. A diagnostic is
+required only if the <i>exception-specification</i>s are not compatible within
+a single translation unit.
+</ins></p>
+
+<p><ins>
+5 If a virtual function has an exception specification that does not allow
+exceptions, all declarations, including the definition, of any function that
+overrides that virtual function in any derived class shall not allow
+exceptions, unless the overriding function is defined as deleted. [
+<i>Example:</i>
+</ins></p>
+<pre>
+     <ins>struct B {</ins>
+       <ins>virtual void f() noexcept;</ins>
+       <ins>virtual void g();</ins>
+       <ins>virtual void h() noexcept;</ins>
+     <ins>};</ins>
+
+     <ins>struct D: B {</ins>
+       <ins>void f();              <i>// ill-formed</i></ins>
+       <ins>void g() noexept;      <i>// OK</i></ins>
+       <ins>void h() = delete;     <i>// OK</i></ins>
+     <ins>};</ins>
+</pre>
+<p><ins>
+The declaration of <tt>D::f</tt> is ill-formed because it allows all
+exceptions, whereas <tt>B::f</tt> allows no exceptions. &mdash; <i>end
+example</i>]
+</ins></p>
+
+<p><ins>
+6 Whenever an exception is thrown and the search for a handler (15.3)
+encounters the outermost block of a function with an exception specification
+that does not allow exceptions, the function <tt>std::terminate()</tt> is
+called (15.5.1).
+</ins></p>
+
+<p><ins>
+7 An implementation shall not reject an expression merely because when
+executed it throws or might throw an exception that the containing function
+does not allow. [ <i>Example:</i>
+</ins></p>
+<pre>
+     <ins>extern void f() noexcept;</ins>
+     <ins>void g() {</ins>
+       <ins>f();  <i>// OK</i></ins>
+     <ins>}</ins>
+</pre>
+<p><ins>
+the call to <tt>f</tt> is well-formed even though, when called, <tt>f</tt>
+might throw an exception that <tt>g</tt> does not allow. &mdash; <i>end
+example</i> ]
+</ins></p>
+
+<p><ins>
+8 An expression allows an exception if and only if any of its immediate
+subexpressions allows an exception.  A subexpression <tt>e1</tt> of an
+expression <tt>e</tt> is an immediate subexpression if there is no
+subexpression <tt>e2</tt> of <tt>e</tt> such that <tt>e1</tt> is a
+subexpression of <tt>e2</tt>.
+</ins></p>
+
+<p><ins>
+9 If <tt>e</tt> initializes an object of type <tt>D</tt> using an inherited
+constructor for a class of type <tt>B</tt> (12.6.3), the set of immediate
+subexpressions of <tt>e</tt> includes the implied constructor invocations for
+subobjects of <tt>D</tt> that are not subobjects of <tt>B</tt> (including
+default argument expressions used in such invocations) as selected by overload
+resolution, and the initialization of non-static data members from
+<i>brace-or-equal-initializers</i> (12.6.2).
+</ins></p>
+
+<p><ins>
+10 An expression (or subexpression) <tt>e</tt> does not allow exceptions unless
+</ins></p>
+<p><ins>
+(10.1) <tt>e</tt> invokes a function, or member function, whose <i>exception
+specification</i> allows exceptions, or
+</ins></p>
+<p><ins>
+(10.2) <tt>e</tt> implicitly invokes a function (such as an overloaded
+<tt>operator</tt>, an allocation function in a <i>new-expression</i>, a
+constructor for a function argument, or a destructor if <tt>e</tt> is a
+full-expression (1.9)), that allows exceptions, or
+</ins></p>
+<p><ins>
+(10.3) <tt>e</tt> is a <i>throw-expression</i> (5.17), or
+</ins></p>
+<p><ins>
+(10.4) <tt>e</tt> is a <tt>dynamic_cast</tt> expression that casts
+to a reference type and requires a run-time check (5.2.7), or
+</ins></p>
+<p><ins>
+(10.5) <tt>e</tt> is a <tt>typeid</tt> expression applied to a glvalue
+expression whose type is a polymorphic class type (5.2.8), or
+</ins></p>
+<p><ins>
+(10.6) <tt>e</tt> is a new-expression with a non-constant
+<i>expression</i> in the <i>noptr-new-declarator</i> (5.3.4), or
+</ins></p>
+<p><ins>
+(10.7) any of the immediate subexpressions of <tt>e</tt> allows exceptions.
+</ins></p>
+
+<p><ins>
+11 An implicitly declared special member function that is a constructor for a
+class <tt>X</tt> has an exception specification that does not allow exceptions
+unless any of the constructors selected by overload resolution in the implicit
+definition of that constructor to initialize direct base classes and non-static
+members, and, unless <tt>X</tt> is abstract, to initialize virtual base
+classes, has an exception specification that allows exceptions, or the
+invocation of such initialization contains an expression that allows
+exceptions, such as default argument expressions used in such invocations, or
+<i>brace-or-equal-initializer</i>s for non-static data members.
+</ins></p>
+
+<p><ins>
+12 [ <i>Note:</i> Even though destructors for fully-constructed subobjects are
+invoked when an exception is thrown during the execution of a constructor
+(15.2), their exception specifications do not contribute to the exception
+specification of the constructor, because an exception thrown from such a
+destructor could never escape the constructor (15.1, 15.5.1). &mdash; <i>end
+note</i>]
+</ins></p>
+
+<p><ins>
+13 [ <i>Note:</i> An instantiation of an inheriting constructor template has an
+implied exception specification as if it were a non-template inheriting
+constructor. &mdash; <i>end note</i> ]
+</ins></p>
+<p><ins>
+[ <i>Example:</i>
+</ins></p>
+<pre>
+   <ins>struct A {</ins>
+     <ins>A(int = (A(5), 0)) noexcept;</ins>
+     <ins>A(const A&amp;) noexcept;</ins>
+     <ins>A(A&amp;&amp;) noexcept;</ins>
+     <ins>~A();</ins>
+   <ins>};</ins>
+   <ins>struct B {</ins>
+     <ins>B() throw();</ins>
+     <ins>B(const B&amp;) = default;  <i>// implicit exception specification is <tt>true</tt></i></ins>
+     <ins>B(B&amp;&amp;, int = (throw Y(), 0)) noexcept;</ins>
+     <ins>~B() noexcept(false);</ins>
+   <ins>};</ins>
+   <ins>int n = 7;</ins>
+   <ins>struct D : public A, public B {</ins>
+     <ins>int * p = new (std::nothrow) int[n];</ins>
+     <ins><i>// D::D() allows exceptions, as the new operator may throw bad_array_new_length</i></ins>
+     <ins><i>// D::D(const D&amp;) does not allow exceptions</i></ins>
+     <ins><i>// D::D(D&amp;&amp;) allows exceptions, as the default argument for B's constructor may throw</i></ins>
+     <ins><i>// D::~D() allows exceptions</i></ins>
+   <ins>};</ins>
+</pre>
+<p><ins>
+Furthermore, if <tt>A::~A()</tt> were virtual, the exception specification of
+<tt>D::~D()</tt> would not be as restrictive as that of <tt>A::~A</tt>, and the
+program would be ill-formed since a function that overrides a virtual function
+from a base class shall have an <i>exception-specification</i> at least as
+restrictive as that in the base class. &mdash; <i>end example</i> ]
+</ins></p>
+
+
+<p><ins>
+14 An implicitly declared special member function that is the destructor for a
+class <tt>X</tt> has an exception specification that does not allow exceptions
+unless any of the destructors for its direct or virtual base classes and
+non-variant non-static data members has a destructor with an exception
+specification that allows exceptions.
+</ins></p>
+
+<p><ins>
+15 An implicitly declared special member function <tt>f</tt> that is an
+assignment operator for a class <tt>X</tt> has an exception specification that
+does not allow exceptions unless the implicit definition of <tt>f</tt>
+selects by overload resolution an assignment operator from a direct base
+class, or from a non-variant non-static data members, that allows exceptions.
+</ins></p>
+
+<p><ins>
+16 A function with an implied non-throwing exception specification, where the
+function’s type is declared to be <tt>T</tt>, is instead considered to be of
+type &quot;<tt>noexcept T</tt>&quot;.
+</ins></p>
+
+<p><ins>
+17 A deallocation function (3.7.4.2) with no explicit
+<i>exception-specification</i> has an exception specification that does not
+allow exceptions.
+</ins></p>
+
+<p>
+18 An <i>exception-specification</i> is considered to be <i>needed</i> when:
+</p>
+<p>
+(18.1) &mdash; in an expression, the function is the unique lookup result or
+the selected member of a set of overloaded functions (3.4, 13.3, 13.4);
+</p>
+<p>
+(18.2) &mdash; the function is odr-used (3.2) or, if it appears in an
+unevaluated operand, would be odr-used if the expression were
+potentially-evaluated;
+</p>
+<p>
+(18.3) &mdash; the <i>exception-specification</i> is compared to that of
+another declaration (e.g., an explicit specialization or an overriding virtual
+function);
+</p>
+<p>
+(18.4) &mdash; the function is defined; or
+</p>
+<p>
+(18.5) &mdash; the <i>exception-specification</i> is needed for a defaulted
+special member function that calls the function. [ <i>Note:</i> A defaulted
+declaration does not require the <i>exception-specification</i> of a base
+member function to be evaluated until the implicit
+<i>exception-specification</i> of the derived function is needed, but an
+explicit <i>exception-specification</i> needs the implicit
+<i>exception-specification</i> to compare against.  &mdash; <i>end note</i> ]
+</p>
+<p>
+</p>
+The <i>exception-specification</i> of a defaulted special member function is
+evaluated as described above only when needed; similarly, the
+<i>exception-specification</i> of a specialization of a function template or
+member function of a class template is instantiated only when needed.
+</p>
+
 
 
 <h2><a name="8.0">Acknowledgements</a></h2>
