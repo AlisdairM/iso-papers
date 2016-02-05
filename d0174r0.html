@@ -96,7 +96,7 @@ Original version of the paper for the 2016 pre-Jacksonville mailing.
 <ul>
   <li>temporary buffers</li>
   <li>is_literal</li>
-  <li>why not <tt>vector&lt;bool&gt;</li>
+  <li>why not <tt>vector&lt;bool&gt;</tt></li>
 </ul>
 
 
@@ -441,7 +441,7 @@ but it is unspecified when this function is called.
   <del>void construct(U* p, Args&amp;&amp;... args);</del>
 </pre>
 <li><del>
-<i>Effects:</i> <tt>::new((void *)p) U(std::forward<Args>(args)...)</tt>
+<i>Effects:</i> <tt>::new((void *)p) U(std::forward&lt;Args&gt;(args)...)</tt>
 </del></li>
 <pre>
 <del>template &lt;class U&gt;</del>
@@ -951,7 +951,7 @@ in the presence of an overloaded <tt>operator&amp;</tt>.
   <ins>void construct(U* p, Args&amp;&amp;... args);</ins>
 </pre>
 <li><ins>
-<i>Effects:</i> <tt>::new((void *)p) U(std::forward<Args>(args)...)</tt>
+<i>Effects:</i> <tt>::new((void *)p) U(std::forward&lt;Args&gt;(args)...)</tt>
 </ins></li>
 <pre>
 <ins>template &lt;class U&gt;</ins>
@@ -1150,8 +1150,10 @@ header in addition to those specified in Clause 25:
 </pre></blockquote>
 
 <li><ins>
-For each of the following algorithms, an invented <tt>InputIterator2</tt>
-object, <tt>last2</tt>, denotes <tt>first2 + (last1 - first1)</tt>.
+For each of the following algorithms, <tt>last2</tt> denotes an invented
+iterator object equivalent to <tt>first2 + (last1 - first1)</tt>. [
+<i>Note:</i> the behavior may undefined if there is no such reachable iterator
+&mdash; <i>end note</i> ]
 </ins></li>
 <blockquote><pre>
 <ins>template &lt;class InputIterator1, class InputIterator2&gt;</ins>
