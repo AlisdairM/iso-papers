@@ -51,11 +51,15 @@ blockquote.stdins { text-decoration: underline;
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2016-01-28</td>
+  <td align="left">2016-02-09</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
   <td align="left">Programming Language C++</td>
+</tr>
+<tr>
+  <td align="left">Audience:</td>
+  <td align="left">Core Working Group</td>
 </tr>
 <tr>
   <td align="left">Reply to:</td>
@@ -106,7 +110,7 @@ blockquote.stdins { text-decoration: underline;
       <li><a href="#STD_15.5.1">15.5.1 The std::terminate() function [except.terminate]</a></li>
       <li><a href="#STD_15.5.2">15.5.2 The <tt>std::unexpected()</tt> function [except.unexpected]</a></li>
     </ul>
-    <li><a href="#STD_17.6.4.8">17.6.4.7 Handler functions [handler.functions]</a></li>
+    <li><a href="#STD_17.6.4.7">17.6.4.7 Handler functions [handler.functions]</a></li>
     <li><a href="#STD_17.6.4.8">17.6.4.8 Other functions [res.on.functions]</a></li>
     <li><a href="#STD_17.6.5.12">17.6.5.12 Restrictions on exception handling [res.on.exception.handling]</a></li>
     <li><a href="#STD_18.8">18.8 Exception Handling [support.exception]</a></li>
@@ -116,6 +120,7 @@ blockquote.stdins { text-decoration: underline;
     </ul>
     <li><a href="#STD_23.3.7.8">23.3.7.8 Zero sized arrays [array.zero]</a></li>
     <li><a href="#STD_B">Annex B (informative) Implementation quantities [implimits]</a></li>
+    <li><a href="#STD_C.4.x">C.4.x Clause 15: declarations [diff.cpp14.dcl.dcl]</a></li>
     <li><a href="#STD_D.2">D.2 Dynamic exception specifications [depr.except.spec]</a></li>
     <li><a href="#STD_D.5">D.5 Violating <i>exception-specifications</i> [exception.unexpected]</a></li>
     <ul>
@@ -129,7 +134,7 @@ blockquote.stdins { text-decoration: underline;
   <ul>
     <li><a href="#STD.2_5.3.7">5.3.7 noexcept operator [expr.unary.noexcept]</a></li>
     <li><a href="#STD.2_8.4.2">8.4.2 Explicitly-defaulted functions [dcl.fct.def.default]</a></li>
-    <li><a href="#STD.2_15.5">15.5 Special functions [except.special]</a></li>
+    <li><a href="#STD.2_15.4">15.4 Exception specifications [except.spec]</a></li>
   </ul>
 </ul>
 <li><a href="#8.0">Acknowledgements</a></li>
@@ -1374,7 +1379,7 @@ replaced by <tt>std::bad_exception</tt> within the function
 </del></p>
 
 
-<h4><a name="STD_17.6.4.8">17.6.4.7 Handler functions [handler.functions]</a></h4>
+<h4><a name="STD_17.6.4.7">17.6.4.7 Handler functions [handler.functions]</a></h4>
 <p>
 1 The C++ standard library provides default versions of the following handler
 function<del>s</del> (Clause 18):
@@ -1536,6 +1541,21 @@ exception object fails to copy</ins><del>thrown as described in (15.5.2)</del>.
 (2.40) &mdash; Throw specifications on a single function declaration [256].
 </del>
 </p>
+
+<h3><ins><a name="STD_C.4.x">C.4.x Clause 15: declarations [diff.cpp14.dcl.dcl]</a></ins></h3>
+
+<p><ins>15.4</ins></p>
+<p><ins><b>Change:</b> Remove dynamic exception specifications.</ins></p>
+<p><ins><b>Rationale:</b> Dynamic exception specifications were a deprecated feature
+that were complex and brittle in use.  They interacted badly with the type system,
+which would be a more significant issue in C++17 where exception specifications become
+part of the function type</ins></p>
+<p><ins><b>Effect on original feature:</b> A valid C++ 2014 function declaration,
+member-function-declaration, function-pointer-declaration, or function-reference
+definition, which has a potentially throwing dyanmic exception specification will be
+rejected as ill-formed in this international standard.  Violating a non-throwing dynamic
+exception specification will call <tt>terminate</tt> rather than <tt>unexcepted</tt> and
+might not perform stack unwinding prior to such a call.</ins></p>
 
 
 <h4><a name="STD_D.2">D.2 Dynamic exception specifications [depr.except.spec]</a></h4>
