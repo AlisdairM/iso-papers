@@ -26,7 +26,7 @@
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2015-11-24</td>
+  <td align="left">2016-02-09</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -54,35 +54,42 @@
   <li><a href="#2.3">Deprecate algorithms taking half an input range</a></li>
   <li><a href="#2.4">Deprecate the Redundant Members of <tt>std::allocator</tt></a></li>
   </ul>
-<li><a href="#3.0">Proposed Wording</a></li>
+<li><a href="#3.0">Additional Candidates</a></li>
   <ul>
-  <li><a href="#3.0.1">20.7.2 Header &lt;memory&gt; synopsis [memory.syn]</li>
-  <li><a href="#3.1">20.7.9 The default allocator [default.allocator]</a></li>
-  <li><a href="#3.2">20.7.9.1 allocator members [allocator.members]</a></li>
-  <li><a href="#3.3">23.2.4 Associative containers [associative.reqmts]</a></li>
-  <li><a href="#3.4">23.4.4 Class template <tt>map</tt> [map]</a></li>
-  <li><a href="#3.4.1">23.4.4.1 Class template <tt>map</tt> overview [map.overview]</a></li>
-  <li><a href="#3.5">23.4.5 Class template <tt>multimap</tt> [multimap]</a></li>
-  <li><a href="#3.5.1">23.4.5.1 Class template <tt>multimap</tt> overview [multimap.overview]</a></li>
-  <li><a href="#3.6">23.4.6 Class template <tt>set</tt> [set]</a></li>
-  <li><a href="#3.6.1">23.4.6.1 Class template <tt>set</tt> overview [set.overview]</a></li>
-  <li><a href="#3.7">23.4.7 Class template <tt>multiset</tt> [multiset]</a></li>
-  <li><a href="#3.7.1">23.4.7.1 Class template <tt>multiset</tt> overview [multiset.overview]</a></li>
-  <li><a href="#3.8">24.3 Header <tt>&lt;iterator&gt;</tt> synopsis [iterator.synopsis]</a></li>
-  <li><a href="#3.9">24.4.2 Basic iterator [iterator.basic]</a></li>
-  <li><a href="#3.10">25 Algorithms library [algorithms]</a></li>
-  <li><a href="#3.10.1">25.1 General [algorithms.general]</a></li>
-  <li><a href="#3.11">25.2.10 Mismatch [mismatch]</a></li>
-  <li><a href="#3.11">25.2.10 Mismatch [mismatch]</a></li>
-  <li><a href="#3.12">25.2.11 Equal [alg.equal]</a></li>
-  <li><a href="#3.13">25.2.12 Is permutation [alg.is_permutation]</a></li>
-  <li><a href="#3.14">D.w The default allocator [depr.default.allocator]</a></li>
-  <li><a href="#3.15">D.x Value Comparators for Associative Containers [depr.container.assoc.value_compare]</a></li>
-  <li><a href="#3.16">D.y Basic iterator [depr.iterator.basic]</a></li>
-  <li><a href="#3.17">D.z Algorithms with Partially Formed Ranges [depr.algorithm.partial.range]</a></li>
+  <li><a href="#3.1">Reconsider <tt>vector&lt;bool&gt;</tt> Partial Specialization</a></li>
+  <li><a href="#3.2">Reconsider <tt>is_literal</tt>  Trait</a></li>
+  <li><a href="#3.3">Reconsider the Temporary Buffer APIs</a></li>
+  <li><a href="#3.4">Reconsider raw storaage iterators</a></li>
   </ul>
-<li><a href="#4.0">Acknowledgements</a></li>
-<li><a href="#5.0">References</a></li>
+<li><a href="#4.0">Proposed Wording</a></li>
+  <ul>
+  <li><a href="#4.0.1">20.7.2 Header &lt;memory&gt; synopsis [memory.syn]</li>
+  <li><a href="#4.1">20.7.9 The default allocator [default.allocator]</a></li>
+  <li><a href="#4.2">20.7.9.1 allocator members [allocator.members]</a></li>
+  <li><a href="#4.3">23.2.4 Associative containers [associative.reqmts]</a></li>
+  <li><a href="#4.4">23.4.4 Class template <tt>map</tt> [map]</a></li>
+  <li><a href="#4.4.1">23.4.4.1 Class template <tt>map</tt> overview [map.overview]</a></li>
+  <li><a href="#4.5">23.4.5 Class template <tt>multimap</tt> [multimap]</a></li>
+  <li><a href="#4.5.1">23.4.5.1 Class template <tt>multimap</tt> overview [multimap.overview]</a></li>
+  <li><a href="#4.6">23.4.6 Class template <tt>set</tt> [set]</a></li>
+  <li><a href="#4.6.1">23.4.6.1 Class template <tt>set</tt> overview [set.overview]</a></li>
+  <li><a href="#4.7">23.4.7 Class template <tt>multiset</tt> [multiset]</a></li>
+  <li><a href="#4.7.1">23.4.7.1 Class template <tt>multiset</tt> overview [multiset.overview]</a></li>
+  <li><a href="#4.8">24.3 Header <tt>&lt;iterator&gt;</tt> synopsis [iterator.synopsis]</a></li>
+  <li><a href="#4.9">24.4.2 Basic iterator [iterator.basic]</a></li>
+  <li><a href="#4.10">25 Algorithms library [algorithms]</a></li>
+  <li><a href="#4.10.1">25.1 General [algorithms.general]</a></li>
+  <li><a href="#4.11">25.2.10 Mismatch [mismatch]</a></li>
+  <li><a href="#4.11">25.2.10 Mismatch [mismatch]</a></li>
+  <li><a href="#4.12">25.2.11 Equal [alg.equal]</a></li>
+  <li><a href="#4.13">25.2.12 Is permutation [alg.is_permutation]</a></li>
+  <li><a href="#4.14">D.w The default allocator [depr.default.allocator]</a></li>
+  <li><a href="#4.15">D.x Value Comparators for Associative Containers [depr.container.assoc.value_compare]</a></li>
+  <li><a href="#4.16">D.y Basic iterator [depr.iterator.basic]</a></li>
+  <li><a href="#4.17">D.z Algorithms with Partially Formed Ranges [depr.algorithm.partial.range]</a></li>
+  </ul>
+<li><a href="#5.0">Acknowledgements</a></li>
+<li><a href="#6.0">References</a></li>
 </ul>
 
 
@@ -111,12 +118,11 @@ features where better, simpler, or clearer options are available.
 
 <h2><a name="2.0">Recommendations for Deprecation</a></h2>
 <p>
-There is likely to be a reasonable amount of user code using all of the
-feature below in production today, so it would be premature to remove
-them from the standard.  However, with best best practice advancing and
-superior or clearer options available within the standard itself, now
-would be a good time to deprecate these features, directing users to
-the preferred alternative instead. 
+There is likely to be a reasonable amount of user code using all of the feature
+below in production today, so it would be premature to remove them from the
+standard.  However, with best best practice advancing and superior or clearer
+options available within the standard itself, now would be a good time to
+deprecate these features, directing users to the preferred alternative instead. 
 </p>
 
 
@@ -124,8 +130,8 @@ the preferred alternative instead.
 <p>
 As an aid to writing iterator classes, the original standard library supplied
 the <tt>iterator</tt> class template to automate the declaration of the five
-typedefs expected of every iterator by <tt>iterator_traits</tt>.  This was
-then used in the library itself, for instance in the specification of
+typedefs expected of every iterator by <tt>iterator_traits</tt>.  This was then
+used in the library itself, for instance in the specification of
 <tt>std::ostream_iterator</tt>:
 </p>
 <blockquote><pre>
@@ -159,42 +165,40 @@ struct MyIterator : std::iterator&lt;std::random_access_iterator_tag, T&gt; {
 };
 </pre></blockquote>
 <p>
-The reason of clarity alone was sufficient to persuade the LWG to update
-the standard library specification to no longer mandate the standard
-iterator adapators as deriving from <tt>std::iterator</tt>, so there is
-no further use of this template within the standard itself.  Therefore,
-it looks like a strong candidate for deprecation.
+The reason of clarity alone was sufficient to persuade the LWG to update the
+standard library specification to no longer mandate the standard iterator
+adapators as deriving from <tt>std::iterator</tt>, so there is no further use
+of this template within the standard itself.  Therefore, it looks like a strong
+candidate for deprecation.
 </p>
 
 
 <h3><a name="2.2">Deprecate <tt>value_compare</tt> predicates</a></h3>
 <p>
-The standard containers <tt>map</tt> and <tt>multimap</tt> both contain
-an identical class template <tt>value_compare</tt> that is a functor
-which can be used to determine the relative order of two elements in
-that container.  These are provided as elements in a map are ordered
-by only the key value, rather than the whole value, so the predicate
-supplied to the container compares the key type, not the actual element
-type.
+The standard containers <tt>map</tt> and <tt>multimap</tt> both contain an
+identical class template <tt>value_compare</tt> that is a functor which can be
+used to determine the relative order of two elements in that container.  These
+are provided as elements in a map are ordered by only the key value, rather
+than the whole value, so the predicate supplied to the container compares the
+key type, not the actual element type.
 </p>
 <p>
-In practice these functors are not used by the containers, as they are
-often required to compare keys with values for elements that have not
-yet been inserted into the map, and may not have been created as a
-<tt>pair</tt> yet.  Meanwhile, the cost of having a nested class type,
-rather than an alias to a functor with the same behavior, means that
-every associative container with a different allocator has an identical
-copy of this class, but with a different name mangling so that the
-duplicate functionality cannot be elided or merged.  The class name
-itself will have a longer mangling than necessary, which would add up
-if these functors were genuinely useful and saw much use in practice.
+In practice these functors are not used by the containers, as they are often
+required to compare keys with values for elements that have not yet been
+inserted into the map, and may not have been created as a <tt>pair</tt> yet.
+Meanwhile, the cost of having a nested class type, rather than an alias to a
+functor with the same behavior, means that every associative container with a
+different allocator has an identical copy of this class, but with a different
+name mangling so that the duplicate functionality cannot be elided or merged.
+The class name itself will have a longer mangling than necessary, which would
+add up if these functors were genuinely useful and saw much use in practice.
 </p>
 <p>
 However, it is not clear that these functors do see much actual use.  For
 example, a quick search with Google Code search while preparing this paper
-turned up 29 hits, which were all standard library implementations, or
-test drivers for standard library implementations, and a similar result for
-the <tt>value_comp()</tt> function that returns an appropriately constructed
+turned up 29 hits, which were all standard library implementations, or test
+drivers for standard library implementations, and a similar result for the
+<tt>value_comp()</tt> function that returns an appropriately constructed
 functor from the container for the client to use.
 </p>
 <p>
@@ -202,38 +206,37 @@ This paper recommends deprecating the <tt>value_compare</tt> member classes of
 the associative containers, and moving their declarations and definitions to
 Annex D, just as the old iostreams members were handled in the original 1998
 standard.  It further recommends making it unspecified whether these members
-are provided as member-classes, per the text of the standard, or as aliases
-to a class with the same interface, allowing, but not requiring, vendors to
-choose to provide these members in a less redundant (but ABI-breaking) manner.
+are provided as member-classes, per the text of the standard, or as aliases to
+a class with the same interface, allowing, but not requiring, vendors to choose
+to provide these members in a less redundant (but ABI-breaking) manner.
 </p>
 
 
 <h3><a name="2.3">Deprecate algorithms taking half an input range</a></h3>
 <p>
-The standard library has several algorithms that read from two ranges in
-order to determine their result.  In most cases, the original C++98
-standard fully specified the first range with a pair of iterators, and
-supplied only the first iterator for the second range, with a narrow
-contract requirement that the second range be at least as large as the
-first.  For the C++14 standard, these algorithms were overloaded with a
-second form where the second range is also fully specified by a pair of
-iterators, partly so that the length of the second sequence can be taken
-into account (when it is shorter), and partly because this form is less
-liable to misuse leading to buffer overruns and other security risks.
-See
+The standard library has several algorithms that read from two ranges in order
+to determine their result.  In most cases, the original C++98 standard fully
+specified the first range with a pair of iterators, and supplied only the first
+iterator for the second range, with a narrow contract requirement that the
+second range be at least as large as the first.  For the C++14 standard, these
+algorithms were overloaded with a second form where the second range is also
+fully specified by a pair of iterators, partly so that the length of the second
+sequence can be taken into account (when it is shorter), and partly because
+this form is less liable to misuse leading to buffer overruns and other
+security risks.  See
 <b><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3671.html">N3671</a>
 Making non-modifying sequence operations more robust</b> for more details.
 </p>
 <p>
-Given the security risks associated with the original algorithms, this
-paper recommends deprecating the form of any algorithm where a second
-input range is specified by only one iterator.  Note that algorithms
-using a single iterator for an output range continue to be supported,
-as there is no (standard) way to specify the end of an output iteration
-sequence, such as defined by an <tt>std::ostream_iterator</tt>.
+Given the security risks associated with the original algorithms, this paper
+recommends deprecating the form of any algorithm where a second input range is
+specified by only one iterator.  Note that algorithms using a single iterator
+for an output range continue to be supported, as there is no (standard) way to
+specify the end of an output iteration sequence, such as defined by an
+<tt>std::ostream_iterator</tt>.
 </p>
 
-<h3><a name="2.3">Deprecate the redundant members of <tt>std::allocator</tt></a></h3>
+<h3><a name="2.4">Deprecate the redundant members of <tt>std::allocator</tt></a></h3>
 <p>
 Many members of <tt>std::allocator</tt> redundantly duplicate behavior that is
 otherwise produced by <tt>std::allocator_traits&lt;allocator&lt;T&gt;&gt;</tt>,
@@ -303,18 +306,148 @@ It was also observed, while writing this paper, that the allocator propagation
 traits for <tt>std::allocator&lt;void&gt;</tt> do not match those for
 <tt>std::allocator&lt;T&gt;</tt>.  It was decided not to provide a drive-by
 fix, as <tt>std::allocator&lt;void&gt;</tt> is not a true allocator, and so
-should not end up in code relying on those traits.  If the desision is made
-not to deprecate this specialization though, it could be worth revisitting the
+should not end up in code relying on those traits.  If the desision is made not
+to deprecate this specialization though, it could be worth revisitting the
 issue, just to address consistency and a lack of surprise.
 </p>
 
-<h2><a name="3.0">Proposed Wording</a></h2>
+<h2><a name="3.0">Additional Candidates</a></h2>
+<p>
+Several additional aspects of the library were looked at, but decided against a
+recommendation for deprecation at this point.  They are listed here, with
+rationale, in case others are more motivated.  With appropriate additions to
+the standard, these may become stronger deprecation candidates for the next
+standard.
+</p>
+
+<p>
+If members of the Library Working Groups would like to see any of these
+additional libraries deprecated, the author is happy to extend the proposal,
+but feels that they go beyond the remit of this paper deprecating only features
+where a preferable alternative is already available in the standard.
+</p>
+
+<h3><a name="3.1">Reconsider <tt>vector&lt;bool&gt;</tt> Partial Specialization</a></h3>
+<p>
+There has been a long history of the <tt>bool</tt> partial specialization
+of <tt>std::vector</tt> not satisfying the container requirements, and in
+particular, its iterators not satisfying the requirements of a random access
+iterator.  A previous attempt to deprecate this container was rejected for C++11,
+<a href=http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2204>N2204</a>.
+</p>
+
+<p>
+One of the reasons for rejection is that it is not clear what it would mean to
+deprecate a particular specialization of a template.  That could be addressed
+with careful wording.  The larger issue is that the (packed) specialization of
+<tt>vector&lt;bool&gt;</tt> offers an important optimization that clients of
+the standard library genuinely seek, but would not longer be available.  It is
+unlikely that we would be able to deprecate this part of the standard until a
+replacement facility is proposed and accepted, such as
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2050">N2050</a>.
+Unfortunately, there are no such revised proposals currently being offered to
+the Library Evolution Working Group.
+</p>
+
+<h3><a name="3.2">Reconsider <tt>is_literal</tt> Trait</a></h3>
+<p>
+The <tt>is_literal</tt> type trait offers negligible value to generic code, as
+what is really needed is the ability to know that a specific construction would
+produce constant initialization.  The core term of a <i>literal type</i> having
+at least one <tt>constexpr</tt> constructor is too weak to be used
+meaningfully.
+</p>
+
+<p>
+However, the (already implemented) trait does no harm, and allows compile-time
+introspection for which core-language type-categories a given template
+parameter might satisfy.  Until the Core Working Group retire the notion of a
+literal type, the corresponding library trait should be preserved.
+</p>
+
+<p>
+One way forward would be to write a paper proposing to remove the term from the
+core language while deprecating/removing the type trait, but the author of this
+paper is not (yet) sufficiently motivated to author such a proposal.
+</p>
+
+
+<h3><a name="3.3">Reconsider the Temporary Buffer APIs</a></h3>
+<p>
+Library clause 20.7.11 <b>[temporary.buffer]</b> provides an API intended to
+efficiently create a <em>small</em> ammount of additional storage for local,
+short-term use.  The inspiration behind the API is to use some magic to create
+a tiny buffer on the stack.
+</p>
+
+<p>
+This API would be considered an incomplete thought were it proposed today.  As
+a functional API it lacks exception safety if the function allocating the
+buffer leaks, yet we offer no RAII-like wrappers to promote safe use.
+</p>
+
+<p>
+It has been suggested that all current implementation of this API actually do
+not perform a more efficient allocation than the regular <tt>new</tt> operator,
+and, if that is genuinely the case, we should seriously consider deprecating
+this facility.  Otherwise, we should probably complete the design with an
+appropriate guard/wrapper class, and encourage vendors to deliver on missed
+optimization opportunities.
+</p>
+
+<p>
+It is possible the need for this API could be overtaken by delivering on a
+genuine C++ API or data structure for allocating off the stack, such as was
+proposed by <tt>std::dynarray</tt> in
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3662">N3662</a>.
+However, the Evolution Working Group has not been keen on further work in this
+direction, and the Arrays TS appears to have stalled, if not abandoned
+entirely.
+</p>
+
+<h3><a name="3.4">Reconsider raw storaage iterators</a></h3>
+<p>
+Like the temporary buffer API, the <tt>raw_storage_iterator</tt> (20.7.10
+<b>[storage.iterator]</b>) and uninitialized algorithms (20.7.12
+<b>[specialized.algorithms]</b>) are incomplete thoughts, although they
+appeared complete at the time of adoption.
+</p>
+
+<p>
+One obvious shortcoming of the iterator adapter is that it could easily query
+the type of element the adapated iterator is prepared to construct via
+<tt>iterator_traits</tt> and provide a default template argument for the second
+parameter, simplifying use.  That no such proposal has come forward in almost
+20 years suggests that this is not a widely used component.  Similarly, a
+type-deducing factory function would be a natural extension, especially with
+the advent of <tt>auto</tt> in C++11, yet no such proposal has materialized.
+</p>
+
+<p>
+A deeper concern arises from the completion of allocator support in C++11.
+There is now a common requirement that construting an object in a region of
+allocated memory should invoke the <tt>construct</tt> method of the
+corresponding allocator.  This is not possible with the current iterator, and
+undermines its use as an implementation detail in users writing generic
+containers.  However, no-one seems motivated to invest the time in proposing an
+allocator-aware raw storage iterator, nor adding allocator-awareness to the
+uninitialized memory algorithms.
+</p>
+
+<p>
+Without a clear alternative to replace them, there is no clear deprecation path
+other than simply looking to drop support for the whole idea in some future
+standard.  That goes beyond the intent of this paper.
+</p>
+
+
+<h2><a name="4.0">Proposed Wording</a></h2>
 <p>
 Amend existing library clauses as below:
 </p>
 <blockquote>
 
-<h3><a name="3.0.1">20.7.2 Header &lt;memory&gt; synopsis [memory.syn]</h3>
+<h3><a name="4.0.1">20.7.2 Header &lt;memory&gt; synopsis [memory.syn]</h3>
 <blockquote><pre>
 namespace std {
   <i>// ...</i>
@@ -331,7 +464,7 @@ namespace std {
 }
 </pre></blockquote>
 
-<h3><a name="3.1">20.7.9 The default allocator [default.allocator]</a></h3>
+<h3><a name="4.1">20.7.9 The default allocator [default.allocator]</a></h3>
 <ol>
 <li>All specializations of the default allocator satisfy the allocator completeness requirements 17.6.3.5.1.</li>
 <blockquote><pre>
@@ -378,7 +511,7 @@ namespace std {
 }
 </pre></blockquote>
 </ol>
-<h3><a name="3.2">20.7.9.1 allocator members [allocator.members]</a></h3>
+<h3><a name="4.2">20.7.9.1 allocator members [allocator.members]</a></h3>
 <ol>
 <li>
 Except for the destructor, member functions of the default allocator shall not
@@ -456,7 +589,7 @@ but it is unspecified when this function is called.
 <p>Delete two rows from Table 101 - Associative container requirements (in addition to container)</p>
 <blockquote>
 
-<h3><a name="3.3">23.2.4 Associative containers [associative.reqmts]</a></h3>
+<h3><a name="4.3">23.2.4 Associative containers [associative.reqmts]</a></h3>
 <table border="1" cellpadding="0" cellspacing="0">
 <tr>
   <td><b>Expression</b></td>
@@ -515,8 +648,8 @@ but it is unspecified when this function is called.
 </tr>
 </table>
 
-<h3><a name="3.4">23.4.4 Class template <tt>map</tt>              [map]</a></h3>
-<h3><a name="3.4.1">23.4.4.1 Class template <tt>map</tt> overview   [map.overview]</a></h3>
+<h3><a name="4.4">23.4.4 Class template <tt>map</tt>              [map]</a></h3>
+<h3><a name="4.4.1">23.4.4.1 Class template <tt>map</tt> overview   [map.overview]</a></h3>
 <blockquote><pre>
 namespace std {
   template &lt;class Key, class T, class Compare = less&lt;Key&gt;,
@@ -553,8 +686,8 @@ namespace std {
 </pre></blockquote>
 
 
-<h3><a name="3.5">23.4.5 Class template <tt>multimap</tt>              [multimap]</a></h3>
-<h3><a name="3.5.1">23.4.5.1 Class template <tt>multimap</tt> overview   [multimap.overview]</a></h3>
+<h3><a name="4.5">23.4.5 Class template <tt>multimap</tt>              [multimap]</a></h3>
+<h3><a name="4.5.1">23.4.5.1 Class template <tt>multimap</tt> overview   [multimap.overview]</a></h3>
 <blockquote><pre>
 namespace std {
   template &lt;class Key, class T, class Compare = less&lt;Key&gt;,
@@ -590,8 +723,8 @@ namespace std {
 }
 </pre></blockquote>
 
-<h3><a name="3.6">23.4.6 Class template <tt>set</tt>              [set]</a></h3>
-<h3><a name="3.6.1">23.4.6.1 Class template <tt>set</tt> overview   [set.overview]</a></h3>
+<h3><a name="4.6">23.4.6 Class template <tt>set</tt>              [set]</a></h3>
+<h3><a name="4.6.1">23.4.6.1 Class template <tt>set</tt> overview   [set.overview]</a></h3>
 <blockquote><pre>
 namespace std {
   template &lt;class Key, class Compare = less&lt;Key&gt;,
@@ -617,8 +750,8 @@ namespace std {
 }
 </pre></blockquote>
 
-<h3><a name="3.7">23.4.7 Class template <tt>multiset</tt>              [multiset]</a></h3>
-<h3><a name="3.7.1">23.4.7.1 Class template <tt>multiset</tt> overview   [multiset.overview]</a></h3>
+<h3><a name="4.7">23.4.7 Class template <tt>multiset</tt>              [multiset]</a></h3>
+<h3><a name="4.7.1">23.4.7.1 Class template <tt>multiset</tt> overview   [multiset.overview]</a></h3>
 <blockquote><pre>
 namespace std {
   template &lt;class Key, class Compare = less&lt;Key&gt;,
@@ -646,7 +779,7 @@ namespace std {
 
 
 
-<h3><a name="3.8">24.3 Header <tt>&lt;iterator&gt;</tt> synopsis [iterator.synopsis]</a></h3>
+<h3><a name="4.8">24.3 Header <tt>&lt;iterator&gt;</tt> synopsis [iterator.synopsis]</a></h3>
 <blockquote><pre>
 namespace std {
   <i>// 24.4, primitives:</i>
@@ -660,7 +793,7 @@ namespace std {
 }
 </pre></blockquote>
 
-<h3><a name="3.9"><del>24.4.2 Basic iterator [iterator.basic]</del></a></h3>
+<h3><a name="4.9"><del>24.4.2 Basic iterator [iterator.basic]</del></a></h3>
 <ol>
 <li><del>
 The <tt>iterator</tt> template may be used as a base class to ease the definition of required types for new iterators.
@@ -680,8 +813,8 @@ The <tt>iterator</tt> template may be used as a base class to ease the definitio
 </pre></blockquote>
 </ol>
 
-<h3><a name="3.10">25 Algorithms library [algorithms]</a></h3>
-<h4><a name="3.10.1">25.1 General [algorithms.general]</a></h4>
+<h3><a name="4.10">25 Algorithms library [algorithms]</a></h3>
+<h4><a name="4.10.1">25.1 General [algorithms.general]</a></h4>
 <h5>Header &lt;algorithm&gt; synopsis</h5>
 <blockquote><pre>
 #include &lt;initializer_list&gt;
@@ -752,7 +885,7 @@ template&lt;class ForwardIterator1, class ForwardIterator2,
 </blockquote>}
 </pre></blockquote>
 
-<h3><a name="3.11">25.2.10 Mismatch [mismatch]</a></h3>
+<h3><a name="4.11">25.2.10 Mismatch [mismatch]</a></h3>
 
 <blockquote><pre>
 <del>template&lt;class InputIterator1, class InputIterator2&gt;</del>
@@ -802,7 +935,7 @@ is not found.
 </li>
 </ol>
 
-<h3><a name="3.12">25.2.11 Equal [alg.equal]</a></h3>
+<h3><a name="4.12">25.2.11 Equal [alg.equal]</a></h3>
 <blockquote><pre>
 <del>template&lt;class InputIterator1, class InputIterator2&gt;</del>
   <del>bool equal(InputIterator1 first1, InputIterator1 last1,</del>
@@ -845,7 +978,7 @@ iterators and <tt>last1 - first1 != last2 - first2</tt>. Otherwise, at most
 <blockquote><pre>
 </pre></blockquote>
 
-<h3><a name="3.13">25.2.12 Is permutation [alg.is_permutation]</a></h3>
+<h3><a name="4.13">25.2.12 Is permutation [alg.is_permutation]</a></h3>
 <blockquote><pre>
 <del>template&lt;class ForwardIterator1, class ForwardIterator2&gt;</del>
   <del>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</del>
@@ -903,7 +1036,7 @@ was given in the argument list; otherwise, at worst O(N<sup>2</sup>), where N ha
 Insert new clauses into Annex D:
 </p>
 <blockquote>
-<h3><a name="3.14"><ins>D.w The default allocator [depr.default.allocator]</ins></a></h3>
+<h3><a name="4.14"><ins>D.w The default allocator [depr.default.allocator]</ins></a></h3>
 <ol>
 <li><ins>The following members are defined in addition to those specified in Clause 20:</ins></li>
 <blockquote><pre>
@@ -962,7 +1095,7 @@ in the presence of an overloaded <tt>operator&amp;</tt>.
 </ins></li>
 </ol>
 
-<h3><a name="3.15"><ins>D.x Value Comparators for Associative Containers [depr.container.assoc.value_compare]</ins></a></h3>
+<h3><a name="4.15"><ins>D.x Value Comparators for Associative Containers [depr.container.assoc.value_compare]</ins></a></h3>
 
 <ol>
 <li><ins>
@@ -1084,7 +1217,7 @@ comparison object.
 </ins></li>
 </ol>
 
-<h4><a name="3.16"><ins>D.y Basic iterator [depr.iterator.basic]</ins></a></h4>
+<h4><a name="4.16"><ins>D.y Basic iterator [depr.iterator.basic]</ins></a></h4>
 <ol>
 <li><ins>
 The header <tt>&lt;iterator&gt;</tt> has the following addition:</ins>
@@ -1113,7 +1246,7 @@ definition, but only to callers of that class <i>- end note</i>]
 </ins></li>
 </ol>
 
-<h4><a name="3.17"><ins>D.z Algorithms with Partially Formed Ranges [depr.algorithm.partial.range]</ins></a></h4>
+<h4><a name="4.17"><ins>D.z Algorithms with Partially Formed Ranges [depr.algorithm.partial.range]</ins></a></h4>
 <ol>
 <li><ins>
 The following function template overloads are provided by the &lt;algorithm&gt;
@@ -1214,12 +1347,12 @@ iterator object equivalent to <tt>first2 + (last1 - first1)</tt>. [
 </ol>
 
 
-<h2><a name="4.0">Acknowledements</h2>
+<h2><a name="5.0">Acknowledements</h2>
 <p>
 </p>
 
 
-<h2><a name="5.0">References</h2>
+<h2><a name="6.0">References</h2>
 <ul>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3671.html">N3671</a> Making non-modifying sequence operations more robust: Revision 2, Mike Spertus, Attila Pall</li>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0090r0.htm">P0090R0</a> Removing result_type, etc., Stephan T. Lavavej</li>
