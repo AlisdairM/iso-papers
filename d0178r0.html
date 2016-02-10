@@ -47,10 +47,11 @@
   <li><a href="#0.1">Revision 0</a></li>
   </ul>
 <li><a href="#1.0">Introduction</a></li>
-<li><a href="#2.0">Problems with <tt>allocator_traits></tt></a></li>
+<li><a href="#2.0">The Basic Problem</tt></a></li>
   <ul>
-  <li><a href="#2.1">Consistency of propagation traits</a></li>
+  <li><a href="#2.1">Feedback from field experience</a></li>
   </ul>
+<li><a href="#3.0">Proposed Solution</a></li>
 <li><a href="#4.0">Acknowledgements</a></li>
 <li><a href="#5.0">References</a></li>
 </ol>
@@ -91,14 +92,41 @@ paper to better describe the issues and propose a solution (with wording!)  This
 is that paper.
 </p>
 
-<h2><a name="3.0">The Basic Problem</a></h2>
+<h2><a name="2.0">The Basic Problem</a></h2>
 <p>
+When support for stateful allocators was added to C++11, it became important to
+answer the question of what should happen when two containers with allocators
+that cannot allocate/deallocate memory on behalf of the other are <tt>swap</tt>ped.
+The conservative position adopted at the time was to simply declare such calls
+out of contract, and make them undefined behavior.  This gave us the maximum
+freedom to revise our position later, if necessary.  It also matched the contract
+Bloomberg documented for their library, which was one of the code bases known to
+make widespread use of stateful allocators.
+</p>
+
+<p>
+The problem with giving the free-function swap a <i>narrow</i> contract is that
+it does not satisfy the contract of the generic <tt>swap</tt> function in the
+same namespace.  This greatly harms the ability to use <tt>std::swap</tt> in
+generic code, as the calling template must now be aware if the type it is
+instantiated for is a standard library container, and if so, whether its
+allocators compare equal.  Conversely, this is not a problem for the <tt>swap</tt>
+member function, as the caller either knows exactly which container they are
+dealing with, or should document the container concept they are dealing with
+if it differs in some way from the standard.  In some sense, the generic free
+function is more fundamental than the member function.
+</p>
+
 Vioates contract of generic swap template
 
 user can write and use their own replacement in generic code
    expensive
    need to invoke metafunction to identify std::container
    does not work anyway, for pair, tuple, and function, as they use std::swap
+</p>
+
+<h3><a name="2.1">Feedback from field experience</a></h3>
+<p>
 </p>
 
 <h2><a name="3.0">Proposed Solution</a></h2>
