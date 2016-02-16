@@ -31,6 +31,9 @@
 <tr>
   <td align="left">Project:</td>
   <td align="left">Programming Language C++</td>
+</tr><tr>
+  <td align="left">Audience:</td>
+  <td align="left">Library Evolution Working Group</td>
 </tr>
 <tr>
   <td align="left">Reply to:</td>
@@ -64,15 +67,14 @@
 Original version of the paper for the 2016 pre-Jacksonville mailing.
 </p>
 
+<!--
 <h6>To be done:</h6>
 <ul>
-  <li>Decribe the problems to be solved</li>
   <li>Cross-reference LWG issues by number and link</li>
-  <li>Proposed resolution - free function wide, member function narrow</li>
   <li>(note original[98] was an optimization from quadratic to linear, not a new semantic)</li>
   <li>Discuss how <i>unified call syntax</i>(?) (does not) interact with this direction</li>
-  <li>propose wording</i>
 </ul>
+-->
 
 <h2><a name="1.0">Introduction</a></h2>
 <p>
@@ -117,22 +119,68 @@ if it differs in some way from the standard.  In some sense, the generic free
 function is more fundamental than the member function.
 </p>
 
-Vioates contract of generic swap template
+<p>
+There has been some concern raised that the standard library cannot make arbitrary
+constraints on <tt>swap</tt> function found via ADL, so this exercise is vain.
+That is not entirely true, as if we assume the container requirements apply to user
+code, then we are already changing their <tt>swap</tt> contract by introducing
+undefined behavior.  However, in practice, the current Container Requirements tables
+do not document Concepts, but are rather a form of common documentation to avoid
+redundant wording through each of the container sub-clauses.  In this context, the
+standard library has broken its own <tt>swap</tt> function by adding an overload
+in its own namespace that, if not present, would allow the container to &quot;do
+the right thing&quot;, and with move-semantics enabled for each container, do so
+efficiently with the correct exception-safety guarnatees.  The optimization offered
+by the overload, in a modern compiler, is tiny (but still worth taking, especially
+for containers with additional predicates).
+</p>
 
-user can write and use their own replacement in generic code
-   expensive
-   need to invoke metafunction to identify std::container
-   does not work anyway, for pair, tuple, and function, as they use std::swap
+<p>
+The breakage of <tt>swap</tt> has more subtle implications too.  The author of
+generic code could, by defining their own <tt>is_standard_container</tt> trait,
+rewrite their algorithm to allow for exchanging states of containers with
+unequal allocators.  In fact, this is necessary for any generic algorithm that
+expects to work with containers unless the contract explicitly calls out this
+problem.  The standard library offers no support for users trying to help
+their users in this manner.  However, the further subtlety is that
+<tt>is_standard_container</tt> is not sufficient, as <tt>swap</tt> for
+<tt>pair</tt> and <tt>tuple</tt> is similarly undefined, and would need to be
+detected and supported separately.  This problem further eats into any other
+type that wraps a standard container and can support stateful allocators.
 </p>
 
 <h3><a name="2.1">Feedback from field experience</a></h3>
 <p>
+Bloomberg have over a decade of experience with a stateful allocator model in
+their standard library.  When this was first introduced, the undefined behavior
+described by the current standard was added to all of our <tt>swap</tt>
+contracts, but the (undocumented) implementation performs the double-copy/swap
+described in this paper.  This allowed existing code, written without stateful
+allocators in mind, to continue to function while the new contract was slowly
+adopted.  A decade on, we still get large resistance any time we try to enable
+assertions on these narrow contracts, as perfectly sensible use-cases exist
+(frequently, not always, in generic code) for continuing to support this
+behavior.  Given the choice between linear and potentially-throwing <tt>swap</tt>
+vs. undefined behavior, our users have been very clear which they prefer -
+as long as the constant-time, non-throwing behavior remains when the allocators
+do compare equal.
 </p>
 
 <h2><a name="3.0">Proposed Solution</a></h2>
 <p>
-The ideal algorithm for swapping containers (or any other allocator-aware type)
-would be something like (for a given <i><tt>CONTAINER_TYPE</tt></i>):
+The simplest implementation of the <tt>swap</tt> overload (for a given
+<i><tt>CONTAINER_TYPE</tt></i>) should be efficient and correct, without
+preconditions:
+</p>
+<blockquote><pre>
+void swap(CONTAINER_TYPE &amp; left, CONTAINER_TYPE &amp; right) {
+   std::swap&lt;TYPE&gt;(left, right);
+}
+</pre></blockquote>
+
+<p>
+However, the optimal algorithm for swapping containers (or any other
+allocator-aware type) might be more like:
 </p>
 
 <blockquote><pre>
@@ -227,6 +275,13 @@ implementations would not have to change, merely that portable code could not
 be relying on any of the differences that are exposed.
 </p>
 
+<p>
+Also, see paper
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0177r0">P0177R0</a>
+for a possible direction to simplify further, by requiring all allocators
+to have <i>sane</i> propagation traits.
+</p>
+
 <h2><a name="4.0">Proposed Wording</a></h2>
 <p>
 Make the following edits to clause 23 [containers]:
@@ -277,16 +332,14 @@ and <tt>b</tt> shall be swappable and shall be exchanged by calling
 is <tt>true</tt>, then lvalues of type <tt>allocator_type</tt> shall be
 swappable and the allocators of <tt>a</tt> and <tt>b</tt> shall also be
 exchanged by calling <tt>swap</tt> as described in 17.6.3.2.  Otherwise, the
-allocators shall not be swapped<del>, and the behavior is undefined unless
-<tt>a.get_allocator() == b.get_allocator()</tt></del>. Every iterator referring
-to an element in one container before the swap shall refer to the same element
-in the other container after the swap. It is unspecified whether an iterator
-with value <tt>a.end()</tt> before the <del>swap</del><ins><tt>swap</tt></ins>
-will have value <tt>b.end()</tt> after the
-<del>swap</del><ins><tt>swap</tt></ins>.  <ins>No exceptions shall be thrown,
-unless thrown by the <tt>swap</tt> called for a <tt>Compare</tt>,
-<tt>Pred</tt>, or <tt>Hash</tt> object.
-</ins>
+allocators shall not be swapped, and the behavior is undefined unless
+<tt>a.get_allocator() == b.get_allocator()</tt>.  Every iterator referring to
+an element in one container before the swap shall refer to the same element in
+the other container after the swap. It is unspecified whether an iterator with
+value <tt>a.end()</tt> before the <del>swap</del><ins><tt>swap</tt></ins> will
+have value <tt>b.end()</tt> after the <del>swap</del><ins><tt>swap</tt></ins>.
+<ins>No exceptions shall be thrown, unless thrown by the <tt>swap</tt> called
+for a <tt>Compare</tt>, <tt>Pred</tt>, or <tt>Hash</tt> object.</ins>
 </p>
 <p><ins>
 10 The expression <tt>swap(a,b)</tt>, for containers <tt>a</tt> and <tt>b</tt>
