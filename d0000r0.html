@@ -1,0 +1,173 @@
+<html>
+
+<head>
+  <meta name="description" content="Proposal for C++ Standard">
+  <meta name="keywords" content="C++,cplusplus,wg21">
+  <meta name="author" content="Alisdair Meredith">
+
+  <title>Proposal Template</title>
+
+  <style type="text/css">
+    ins {background-color:#A0FFA0}
+    del {background-color:#FFA0A0}
+    p {text-align:justify}
+    li {text-align:justify}
+    blockquote.note
+    {
+      background-color:#E0E0E0;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
+  </style>
+</head>
+
+<body>
+<table>
+<tr>
+  <td align="left">Doc. no.</td>
+  <td align="left">D0000R0</td>
+</tr>
+<tr>
+  <td align="left">Date:</td>
+  <td align="left">20yy-mm-dd</td>
+</tr>
+<tr>
+  <td align="left">Project:</td>
+  <td align="left">Programming Language C++</td>
+</tr>
+<tr>
+  <td align="left">Audience:</td>
+  <td align="left">Core Library Evolution Working Group</td>
+</tr>
+<tr>
+  <td align="left">Reply to:</td>
+  <td align="left">Alisdair Meredith &lt;<a href="mailto:ameredith1@bloomberg.net">ameredith1@bloomberg.net</a>&gt;</td>
+</tr>
+</table>
+
+<h1>Proposal Template</h1>
+
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#rev.hist">Revision History</a></li>
+  <ul>
+  <li><a href="#rev.0">Revision 0</a></li>
+  </ul>
+<li><a href="#1.0">1 Introduction</a></li>
+<li><a href="#2.0">2 Stating the problem</a></li>
+  <ul>
+  <li><a href="#2.1">Consistency of propagation traits</a></li>
+  </ul>
+<li><a href="#3.0">3 Propose Solution</a></li>
+<li><a href="#4.0">4 Other Directions</a></li>
+<li><a href="#5.0">5 Formal Wording</a></li>
+<li><a href="#6.0">6 Acknowledgements</a></li>
+<li><a href="#7.0">7 References</a></li>
+</ol>
+
+
+<h2><a name="rev.hist">Revision History</a></h2>
+
+<h3><a name="rev.0">Revision 0</a></h3>
+<p>
+Original version of the paper for the 2016 pre-Jacksonville mailing.
+</p>
+
+<h6>Sketch of ideas to be turned into paper</h6>
+<p>
+This is a quick checklist of ideas that need to be incorporated.
+</p>
+<ul>
+  <li>Update boilerplate (title/date)</li>
+  <li>Write introduction</li>
+  <li>Describe Problem</li>
+  <li>Propose Solution</li>
+  <li>Describe any alternatives</li>
+  <li>Write Wording</li>
+</ul>
+
+
+<h2><a name="1.0">1 Introduction</a></h2>
+<p>
+High level summary of the paper, stated in a single paragraph.
+</p>
+
+
+<h2><a name="2.0">2 Stating the problem</a></h2>
+<p>
+Describe in detail the problem to be solved.
+</p>
+
+
+<h3><a name="3.0">3 Propose Solution</a></h3>
+<p>
+Describe the proposed change/addition to the standard, and how
+it will address the problem at hand.
+</p>
+
+
+<h3><a name="4.0">4 Other Directions</a></h3>
+<p>
+Document any variations in design that were considered and rejected,
+along with a rationale for the rejection.
+</p>
+
+
+<h3><a name="5.0">5 Formal Wording</a></h3>
+<p>
+Make the following changes to the specified working paper:
+</p>
+
+<blockquote>
+
+<h4>D.x Deprecated allocator traits bits [depr.alloc.traits]</h4>
+<blockquote><pre>
+<ins>namespace std {</ins>
+  <ins>template &lt;class Alloc&gt; struct allocator_traits {</ins>
+    <ins>typedef propagate_on_container_swap propagate_on_container_copy_assignment;</ins>
+    <ins>typedef propagate_on_container_swap propagate_on_container_move_assignment;</ins>
+  <ins>};</ins>
+<ins>}</ins>
+</pre></blockquote>
+
+</blockquote>
+
+<p>
+Insert the following rationale into the compatibility Annex C:
+</p>
+
+<blockquote>
+
+<h4>C.4.x Removed Deprecated Feature [diff.cpp14.library]</h4>
+<p>17.6.4.2.3</p>
+<p><b>Change:</b> Removed deprecated feature</p>
+<p><b>Rationale:</b> Feature has been superceded.</p>
+<p>
+<b>Effect on original feature:</b> code using the removed feature may be
+invalid in this International Standard.
+</p>
+
+</blockquote>
+
+
+
+<h2><a name="6.0">6 Acknowledements</h2>
+<p>
+Thanks to contributors and reviewers of this paper.
+</p>
+
+
+<h2><a name="7.0">7 References</h2>
+<ul>
+  <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2151">LWG #2151</a> <tt>basic_string&lt;&gt;::swap</tt> semantics ignore allocators</li>
+  <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2152">LWG #2152</a> Instances of standard container types are not swappable</li>
+  <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2153">LWG #2153</a> Narrowing of the non-member <tt>swap</tt> contract</li>
+
+  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4511">N4511</a> Adding [nothrow-]swappable traits, Daniel Krügler</li>
+</ul>
+
+
+</body>
+</html>
