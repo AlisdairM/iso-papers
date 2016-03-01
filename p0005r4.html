@@ -22,11 +22,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">D0005R4</td>
+  <td align="left">P0005R4</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2015-11-11</td>
+  <td align="left">2016-03-01</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -134,7 +134,6 @@ specification, to minimize confusion with the term <tt>fd</tt> used in the
 same paragraphs.
 </p>
 
-
 <h3><a name="0.4">Revision 3</a></h3>
 <p>
 Deprecate the remnants of the old adaptable function facility rather than
@@ -146,6 +145,11 @@ of the standard.
 Drop the paragraphs added to the compatiblity annex, and prune the list of names
 in the Zombie Names clause, as this revision does not remove any old names, and
 so creates no compatibility concerns.
+</p>
+
+<h3><a name="0.4">Revision 3</a></h3>
+<p>
+Minor cleanup wording D.x.2 p9-11 in final review.
 </p>
 
 
@@ -1452,20 +1456,22 @@ The forwarding call wrapper <tt>g</tt> returned by a call to
 <tt>result_type</tt> defined as a synonym for <tt>R</tt>.
 </ins></li>
 <li><ins>
-The simple call wrapper <ins><tt>fn</tt> returned from a call to
+The simple call wrapper returned from a call to
 <tt>mem_fn(pm)</tt> shall have a nested type <tt>result_type</tt> that is a
 synonym for the return type of <tt>pm</tt> when <tt>pm</tt> is a pointer to
 member function.
 </ins></li>
 <li><ins>
-The simple call wrapper shall define two nested types named
+The simple call wrapper returned from a call to
+<tt>mem_fn(pm)</tt> shall define two nested types named
 <tt>argument_type</tt> and <tt>result_type</tt> as synonyms for
 <tt><i>cv</i> T*</tt> and <tt>Ret</tt>, respectively, when <tt>pm</tt> is a
 pointer to member function with <i>cv</i>-qualifier <i>cv</i> and taking no
 arguments, where <tt>Ret</tt> is <tt>pm</tt>'s return type.
 </ins></li>
 <li><ins>
-The simple call wrapper shall define three nested types named
+The simple call wrapper returned from a call to
+<tt>mem_fn(pm)</tt> shall define three nested types named
 <tt>first_argument_type</tt>, <tt>second_argument_type</tt>, and
 <tt>result_type</tt> as synonyms for <tt>cv T*</tt>, <tt>T1</tt>, and
 <tt>Ret</tt>, respectively, when <tt>pm</tt> is a pointer to member function
