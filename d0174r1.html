@@ -26,7 +26,7 @@
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2016-03-03</td>
+  <td align="left">2016-03-21</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -117,6 +117,8 @@ Following Jacksonville review.
 <li>Do not deprecate <tt>value_compare</tt> predicates</li>
 <li>Deprecate <tt>is_literal_type</tt> now</li>
 <li>Deprecate even more of <tt>std::allocator</tt></li>
+<li>Deprecate temporary buffer APIs now</li>
+<li>Deprecate <tt>raw_storage_iterator</tt> now</li>
 </ul>
 
 
@@ -579,6 +581,10 @@ specify the end of an output iteration sequence, such as defined by an
 </tr>
 </table>
 
+<p>
+There is no consensus to deprecate at this point, although interest remains
+to revisit for a future standard, probably after the Ranges TS has landed.
+</p>
 
 <h3><a name="3.5">Reconsider <tt>value_compare</tt> predicates</a></h3>
 <p>
@@ -662,6 +668,15 @@ namespace std {
     bool operator==(const allocator&lt;T&gt;&amp;, const allocator&lt;U&gt;&amp;) noexcept;
   template &lt;class T, class U&gt;
     bool operator!=(const allocator&lt;T&gt;&amp;, const allocator&lt;U&gt;&amp;) noexcept;
+
+  <del><i>// 20.9.10, raw storage iterator:</i></del>
+  <del>template &lt;class OutputIterator, class T&gt; class raw_storage_iterator;</del>
+
+  <del><i>// 20.9.11, temporary buffers:</i></del>
+  <del>template &lt;class T&gt;</del>
+    <del>pair&lt;T*, ptrdiff_t&gt; get_temporary_buffer(ptrdiff_t n) noexcept;</del>
+  <del>template &lt;class T&gt;</del>
+    <del>void return_temporary_buffer(T* p);</del>
 
   <i>// ...</i>
 }
@@ -794,6 +809,156 @@ but it is unspecified when this function is called.
 </ol>
 
 
+<h3><del>20.9.10 Raw storage iterator [storage.iterator]</del></h3>
+<ol>
+<li><del>
+<tt>raw_storage_iterator</tt> is provided to enable algorithms to store their
+results into uninitialized memory. The template parameter
+<tt>OutputIterator</tt> is required to have its <tt>operator*</tt> return an
+object for which <tt>operator&amp;</tt> is defined and returns a pointer to
+<tt>T</tt>, and is also required to satisfy the requirements of an output
+iterator (24.2.4).
+</del></li>
+<pre>
+  <del>namespace std {</del>
+    <del>template &lt;class OutputIterator, class T&gt;</del>
+    <del>class raw_storage_iterator {</del>
+    <del>public:</del>
+      <del>typedef output_iterator_tag iterator_category;</del>
+      <del>typedef void value_type;</del>
+      <del>typedef void difference_type;</del>
+      <del>typedef void pointer;</del>
+      <del>typedef void reference;</del>
+
+      <del>explicit raw_storage_iterator(OutputIterator x);</del>
+
+      <del>raw_storage_iterator&amp; operator*();</del>
+      <del>raw_storage_iterator&amp; operator=(const T&amp; element);</del>
+      <del>raw_storage_iterator&amp; operator=(T&amp;&amp; element);</del>
+      <del>raw_storage_iterator&amp; operator++();</del>
+      <del>raw_storage_iterator  operator++(int);</del>
+      <del>OutputIterator base() const;</del>
+    <del>};</del>
+  <del>}</del>
+</pre>
+
+<pre>
+<del>explicit raw_storage_iterator(OutputIterator x);</del>
+</pre>
+<li><del>
+<i>Effects:</i> Initializes the iterator to point to the same value to which
+<tt>x</tt> points.
+</del></li>
+
+<pre>
+<del>raw_storage_iterator&amp; operator*();</del>
+</pre>
+<li><del>
+<i>Returns:</i> <tt>*this</tt>
+</del></li>
+
+<pre>
+<del>raw_storage_iterator&amp; operator=(const T&amp; element);</del>
+</pre>
+<li><del>
+<i>Requires:</i> <tt>T</tt> shall be <tt>CopyConstructible</tt>.
+</del></li>
+<li><del>
+<i>Effects:</i> Constructs a value from <tt>element</tt> at the location to
+which the iterator points.
+</del></li>
+<li><del>
+<i>Returns:</i> A reference to the iterator.
+</del></li>
+
+<pre>
+<del>raw_storage_iterator&amp; operator=(T&amp;&amp; element);</del>
+</pre>
+<li><del>
+<i>Requires:</i> <tt>T</tt> shall be <tt>MoveConstructible</tt>.
+</del></li>
+<li><del>
+<i>Effects:</i> Constructs a value from <tt>std::move(element)</tt> at the
+location to which the iterator points.
+</del></li>
+<li><del>
+<i>Returns:</i> A reference to the iterator.
+</del></li>
+
+<pre>
+<del>raw_storage_iterator&amp; operator++();</del>
+</pre>
+<li><del>
+<i>Effects:</i> Pre-increment: advances the iterator and returns a reference to
+the updated iterator.
+</del></li>
+
+<pre>
+<del>raw_storage_iterator operator++(int);</del>
+</pre>
+<li><del>
+<i>Effects:</i> Post-increment: advances the iterator and returns the old value
+of the iterator.
+</del></li>
+
+<pre>
+<del>OutputIterator base() const;</del>
+</pre>
+<li><del>
+<i>Returns:</i> An iterator of type <tt>OutputIterator</tt> that points to the
+same value as <tt>*this</tt> points to.
+</del></li>
+</ol>
+
+<h3><a name="4.Z"><del>20.9.11 Temporary buffers [temporary.buffer]</del></a></h3>
+<pre>
+<del>template &lt;class T&gt;</del>
+  <del>pair&lt;T*, ptrdiff_t&gt; get_temporary_buffer(ptrdiff_t n) noexcept;</del>
+</pre>
+<ol>
+<li><del>
+<i>Effects:</i> Obtains a pointer to uninitialized, contiguous storage for
+<i>N</i> adjacent objects of type <tt>T</tt>, for some non-negative number
+<i>N</i>. It is implementation-defined whether over-aligned types are supported
+(3.11).
+</del></li>
+<li><del>
+<i>Remarks:</i> Calling <tt>get_temporary_buffer</tt> with a positive number
+<tt>n</tt> is a non-binding request to return storage for <tt>n</tt> objects of
+type <tt>T</tt>. In this case, an implementation is permitted to return instead
+storage for a non-negative number <i>N</i> of such objects, where
+<i>N</i><tt>!= n</tt> (including <i>N</i><tt> == 0</tt>). [ <i>Note:</i> The
+request is non-binding to allow latitude for implementation-specific
+optimizations of its memory management.  - <i>end note</i> ]
+</del></li>
+<li><del>
+<i>Returns:</i> If <tt>n &lt;= 0</tt> or if no storage could be obtained,
+returns a pair <tt>P</tt> such that <tt>P.first</tt> is a null pointer value
+and <tt>P.second == 0</tt>; otherwise returns a pair <tt>P</tt> such that
+<tt>P.first</tt> refers to the address of the uninitialized storage and
+<tt>P.second</tt> refers to its capacity <i>N</i> (in the units of
+<tt>sizeof(T)</tt>).
+</del></li>
+</ol>
+
+<pre>
+<del>template &lt;class T&gt; void return_temporary_buffer(T* p);</del>
+</pre>
+<ol>
+<li><del>
+<i>Effects:</i> Deallocates the storage referenced by <tt>p</tt>.
+</del></li>
+<li><del>
+<i>Requires:</i> <tt>p</tt> shall be a pointer value returned by an earlier
+call to <tt>get_temporary_buffer</tt> that has not been invalidated by an
+intervening call to <tt>return_temporary_buffer(T*)</tt>.
+</del></li>
+<li><del>
+<i>Throws:</i> Nothing.
+</del></li>
+</ol>
+
+
 <h3><a name="4.X">20.10.2 Header <tt>&lt;type_traits&gt;</tt> synopsis [meta.type.synop]</a></h3>
 <blockquote><pre>
 namespace std {
@@ -881,7 +1046,7 @@ Insert new clauses into Annex D:
 </p>
 
 <blockquote>
-<h3><a name="4.14"><ins>D.w The default allocator [depr.default.allocator]</ins></a></h3>
+<h3><a name="4.14"><ins>D.v The default allocator [depr.default.allocator]</ins></a></h3>
 <ol>
 <li><ins>The following members are defined in addition to those specified in Clause 20:</ins></li>
 <blockquote><pre>
@@ -968,17 +1133,190 @@ how often this function is called.
 <i>Returns:</i> The largest value <tt>N</tt> for which the call
 <tt>allocate(N)</tt> might succeed.
 </ins></li>
-
 </ol>
 
-<h3><a name="4.Y"><ins>D.x Deprecated Type Traits [depr.meta.type]</ins></h3>
+
+<h3><ins>D.w Raw storage iterator [depr.storage.iterator]</ins></h3>
+<ol>
+<p><ins>
+The header <tt>&lt;memory&gt;</tt> has the following addition:</ins>
+</ins></p>
+
+<pre>
+  <ins>namespace std {</ins>
+    <ins>template &lt;class OutputIterator, class T&gt;</ins>
+    <ins>class raw_storage_iterator {</ins>
+    <ins>public:</ins>
+      <ins>typedef output_iterator_tag iterator_category;</ins>
+      <ins>typedef void value_type;</ins>
+      <ins>typedef void difference_type;</ins>
+      <ins>typedef void pointer;</ins>
+      <ins>typedef void reference;</ins>
+
+      <ins>explicit raw_storage_iterator(OutputIterator x);</ins>
+
+      <ins>raw_storage_iterator&amp; operator*();</ins>
+      <ins>raw_storage_iterator&amp; operator=(const T&amp; element);</ins>
+      <ins>raw_storage_iterator&amp; operator=(T&amp;&amp; element);</ins>
+      <ins>raw_storage_iterator&amp; operator++();</ins>
+      <ins>raw_storage_iterator  operator++(int);</ins>
+      <ins>OutputIterator base() const;</ins>
+    <ins>};</ins>
+  <ins>}</ins>
+</pre>
+
+<li><ins>
+<tt>raw_storage_iterator</tt> is provided to enable algorithms to store their
+results into uninitialized memory. The template parameter
+<tt>OutputIterator</tt> is required to have its <tt>operator*</tt> return an
+object for which <tt>operator&amp;</tt> is defined and returns a pointer to
+<tt>T</tt>, and is also required to satisfy the requirements of an output
+iterator (24.2.4).
+</ins></li>
+
+<pre>
+<ins>explicit raw_storage_iterator(OutputIterator x);</ins>
+</pre>
+<li><ins>
+<i>Effects:</i> Initializes the iterator to point to the same value to which
+<tt>x</tt> points.
+</ins></li>
+
+<pre>
+<ins>raw_storage_iterator&amp; operator*();</ins>
+</pre>
+<li><ins>
+<i>Returns:</i> <tt>*this</tt>
+</ins></li>
+
+<pre>
+<ins>raw_storage_iterator&amp; operator=(const T&amp; element);</ins>
+</pre>
+<li><ins>
+<i>Requires:</i> <tt>T</tt> shall be <tt>CopyConstructible</tt>.
+</ins></li>
+<li><ins>
+<i>Effects:</i> Constructs a value from <tt>element</tt> at the location to
+which the iterator points.
+</ins></li>
+<li><ins>
+<i>Returns:</i> A reference to the iterator.
+</ins></li>
+
+<pre>
+<ins>raw_storage_iterator&amp; operator=(T&amp;&amp; element);</ins>
+</pre>
+<li><ins>
+<i>Requires:</i> <tt>T</tt> shall be <tt>MoveConstructible</tt>.
+</ins></li>
+<li><ins>
+<i>Effects:</i> Constructs a value from <tt>std::move(element)</tt> at the
+location to which the iterator points.
+</ins></li>
+<li><ins>
+<i>Returns:</i> A reference to the iterator.
+</ins></li>
+
+<pre>
+<ins>raw_storage_iterator&amp; operator++();</ins>
+</pre>
+<li><ins>
+<i>Effects:</i> Pre-increment: advances the iterator and returns a reference to
+the updated iterator.
+</ins></li>
+
+<pre>
+<ins>raw_storage_iterator operator++(int);</ins>
+</pre>
+<li><ins>
+<i>Effects:</i> Post-increment: advances the iterator and returns the old value
+of the iterator.
+</ins></li>
+
+<pre>
+<ins>OutputIterator base() const;</ins>
+</pre>
+<li><ins>
+<i>Returns:</i> An iterator of type <tt>OutputIterator</tt> that points to the
+same value as <tt>*this</tt> points to.
+</ins></li>
+</ol>
+
+
+<h3><a name="4.Z"><ins>D.x Temporary buffers [depr.temporary.buffer]</ins></a></h3>
+<ol>
+<li><ins>
+The header <tt>&lt;memory&gt;</tt> has the following additional functions:</ins>
+</ins></li>
+<blockquote><pre>
+<ins>namespace std {</ins>
+  <ins><i>// 20.9.11, temporary buffers:</i></ins>
+  <ins>template &lt;class T&gt;</ins>
+    <ins>pair&lt;T*, ptrdiff_t&gt; get_temporary_buffer(ptrdiff_t n) noexcept;</ins>
+  <ins>template &lt;class T&gt;</ins>
+    <ins>void return_temporary_buffer(T* p);</ins>
+<ins>}</ins>
+</pre></blockquote>
+
+<pre>
+<ins>template &lt;class T&gt;</ins>
+  <ins>pair&lt;T*, ptrdiff_t&gt; get_temporary_buffer(ptrdiff_t n) noexcept;</ins>
+</pre>
+<li><ins>
+<i>Effects:</i> Obtains a pointer to uninitialized, contiguous storage for
+<i>N</i> adjacent objects of type <tt>T</tt>, for some non-negative number
+<i>N</i>. It is implementation-defined whether over-aligned types are supported
+(3.11).
+</ins></li>
+<li><ins>
+<i>Remarks:</i> Calling <tt>get_temporary_buffer</tt> with a positive number
+<tt>n</tt> is a non-binding request to return storage for <tt>n</tt> objects of
+type <tt>T</tt>. In this case, an implementation is permitted to return instead
+storage for a non-negative number <i>N</i> of such objects, where
+<i>N</i><tt>!= n</tt> (including <i>N</i><tt> == 0</tt>). [ <i>Note:</i> The
+request is non-binding to allow latitude for implementation-specific
+optimizations of its memory management.  - <i>end note</i> ]
+</ins></li>
+<li><ins>
+<i>Returns:</i> If <tt>n &lt;= 0</tt> or if no storage could be obtained,
+returns a pair <tt>P</tt> such that <tt>P.first</tt> is a null pointer value
+and <tt>P.second == 0</tt>; otherwise returns a pair <tt>P</tt> such that
+<tt>P.first</tt> refers to the address of the uninitialized storage and
+<tt>P.second</tt> refers to its capacity <i>N</i> (in the units of
+<tt>sizeof(T)</tt>).
+</ins></li>
+</ol>
+
+<pre>
+<ins>template &lt;class T&gt; void return_temporary_buffer(T* p);</ins>
+</pre>
+<ol>
+<li><ins>
+<i>Effects:</i> Deallocates the storage referenced by <tt>p</tt>.
+</ins></li>
+<li><ins>
+<i>Requires:</i> <tt>p</tt> shall be a pointer value returned by an earlier
+call to <tt>get_temporary_buffer</tt> that has not been invalidated by an
+intervening call to <tt>return_temporary_buffer(T*)</tt>.
+</ins></li>
+<li><ins>
+<i>Throws:</i> Nothing.
+</ins></li>
+</ol>
+
+
+<h3><a name="4.Y"><ins>D.y Deprecated Type Traits [depr.meta.type]</ins></a></h3>
+<ol>
+<li><ins>
+The header <tt>&lt;type_traits&gt;</tt> has the following addition:</ins>
+</ins></li>
+
 <blockquote><pre>
 <ins>namespace std {</ins>
   <ins>template &lt;class T&gt; struct is_literal_type;</ins>
 <ins>}</ins>
 </pre></blockquote>
 
-<ol>
 <li><ins>
 <i>Requires:</i> <tt>remove_all_extents_t&lt;T&gt;</tt> shall be a complete
 type or (possibly cv-qualified) <tt>void</tt>.
@@ -991,10 +1329,12 @@ base-characteristic of <tt>false_type</tt> otherwise.
 </ins></li>
 </ol>
 
-<h3><a name="4.16"><ins>D.y Basic iterator [depr.iterator.basic]</ins></a></h3>
+
+<h3><a name="4.16"><ins>D.z Basic iterator [depr.iterator.basic]</ins></a></h3>
 <ol>
 <li><ins>
 The header <tt>&lt;iterator&gt;</tt> has the following addition:</ins>
+</ins></li>
 <blockquote><pre>
 <ins>namespace std {</ins>
   <ins>template&lt;class Category, class T, class Distance = ptrdiff_t,</ins>
@@ -1009,7 +1349,6 @@ The header <tt>&lt;iterator&gt;</tt> has the following addition:</ins>
 <ins>}</ins>
 </pre></blockquote>
 
-</li>
 <li><ins>
 The <tt>iterator</tt> template may be used as a base class to provide the type
 alias members required for the definition of an iterator type.
@@ -1024,640 +1363,13 @@ definition, but only to callers of that class <i>- end note</i>]
 
 
 <!--
-</blockquote>
-<p>Delete two rows from Table 101 - Associative container requirements (in addition to container)</p>
-<blockquote>
-
-<h3><a name="4.3">23.2.4 Associative containers [associative.reqmts]</a></h3>
-<table border="1" cellpadding="0" cellspacing="0">
-<tr>
-  <td><b>Expression</b></td>
-  <td><b>Return type</b></td>
-  <td><b>Assertion/note/pre-/post-condition</b></td>
-  <td><b>Complexity</b></td>
-</tr>
-<tr>
-  <td><tt></tt></td>
-  <td><tt></tt></td>
-  <td><i>... rows elided ...</i></td>
-  <td></td>
-</tr>
-<tr>
-  <td><tt>key_compare</tt></td>
-  <td><tt>Compare</tt></td>
-  <td>defaults to <tt>less&lt;key_type&gt;</td>
-  <td>compile time</td>
-</tr>
-<tr>
-  <td><del><tt>value_compare</tt></del></td>
-  <td><del>a binary predicate type</del></td>
-  <td><del>
-    is the same as <tt>key_compare</tt> for <tt>set</tt> and <tt>multiset</tt>;
-    is an ordering relation on pairs induced by the first component (i.e.,
-    <tt>Key</tt>) for <tt>map</tt> and <tt>multimap</tt>.
-  </del></td>
-  <td><del>compile time</del></td>
-</tr>
-<tr>
-  <td><tt></tt></td>
-  <td><tt></tt></td>
-  <td><i>... rows elided ...</i></td>
-  <td></td>
-</tr>
-<tr>
-  <td><tt>a.key_comp()</tt></td>
-  <td><tt>X::key_compare</tt></td>
-  <td>returns the comparison objects out of which <tt>a</tt> was constructed</td>
-  <td>constant</td>
-</tr>
-<tr>
-  <td><del><tt>a.value_comp()</tt></del></td>
-  <td><del><tt>X::value_compare</tt></del></td>
-  <td><del>
-    returns an object of <tt>value_compare</tt> constructed out of the comparison
-    object
-  </del></td>
-  <td><del>constant</del></td>
-</tr>
-<tr>
-  <td><tt></tt></td>
-  <td><tt></tt></td>
-  <td><i>... rows elided ...</i></td>
-  <td></td>
-</tr>
-</table>
-
-<h3><a name="4.4">23.4.4 Class template <tt>map</tt>              [map]</a></h3>
-<h3><a name="4.4.1">23.4.4.1 Class template <tt>map</tt> overview   [map.overview]</a></h3>
-<blockquote><pre>
-namespace std {
-  template &lt;class Key, class T, class Compare = less&lt;Key&gt;,
-            class Allocator = allocator&lt;pair&lt;const Key, T&gt; &gt; &gt;
-  class map {
-  public:
-    <i>// types</i>
-    <i>// details elided...</i>
-
-    <del>class value_compare {</del>
-    <del>friend class map;</del>
-    <del>protected:</del>
-      <del>Compare comp;</del>
-      <del>value_compare(Compare c) : comp(c) {}</del>
-    <del>public:</del>
-      <del>typedef bool result_type;</del>
-      <del>typedef value_type first_argument_type;</del>
-      <del>typedef value_type second_argument_type;</del>
-      <del>bool operator()(const value_type&amp; x, const value_type&amp; y) const {</del>
-        <del>return comp(x.first, y.first);</del>
-      <del>}</del>
-    <del>};</del>
-
-    <i>// 23.4.4.2, construct/copy/destroy:</i>
-    <i>// details elided...</i>
-
-    <i>// observers:</i>
-    key_compare key_comp() const;
-    <del>value_compare value_comp() const;</del>
-
-    <i>// remaining details elided...</i>
-  };
-}
-</pre></blockquote>
-
-
-<h3><a name="4.5">23.4.5 Class template <tt>multimap</tt>              [multimap]</a></h3>
-<h3><a name="4.5.1">23.4.5.1 Class template <tt>multimap</tt> overview   [multimap.overview]</a></h3>
-<blockquote><pre>
-namespace std {
-  template &lt;class Key, class T, class Compare = less&lt;Key&gt;,
-            class Allocator = allocator&lt;pair&lt;const Key, T&gt; &gt; &gt;
-  class multimap {
-  public:
-    <i>// types</i>
-    <i>// details elided...</i>
-
-    <del>class value_compare {</del>
-    <del>friend class multimap;</del>
-    <del>protected:</del>
-      <del>Compare comp;</del>
-      <del>value_compare(Compare c) : comp(c) {}</del>
-    <del>public:</del>
-      <del>typedef bool result_type;</del>
-      <del>typedef value_type first_argument_type;</del>
-      <del>typedef value_type second_argument_type;</del>
-      <del>bool operator()(const value_type&amp; x, const value_type&amp; y) const {</del>
-        <del>return comp(x.first, y.first);</del>
-      <del>}</del>
-    <del>};</del>
-
-    <i>// construct/copy/destroy:</i>
-    <i>// details elided...</i>
-
-    <i>// observers:</i>
-    key_compare key_comp() const;
-    <del>value_compare value_comp() const;</del>
-
-    <i>// remaining details elided...</i>
-  };
-}
-</pre></blockquote>
-
-<h3><a name="4.6">23.4.6 Class template <tt>set</tt>              [set]</a></h3>
-<h3><a name="4.6.1">23.4.6.1 Class template <tt>set</tt> overview   [set.overview]</a></h3>
-<blockquote><pre>
-namespace std {
-  template &lt;class Key, class Compare = less&lt;Key&gt;,
-            class Allocator = allocator&lt;Key&gt; &gt;
-  class set {
-  public:
-    <i>// types</i>
-    typedef Key               key_type;
-    typedef Key               value_type;
-    typedef Compare           key_compare;
-    <del>typedef Compare           value_compare;</del>
-    <i>// details elided...</i>
-
-    <i>// 23.4.6.2, construct/copy/destroy:</i>
-    <i>// details elided...</i>
-
-    <i>// observers:</i>
-    key_compare key_comp() const;
-    <del>value_compare value_comp() const;</del>
-
-    <i>// remaining details elided...</i>
-  };
-}
-</pre></blockquote>
-
-<h3><a name="4.7">23.4.7 Class template <tt>multiset</tt>              [multiset]</a></h3>
-<h3><a name="4.7.1">23.4.7.1 Class template <tt>multiset</tt> overview   [multiset.overview]</a></h3>
-<blockquote><pre>
-namespace std {
-  template &lt;class Key, class Compare = less&lt;Key&gt;,
-            class Allocator = allocator&lt;Key&gt; &gt;
-  class multiset {
-  public:
-    <i>// types</i>
-    typedef Key               key_type;
-    typedef Key               value_type;
-    typedef Compare           key_compare;
-    <del>typedef Compare           value_compare;</del>
-    <i>// details elided...</i>
-
-    <i>// construct/copy/destroy:</i>
-    <i>// details elided...</i>
-
-    <i>// observers:</i>
-    key_compare key_comp() const;
-    <del>value_compare value_comp() const;</del>
-
-    <i>// remaining details elided...</i>
-  };
-}
-</pre></blockquote>
--->
-
-<!--
-<h3><a name="4.10">25 Algorithms library [algorithms]</a></h3>
-<h4><a name="4.10.1">25.1 General [algorithms.general]</a></h4>
-<h5>Header &lt;algorithm&gt; synopsis</h5>
-<blockquote><pre>
-#include &lt;initializer_list&gt;
-
-namespace std {
-<blockquote><i>// 25.2, non-modifying sequence operations:</i>
-
-<i>// ... several declarations omitted for brevity</i>
-
-<del>template&lt;class InputIterator1, class InputIterator2&gt;</del>
-  <del>pair&lt;InputIterator1, InputIterator2&gt;</del>
-    <del>mismatch(InputIterator1 first1, InputIterator1 last1,</del>
-             <del>InputIterator2 first2);</del>
-<del>template</del>
- <del>&lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;</del>
-  <del>pair&lt;InputIterator1, InputIterator2&gt;</del>
-    <del>mismatch(InputIterator1 first1, InputIterator1 last1,</del>
-             <del>InputIterator2 first2, BinaryPredicate pred);</del>
-
-template&lt;class InputIterator1, class InputIterator2&gt;
-  pair&lt;InputIterator1, InputIterator2&gt;
-    mismatch(InputIterator1 first1, InputIterator1 last1,
-             InputIterator2 first2, InputIterator2 last2);
-template
- &lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;
-  pair&lt;InputIterator1, InputIterator2&gt;
-    mismatch(InputIterator1 first1, InputIterator1 last1,
-             InputIterator2 first2, InputIterator2 last2,
-             BinaryPredicate pred);
-
-<del>template&lt;class InputIterator1, class InputIterator2&gt;</del>
-  <del>bool equal(InputIterator1 first1, InputIterator1 last1,</del>
-             <del>InputIterator2 first2);</del>
-<del>template</del>
-<del>&lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;</del>
-  <del>bool equal(InputIterator1 first1, InputIterator1 last1,</del>
-             <del>InputIterator2 first2, BinaryPredicate pred);</del>
-
-template&lt;class InputIterator1, class InputIterator2&gt;
-  bool equal(InputIterator1 first1, InputIterator1 last1,
-             InputIterator2 first2, InputIterator2 last2);
-
-template
- &lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;
-  bool equal(InputIterator1 first1, InputIterator1 last1,
-             InputIterator2 first2, InputIterator2 last2,
-             BinaryPredicate pred);
-
-<del>template&lt;class ForwardIterator1, class ForwardIterator2&gt;</del>
-  <del>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</del>
-                      <del>ForwardIterator2 first2);</del>
-<del>template&lt;class ForwardIterator1, class ForwardIterator2,</del>
-                 <del>class BinaryPredicate&gt;</del>
-  <del>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</del>
-                      <del>ForwardIterator2 first2, BinaryPredicate pred);</del>
-
-template&lt;class ForwardIterator1, class ForwardIterator2&gt;
-  bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,
-                      ForwardIterator2 first2, ForwardIterator2 last2);
-
-template&lt;class ForwardIterator1, class ForwardIterator2,
-                    class BinaryPredicate&gt;
-  bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,
-                      ForwardIterator2 first2, ForwardIterator2 last2,
-                      BinaryPredicate pred);
-
-<i>// ... many more declarations omitted for brevity</i>
-</blockquote>}
-</pre></blockquote>
-
-<h3><a name="4.11">25.2.10 Mismatch [mismatch]</a></h3>
-
-<blockquote><pre>
-<del>template&lt;class InputIterator1, class InputIterator2&gt;</del>
-  <del>pair&lt;InputIterator1, InputIterator2&gt;</del>
-      <del>mismatch(InputIterator1 first1, InputIterator1 last1,</del>
-               <del>InputIterator2 first2);</del>
-
-<del>template&lt;class InputIterator1, class InputIterator2,</del>
-          <del>class BinaryPredicate&gt;</del>
-  <del>pair&lt;InputIterator1, InputIterator2&gt;</del>
-      <del>mismatch(InputIterator1 first1, InputIterator1 last1,</del>
-               <del>InputIterator2 first2, BinaryPredicate pred);</del>
-
-template&lt;class InputIterator1, class InputIterator2&gt;
-  pair&lt;InputIterator1, InputIterator2&gt;
-    mismatch(InputIterator1 first1, InputIterator1 last1,
-             InputIterator2 first2, InputIterator2 last2);
-
-template &lt;class InputIterator1, class InputIterator2,
-           class BinaryPredicate&gt;
-  pair&lt;InputIterator1, InputIterator2&gt;
-    mismatch(InputIterator1 first1, InputIterator1 last1,
-             InputIterator2 first2, InputIterator2 last2,
-             BinaryPredicate pred);
-</pre></blockquote>
-<ol>
-<li>
-<del><i>Remarks:</i> If <tt>last2</tt> was not given in the argument list, it
-denotes <tt>first2 + (last1 - first1)</tt> below.</del>
-
-</li>
-<li>
-<i>Returns:</i> A pair of iterators <tt>i</tt> and <tt>j</tt> such that
-<tt>j == first2 + (i - first1)</tt> and <tt>i</tt> is the first iterator in the
-range <tt>[first1,last1)</tt> for which the following corresponding conditions hold:
-<ol>
-<li>— <tt>j</tt> is in the range <tt>[first2, last2)</tt>.</li>
-<li>— <tt>!(*i == *(first2 + (i - first1)))</tt></li>
-<li>— <tt>pred(*i, *(first2 + (i - first1))) == false</tt></li>
-</ol>
-Returns the pair <tt>first1 + min(last1 - first1, last2 - first2)</tt> and
-<tt>first2 + min(last1 - first1, last2 - first2)</tt> if such an iterator <tt>i</tt>
-is not found.
-</li>
-<li>
-<i>Complexity:</i> At most <tt>min(last1 - first1, last2 - first2)</tt> applications of the corresponding predicate.
-</li>
-</ol>
-
-<h3><a name="4.12">25.2.11 Equal [alg.equal]</a></h3>
-<blockquote><pre>
-<del>template&lt;class InputIterator1, class InputIterator2&gt;</del>
-  <del>bool equal(InputIterator1 first1, InputIterator1 last1,</del>
-             <del>InputIterator2 first2);</del>
-
-<del>template&lt;class InputIterator1, class InputIterator2,</del>
-          <del>class BinaryPredicate&gt;</del>
-  <del>bool equal(InputIterator1 first1, InputIterator1 last1,</del>
-             <del>InputIterator2 first2, BinaryPredicate pred);</del>
-
-template&lt;class InputIterator1, class InputIterator2&gt;
-  bool equal(InputIterator1 first1, InputIterator1 last1,
-             InputIterator2 first2, InputIterator2 last2);
-
-template&lt;class InputIterator1, class InputIterator2,
-           class BinaryPredicate&gt;
-bool equal(InputIterator1 first1, InputIterator1 last1,
-           InputIterator2 first2, InputIterator2 last2,
-           BinaryPredicate pred);
-</pre></blockquote>
-<ol>
-<li>
-<del><i>Remarks:</i> If <tt>last2</tt> was not given in the argument list, it denotes
-<tt>first2 + (last1 - first1)</tt> below.<del>
-</li>
-<li>
-<i>Returns:</i> If <tt>last1 - first1 != last2 - first2</tt>, return <tt>false</tt>.
-Otherwise return <tt>true</tt> if for every iterator <tt>i</tt> in the range
-<tt>[first1,last1)</tt> the following corresponding conditions hold:
-<tt>*i == *(first2 + (i - first1))</tt>,
-<tt>pred(*i, *(first2 + (i - first1))) != false</tt>. Otherwise, returns <tt>false</tt>.
-</li>
-<li>
-<i>Complexity:</i> No applications of the corresponding predicate if
-<tt>InputIterator1</tt> and <tt>InputIterator2</tt> meet the requirements of random access
-iterators and <tt>last1 - first1 != last2 - first2</tt>. Otherwise, at most
-<tt>min(last1 - first1, last2 - first2)</tt> applications of the corresponding predicate.
-</li>
-</ol>
-<blockquote><pre>
-</pre></blockquote>
-
-<h3><a name="4.13">25.2.12 Is permutation [alg.is_permutation]</a></h3>
-<blockquote><pre>
-<del>template&lt;class ForwardIterator1, class ForwardIterator2&gt;</del>
-  <del>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</del>
-                      <del>ForwardIterator2 first2);</del>
-
-<del>template&lt;class ForwardIterator1, class ForwardIterator2,</del>
-                 <del>class BinaryPredicate&gt;</del>
-  <del>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</del>
-                      <del>ForwardIterator2 first2, BinaryPredicate pred);</del>
-
-template&lt;class ForwardIterator1, class ForwardIterator2&gt;
-  bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,
-                      ForwardIterator2 first2, ForwardIterator2 last2);
-
-template&lt;class ForwardIterator1, class ForwardIterator2,
-                 class BinaryPredicate&gt;
-bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,
-                    ForwardIterator2 first2, ForwardIterator2 last2,
-                    BinaryPredicate pred);
-</pre></blockquote>
-<ol>
-<li>
-<i>Requires:</i> <tt>ForwardIterator1</tt> and <tt>ForwardIterator2</tt> shall
-have the same value type. The comparison function shall be an equivalence
-relation.
-</li>
-<li>
-<del><i>Remarks:</i> If <tt>last2</tt> was not given in the argument list, it
-denotes <tt>first2 + (last1 - first1)</tt> below.</del>
-</li>
-<li>
-<i>Returns:</i> If <tt>last1 - first1 != last2 - first2</tt>, return <tt>false</tt>.
-Otherwise return <tt>true</tt> if there exists a permutation of the elements in the
-range <tt>[first2,first2 + (last1 - first1))</tt>, beginning with
-<tt>ForwardIterator2 begin</tt>, such that <tt>equal(first1, last1, begin)</tt>
-returns <tt>true</tt> or <tt>equal(first1, last1, begin, pred)</tt> returns <tt>true</tt>;
-otherwise, returns <tt>false</tt>.
-</li>
-<li>
-<i>Complexity:</i> No applications of the corresponding predicate if <tt>ForwardIterator1</tt>
-and <tt>ForwardIterator2</tt> meet the requirements of random access iterators and
-<tt>last1 - first1 != last2 - first2</tt>. Otherwise, exactly <tt>distance(first1, last1)</tt>
-applications of the corresponding predicate if <tt>equal( first1, last1, first2, last2)</tt>
-would return <tt>true</tt> if <tt>pred</tt> was not given in the argument list or
-<tt>equal(first1, last1, first2, last2, pred)</tt> would return <tt>true</tt> if <tt>pred</tt>
-was given in the argument list; otherwise, at worst O(N<sup>2</sup>), where N has the value
-<tt>distance(first1, last1)</tt>.
-</li>
-</ol>
--->
-
-<!--
 <h3><a name="4.15"><ins>D.x Value Comparators for Associative Containers [depr.container.assoc.value_compare]</ins></a></h3>
 
-<ol>
-<li><ins>
-The following member names are defined in addition to names specified in Clause
-23.  It is unspecified whether the <tt>value_compare</tt> classes are provided
-directly as member classes, or as aliases of classes with the same
-specification:
-</ins></li>
-<blockquote><pre>
-<ins>namespace std {</ins>
-  <ins>template &lt;class Key, class T, class Compare = less&lt;Key&gt;,</ins>
-            <ins>class Allocator = allocator&lt;pair&lt;const Key, T&gt; &gt; &gt;</ins>
-  <ins>class map {</ins>
-  <ins>public:</ins>
-    <ins>class value_compare {</ins>
-    <ins>friend class map;</ins>
-    <ins>protected:</ins>
-      <ins>Compare comp;</ins>
-      <ins>value_compare(Compare c) : comp(c) {}</ins>
-    <ins>public:</ins>
-      <ins>typedef bool result_type;</ins>
-      <ins>typedef value_type first_argument_type;</ins>
-      <ins>typedef value_type second_argument_type;</ins>
-      <ins>bool operator()(const value_type&amp; x, const value_type&amp; y) const {</ins>
-        <ins>return comp(x.first, y.first);</ins>
-      <ins>}</ins>
-    <ins>};</ins>
 
-    <ins><i>// observers:</i></ins>
-    <ins>value_compare value_comp() const;</ins>
-  <ins>};</ins>
-<ins>}</ins>
-</pre></blockquote>
-
-<pre><ins>value_compare value_comp() const;</ins></pre>
-
-<li><ins>
-<i>Returns:</i> an object of type <tt>value_compare</tt> constructed out of the
-comparison object.
-</ins></li>
-
-<blockquote><pre>
-<ins>namespace std {</ins>
-  <ins>template &lt;class Key, class T, class Compare = less&lt;Key&gt;,</ins>
-            <ins>class Allocator = allocator&lt;pair&lt;const Key, T&gt; &gt; &gt;</ins>
-  <ins>class multimap {</ins>
-  <ins>public:</ins>
-     <ins>class value_compare {</ins>
-     <ins>friend class multimap;</ins>
-     <ins>protected:</ins>
-       <ins>Compare comp;</ins>
-       <ins>value_compare(Compare c) : comp(c) {}</ins>
-     <ins>public:</ins>
-       <ins>typedef bool result_type;</ins>
-       <ins>typedef value_type first_argument_type;</ins>
-       <ins>typedef value_type second_argument_type;</ins>
-       <ins>bool operator()(const value_type&amp; x, const value_type&amp; y) const {</ins>
-         <ins>return comp(x.first, y.first);</ins>
-       <ins>}</ins>
-    <ins>};</ins>
-
-    <ins><i>// observers:</i></ins>
-    <ins>value_compare value_comp() const;</ins>
-  <ins>};</ins>
-<ins>}</ins>
-</pre></blockquote>
-</li>
-
-<pre><ins>value_compare value_comp() const;</ins></pre>
-
-<li><ins>
-<i>Returns:</i> an object of type <tt>value_compare</tt> constructed out of the
-comparison object.
-</ins></li>
-
-
-<blockquote><pre>
-<ins>namespace std {</ins>
-  <ins>template &lt;class Key, class Compare = less&lt;Key&gt;,</ins>
-            <ins>class Allocator = allocator&lt;Key&gt; &gt;</ins>
-  <ins>class set {</ins>
-  <ins>public:</ins>
-    <ins><i>// types</i></ins>
-    <ins>typedef Compare value_compare;</ins>
-
-    <ins><i>// observers:</i></ins>
-    <ins>value_compare value_comp() const;</ins>
-  <ins>};</ins>
-<ins>}</ins>
-</pre></blockquote>
-
-<pre><ins>value_compare value_comp() const;</ins></pre>
-
-<li><ins>
-<i>Returns:</i> an object of type <tt>value_compare</tt> constructed out of the
-comparison object.
-</ins></li>
-
-
-<blockquote><pre>
-<ins>namespace std {</ins>
-  <ins>template &lt;class Key, class Compare = less&lt;Key&gt;,</ins>
-            <ins>class Allocator = allocator&lt;Key&gt; &gt;</ins>
-  <ins>class multiset {</ins>
-  <ins>public:</ins>
-    <ins>typedef Compare value_compare;</ins>
-
-    <ins><i>// observers:</i></ins>
-    <ins>value_compare value_comp() const;</ins>
-  <ins>};</ins>
-<ins>}</ins>
-</pre></blockquote>
-
-<pre><ins>value_compare value_comp() const;</ins></pre>
-
-<li><ins>
-<i>Returns:</i> an object of type <tt>value_compare</tt> constructed out of the
-comparison object.
-</ins></li>
-</ol>
 -->
 
 <!--
 <h4><a name="4.17"><ins>D.z Algorithms with Partially Formed Ranges [depr.algorithm.partial.range]</ins></a></h4>
-<ol>
-<li><ins>
-The following function template overloads are provided by the &lt;algorithm&gt;
-header in addition to those specified in Clause 25:
-</ins></li>
-<blockquote><pre>
-<ins>namespace std {</ins>
-<blockquote><ins><i>// non-modifying sequence operations:</i></ins>
-
-<ins>template &lt;class InputIterator1, class InputIterator2&gt;</ins>
-  <ins>pair &lt;InputIterator1, InputIterator2&gt;</ins>
-    <ins>mismatch(InputIterator1 first1, InputIterator1 last1,</ins>
-             <ins>InputIterator2 first2);</ins>
-<ins>template &lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;</ins>
-  <ins>pair &lt;InputIterator1, InputIterator2&gt;</ins>
-    <ins>mismatch(InputIterator1 first1, InputIterator1 last1,</ins>
-             <ins>InputIterator2 first2, BinaryPredicate pred);</ins>
-
-<ins>template &lt;class InputIterator1, class InputIterator2&gt;</ins>
-  <ins>bool equal(InputIterator1 first1, InputIterator1 last1,</ins>
-             <ins>InputIterator2 first2);</ins>
-<ins>template &lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;</ins>
-  <ins>bool equal(InputIterator1 first1, InputIterator1 last1,</ins>
-             <ins>InputIterator2 first2, BinaryPredicate pred);</ins>
-
-<ins>template &lt;class ForwardIterator1, class ForwardIterator2&gt;</ins>
-  <ins>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</ins>
-                      <ins>ForwardIterator2 first2);</ins>
-<ins>template &lt;class ForwardIterator1, class ForwardIterator2,</ins>
-                 <ins>class BinaryPredicate&gt;</ins>
-  <ins>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</ins>
-                      <ins>ForwardIterator2 first2, BinaryPredicate pred);</ins>
-</blockquote><ins>}</ins>
-</pre></blockquote>
-
-<li><ins>
-For each of the following algorithms, <tt>last2</tt> denotes an invented
-iterator object equivalent to <tt>first2 + (last1 - first1)</tt>. [
-<i>Note:</i> the behavior may undefined if there is no such reachable iterator
-&mdash; <i>end note</i> ]
-</ins></li>
-<blockquote><pre>
-<ins>template &lt;class InputIterator1, class InputIterator2&gt;</ins>
-  <ins>pair &lt;InputIterator1, InputIterator2&gt;</ins>
-    <ins>mismatch(InputIterator1 first1, InputIterator1 last1,</ins>
-             <ins>InputIterator2 first2);</ins>
-</pre></blockquote>
-<li><ins>
-<i>Effects:</i> equivalent to <tt>mismatch(first1, first2, last1, last2);</tt>
-</ins></li>
-
-<blockquote><pre>
-<ins>template &lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;</ins>
-  <ins>pair &lt;InputIterator1, InputIterator2&gt;</ins>
-    <ins>mismatch(InputIterator1 first1, InputIterator1 last1,</ins>
-             <ins>InputIterator2 first2, BinaryPredicate pred);</ins>
-</pre></blockquote>
-<li><ins>
-<i>Effects:</i> equivalent to <tt>mismatch(first1, first2, last1, last2, pred);</tt>
-</ins></li>
-
-<blockquote><pre>
-<ins>template &lt;class InputIterator1, class InputIterator2&gt;</ins>
-  <ins>bool equal(InputIterator1 first1, InputIterator1 last1,</ins>
-             <ins>InputIterator2 first2);</ins>
-</pre></blockquote>
-<li><ins>
-<i>Effects:</i> equivalent to <tt>equal(first1, first2, last1, last2);</tt>
-</ins></li>
-
-<blockquote><pre>
-<ins>template &lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;</ins>
-  <ins>bool equal(InputIterator1 first1, InputIterator1 last1,</ins>
-             <ins>InputIterator2 first2, BinaryPredicate pred);</ins>
-</pre></blockquote>
-<li><ins>
-<i>Effects:</i> equivalent to <tt>equal(first1, first2, last1, last2, pred);</tt>
-</ins></li>
-
-<blockquote><pre>
-<ins>template &lt;class ForwardIterator1, class ForwardIterator2&gt;</ins>
-  <ins>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</ins>
-                      <ins>ForwardIterator2 first2);</ins>
-</pre></blockquote>
-<li><ins>
-<i>Effects:</i> equivalent to <tt>is_permutation(first1, first2, last1, last2);</tt>
-</ins></li>
-
-<blockquote><pre>
-<ins>template &lt;class ForwardIterator1, class ForwardIterator2,</ins>
-                 <ins>class BinaryPredicate&gt;</ins>
-  <ins>bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,</ins>
-                      <ins>ForwardIterator2 first2, BinaryPredicate pred);</ins>
-</pre></blockquote>
-<li><ins>
-<i>Effects:</i> equivalent to <tt>is_permutation(first1, first2, last1, last2, pred);</tt>
-</ins></li>
 </ol>
 -->
 
