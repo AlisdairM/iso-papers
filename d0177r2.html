@@ -22,11 +22,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0177R1</td>
+  <td align="left">D0177R2</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2016-03-01</td>
+  <td align="left">2016-02-15</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -50,6 +50,7 @@
   <ul>
   <li><a href="#rev.0">Revision 0</a></li>
   <li><a href="#rev.1">Revision 1</a></li>
+  <li><a href="#rev.2">Revision 2</a></li>
   </ul>
 <li><a href="#1.0">Introduction</a></li>
 <li><a href="#2.0">Problems with <tt>allocator_traits></tt></a></li>
@@ -60,7 +61,7 @@
   <li><a href="#2.4"><tt>noexcept</tt> Move Operations</a></li>
   </ul>
 <li><a href="#3.0">Ideas not Pursued</a></li>
-<li><a href="#4.0">Drive-by Fixed</a></li>
+<li><a href="#4.0">Drive-by Fixes</a></li>
   <ul>
   <li><a href="#4.1">Tidying the Allocator Requirements Table</a></li>
   <li><a href="#4.2">Annex C was not updated for C++11</a></h3>
@@ -69,9 +70,10 @@
   <li><a href="#4.5"><tt>vector&lt;bool&gt;</tt> does not use <tt>noexcept</tt></a></li>
   <li><a href="#4.6">Adding (nothrow) swappable traits</tt></a></li>
   </ul>
-<li><a href="#5.0">Proposed Wording</a></li>
-<li><a href="#6.0">Acknowledgements</a></li>
-<li><a href="#7.0">References</a></li>
+<li><a href="#5.0">Library Evolution Review</a></li>
+<li><a href="#6.0">Proposed Wording</a></li>
+<li><a href="#7.0">Acknowledgements</a></li>
+<li><a href="#8.0">References</a></li>
 </ol>
 
 
@@ -92,7 +94,25 @@ Update reviewed at the Jacksonville 2016 meeting.
   <li>Restricted <tt>*_pointer</tt> types and <tt>size_type</tt> to be exactly their default</li>
 </ul>
 
+<h3><a name="rev.2">Revision 2</a></h3>
+<p>
+Update for the 2016 post-Jacksonville mailing.
+</p>
+<ul>
+  <li>Note LEWG review results</li>
+  <li>Limit specializations to exact same behavior - i.e., compile time optimization</li>
+  <li>Defer simplifying the propagation traits</li>
+  <li>Drop simple variable template used to simplify exception specifications</li>
+</ul>
 
+<!--
+<h6>To be done:</h6>
+<ul>
+  <li>Note problem with (currently permitted) partial-specialization for generic allocator of user-defined value types</li>
+  <li>Rationale: Exactly specify pointer types and size_type, rather than default - other than ::pointer itself</li>
+  <li>Clearly defer (with reference) issue of propagate-on-copy-construct to P0176</li>
+</ul>
+-->
 
 <h2><a name="1.0">Introduction</a></h2>
 <p>
@@ -508,18 +528,105 @@ Note that this issue is not fully addressed by this paper, but only one class.
 
 <h3><a name="4.5"><tt>vector&lt;bool&gt;</tt> does not use <tt>noexcept</tt></a></h3>
 <p>
+The <tt>vector&lt;bool&gt;</tt> specialization doea not have the
+allocator-specific <tt>noexcept</tt> specifications of the primary template.
+This appears to have been a simple oversight, each time the exception
+specifications were revised.
 </p>
 
-<h3><a name="4.6">Adding (nothrow) swappable traits</tt></a></h3>
+
+<h2><a name="5.0">Library Evolution Review</a></h2>
 <p>
-This paper should incorporate the improved support for portable detection of
-<tt>noexept</tt> swap functions in
-<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0185r0">P0185R0</a>,
-Adding [nothrow-]swappable traits, by Daniel Krügler.
+The initial review liked the idea of clean-up in general, removing un-necessary
+freedoms, and more consistent naming of terms across the tables.  Concerns
+were raised that at least some present in the discussion were already
+supporting customers using allocator models with propagation traits that
+were not uniformly <tt>true</tt> or <tt>false</tt>, so that aspect of the
+proposal was dropped.  Otherwise, there was support for it to proceed to
+LWG for C++17.
+</p>
+<p>
+Subsequent discussion showed continued interest in simplifying the propagation
+traits, but there would not be time to discuss it further in the C++17
+schedule.  That aspect of the proposal may come back for a future standard.
 </p>
 
+<h3>Polls</h3>
 
-<h2><a name="5.0">Proposed Wording</a></h2>
+<h4>Require specializations of allocator_traits to match allocator members?</h4>
+<table>
+<tr>
+  <td><b>SF</b></td>
+  <td><b>F</b></td>
+  <td><b>N</b></td>
+  <td><b>A</b></td>
+  <td><b>SA</b></td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>7</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+</table>
+
+<h4>Require allocator pointer type members to be related through pointer traits?</h4>
+<table>
+<tr>
+  <td><b>SF</b></td>
+  <td><b>F</b></td>
+  <td><b>N</b></td>
+  <td><b>A</b></td>
+  <td><b>SA</b></td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>5</td>
+  <td>3</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+</table>
+
+<h4>Forward these parts of P0177 to LWG for the IS?</h4>
+<table>
+<tr>
+  <td><b>SF</b></td>
+  <td><b>F</b></td>
+  <td><b>N</b></td>
+  <td><b>A</b></td>
+  <td><b>SA</b></td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>4</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+</table>
+
+<h4>Do we want to see a separate, new paper on propagation traits?</h4>
+<table>
+<tr>
+  <td><b>SF</b></td>
+  <td><b>F</b></td>
+  <td><b>N</b></td>
+  <td><b>A</b></td>
+  <td><b>SA</b></td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>7</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+</table>
+
+
+<h2><a name="6.0">Proposed Wording</a></h2>
 <p>
 Amend existing library clauses as below:
 </p>
@@ -891,30 +998,29 @@ transitive, and shall not exit via an exception.
   <td><tt>return a;</tt></td>
 </tr>
 <tr>
-  <td><del><tt>propagate_on_container_copy_assignment</tt></del></td>
-  <td><del>Identical to or derived from <tt>true_type</tt> or <tt>false_type</tt></del></td>
-  <td><del>
-<tt>true_type</tt> only if an allocator of type <tt>X</tt> should be copied
+  <td><tt>propagate_on_container_copy_assignment</tt></td>
+  <td>Identical to or derived from <tt>true_type</tt> or <tt>false_type</tt></td>
+  <td>
+<tt>true_type</tt> only if an allocator of type <tt><del>X</del><ins>A</ins></tt> should be copied
 when the client container is copy-assigned. See Note B, below.
-  </del></td>
-  <td><del><tt>false_type</tt></del></td>
+  </td>
+  <td><tt>false_type</tt></td>
 </tr>
 <tr>
-  <td><del><tt>propagate_on_container_move_assignment</tt></del></td>
-  <td><del>Identical to or derived from <tt>true_type</tt> or <tt>false_type</tt></del></td>
-  <td><del>
-<tt>true_type</tt> only if an allocator of type <tt>X</tt> should be moved
+  <td><tt>propagate_on_container_move_assignment</tt></td>
+  <td>Identical to or derived from <tt>true_type</tt> or <tt>false_type</tt></td>
+  <td>
+<tt>true_type</tt> only if an allocator of type <tt><del>X</del><ins>A</ins></tt> should be moved
 when the client container is move-assigned. See Note B, below.
-  </del></td>
-  <td><del><tt>false_type</tt></del></td>
+  </td>
+  <td><tt>false_type</tt></td>
 </tr>
 <tr>
   <td><tt>propagate_on_container_swap</tt></td>
   <td>Identical to or derived from <tt>true_type</tt> or <tt>false_type</tt></td>
   <td>
 <tt>true_type</tt> only if an allocator of type <tt><del>X</del><ins>A</ins></tt> should be swapped
-when the client container is swapped<ins>, copied when the client container is copy-assigned, and
-moved when the client container is move-assigned</ins>. See Note B, below.
+when the client container is swapped. See Note B, below.
   </td>
   <td><tt>false_type</tt></td>
 </tr>
@@ -948,7 +1054,7 @@ are not template instantiations of the above form, no default is provided.
 </li>
 
 <li>
-Note B:<del>
+Note B:
 If <tt>X::propagate_on_container_copy_assignment::value</tt> is <tt>true</tt>,
 <tt>X</tt> shall satisfy the <tt>CopyAssignable</tt> requirements (Table 23)
 and the copy operation shall not throw exceptions. If
@@ -958,13 +1064,7 @@ and the move operation shall not throw exceptions. If
 <tt>X::propagate_on_container_swap::value</tt> is <tt>true</tt>, lvalues of
 type <tt>X</tt> shall be swappable (17.6.3.2) and the <tt>swap</tt> operation
 shall not throw exceptions.
-</del><ins>
-If <tt>AT::propagate_on_container_swap::value</tt> is <tt>true</tt>, <tt>A</tt>
-shall satisfy the <tt>CopyAssignable</tt> requirements (Table 23) and the
-<tt>MoveAssignable</tt> requirements (Table 22), lvalues of type <tt>A</tt>
-shall be swappable (17.6.3.2), and the copy-assignment, move-assignment, and
-swap operations shall not throw exceptions.
-</ins></li>
+</li>
 
 <li>
 An allocator type <tt><del>X</del><ins>A</ins></tt> shall satisfy the
@@ -1080,6 +1180,14 @@ all allocator types. An allocator cannot be a non-class type, however, even if
 <i>Note:</i> Thus, it is always possible to create a derived class from an
 allocator. <i>- end note</i> ]
 </li>
+
+<li><ins>
+User specializations of <tt>allocator_traits</tt> are permitted only if they
+provide exactly the same behavior as an instantiation of the primary template.
+[ <i>Note:</i> Such specializations might be provided as an aid to the compiler,
+e.g., where it is simpler to directly provide the specified type aliases than
+to compute them afresh each time. <i>- end note</i> ]
+</ins></li>
 </ol>
 
 <blockquote><pre>
@@ -1097,8 +1205,8 @@ namespace std {
     typedef <i>see below</i>                                 difference_type;
     typedef <del><i>see below</i></del><ins>make_unsigned_t&lt;difference_type&gt;</ins> size_type;
 
-    <del>typedef <i>see below</i> propagate_on_container_copy_assignment;</del>
-    <del>typedef <i>see below</i> propagate_on_container_move_assignment;</del>
+    typedef <i>see below</i> propagate_on_container_copy_assignment;
+    typedef <i>see below</i> propagate_on_container_move_assignment;
     typedef <i>see below</i> propagate_on_container_swap;
     typedef <i>see below</i> is_always_equal;
 
@@ -1122,11 +1230,13 @@ namespace std {
   };
 }
 
+<!-- This no longer works, as we do not propose a single propagation trait
 // NOTE: MOVE THIS TO SYNOPSIS INSTEAD
 <ins>template &lt;class Alloc&gt;</ins>
 <ins>constexpr propagate_may_throw_v =</ins>
   <ins>!allocator_traits&lt;Alloc&gt;::is_always_equal</ins>
   <ins>!allocator_traits&lt;Alloc&gt;::propagate_on_container_swap;</ins>
+-->
 </pre></blockquote>
 
 
@@ -1172,6 +1282,7 @@ is valid and denotes a type (14.8.2); otherwise, <tt>value_type*</tt>.
 valid and denotes a type (14.8.2); otherwise, <tt>make_unsigned_t&lt;difference_type&gt;</tt>.
 </del></li>
 
+<!-- This dependend on having a single propagation trait
 <pre><del>typedef <i>see below</i> propagate_on_container_copy_assignment;</del></pre>
 <li><del>
 <i>Type:</i> <tt>Alloc::propagate_on_container_copy_assignment</tt> if the 
@@ -1202,9 +1313,11 @@ denotes a type (14.8.2); otherwise <del><tt>false_type</tt></del>
 <tt>Alloc::is_always_equal</tt> is valid and denotes a type (14.8.2); otherwise
 <tt>is_empty&lt;Alloc&gt;::type</tt>.
 </li>
+-->
 </ol>
 
 
+<!-- This dependend on having a single propagation trait
 <h4>20.13.1 Header &lt;scoped_allocator&gt; synopsis</h4>
 
 <blockquote><pre>
@@ -1261,8 +1374,10 @@ namespace std {
   otherwise, <tt>false_type</tt>.
 </li>
 </ol>
+-->
 
 
+<!-- This dependend on having a single propagation trait
 <h4>21.4 Class template basic_string [basic.string]</h4>
 <blockquote><pre>
 namespace std {
@@ -1305,9 +1420,10 @@ namespace std {
   };
 }
 </pre></blockquote>
-
+-->
 
 <h4>23.2.1 General container requirements [container.requirements.general]</h4>
+<!-- This dependend on having a single propagation trait
 <p>
 8 Unless otherwise specified, all containers defined in this clause obtain
 memory using an allocator (see 17.6.3.5). Copy constructors for these container
@@ -1315,8 +1431,8 @@ types obtain an allocator by calling
 <tt>allocator_traits&lt;allocator_type&gt;::select_on_container_copy_construction</tt>
 on the allocator belonging to the container being copied. Move constructors
 obtain an allocator by move construction from the allocator belonging to the
-container being moved. <del>Such move construction of the allocator shall not
-exit via an exception.</del> All other constructors for these container types
+container being moved.  Such move construction of the allocator shall not
+exit via an exception.  All other constructors for these container types
 take a <tt>const allocator_type&amp;</tt> argument.  [<i>Note:</i> If an
 invocation of a constructor uses the default value of an optional allocator
 argument, then the <tt>Allocator</tt> type must support value initialization.
@@ -1355,6 +1471,7 @@ other container after the swap. It is unspecified whether an iterator with
 value <tt>a.end()</tt> before the swap will have value <tt>b.end()</tt> after
 the swap.
 </p>
+-->
 
 <h5>Table 98 — Allocator-aware container requirements</h5>
 <table border="1" cellpadding="0" cellspacing="0">
@@ -1398,9 +1515,8 @@ exception.</del> <i>post:</i> <tt>u</tt> shall have the same elements as
   <td><tt>X&amp;</tt</td>
   <td>
 <i>Requires:</i> If
-<del><tt>allocator_traits&lt;allocator_type&gt;::propagate_on_container_move_assignment::value</tt>
-is <tt>false</tt></del>
-<ins><tt>propagate_may_throw_v&lt;allocator_type&gt;</tt></ins>, <tt>T</tt> is
+<tt>allocator_traits&lt;allocator_type&gt;::propagate_on_container_move_assignment::value</tt>
+is <tt>false</tt>, <tt>T</tt> is
 <tt>MoveInsertable</tt> into <tt>X</tt> and <tt>MoveAssignable</tt>.
 </p>
 <ins><i>Effects:</i></ins>  All
@@ -1412,6 +1528,7 @@ existing elements of <tt>a</tt> are either move assigned to or destroyed.
 </tr>
 </table>
 
+<!-- This dependend on having a single propagation trait
 <h4>23.3.3.1 Class template <tt>deque</tt> overview [deque.overview]</h4>
 <blockquote><pre>
 namespace std {
@@ -1471,7 +1588,7 @@ namespace std {
   };
 }
 </pre></blockquote>
-
+-->
 
 <h4>23.3.7 Class <tt>vector&lt;bool&gt;</tt> [vector.bool]</h4>
 <ol>
@@ -1497,8 +1614,10 @@ namespace std {
     vector(initializer_list&lt;bool&gt;, const Allocator&amp; = Allocator()));
     ~vector();
     vector&lt;bool, Allocator&gt;&amp; operator=(const vector<del>&lt;bool, Allocator&gt;</del>&amp; x);
-    vector&lt;bool, Allocator&gt;&amp; operator=(vector<del>&lt;bool, Allocator&gt;</del>&amp;&amp; x) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
-    vector&amp; operator=(initializer_list<bool>);
+    vector&lt;bool, Allocator&gt;&amp; operator=(vector<del>&lt;bool, Allocator&gt;</del>&amp;&amp; x)
+      <ins>noexcept(allocator_traits&lt;Allocator&gt;::propagate_on_container_move_assignment::value ||</ins>
+               <ins>allocator_traits&lt;Allocator&gt;::is_always_equal::value)</ins>;
+    vector&amp; operator=(initializer_list&lt;bool&gt;);
     template &lt;class InputIterator&gt;
       void assign(InputIterator first, InputIterator last);
     void assign(size_type n, const bool&amp; t);
@@ -1508,7 +1627,9 @@ namespace std {
 
     iterator erase(const_iterator position);
     iterator erase(const_iterator first, const_iterator last)
-    void swap(vector<del>&lt;bool, Allocator&gt;</del>&amp;) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
+    void swap(vector<del>&lt;bool, Allocator&gt;</del>&amp;)
+      <ins>noexcept(allocator_traits&lt;Allocator&gt;::propagate_on_container_swap::value ||</ins>
+               <ins>allocator_traits&lt;Allocator&gt;::is_always_equal::value)</ins>;
     static void swap(reference x, reference y) noexcept;
     void flip() noexcept; <i>// flips all bits</i>
     void clear() noexcept;
@@ -1517,6 +1638,7 @@ namespace std {
 </pre></blockquote>
 
 
+<!-- This dependend on having a single propagation trait
 <h4>23.4.4.1 Class template <tt>map</tt> overview [map.overview]</h4>
 <blockquote><pre>
 namespace std {
@@ -1649,7 +1771,7 @@ namespace std {
   };
 }
 </pre></blockquote>
-
+-->
 
 <h4>28.10 Class template match_results [re.results]</h4>
 <blockquote><pre>
@@ -1678,7 +1800,9 @@ namespace std {
     <ins>match_results(const match_results&amp; m, const Allocator&amp; a);</ins>
     <ins>match_results(match_results&amp;&amp; m, const Allocator&amp; a);</ins>
     match_results&amp; operator=(const match_results&amp; m);
-    match_results&amp; operator=(match_results&amp;&amp; m) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
+    match_results&amp; operator=(match_results&amp;&amp; m)
+      <ins>noexcept(allocator_traits&lt;Allocator&gt;::propagate_on_container_move_assignment::value ||</ins>
+               <ins>allocator_traits&lt;Allocator&gt;::is_always_equal::value)</ins>;
     ~match_results();
 
     <i>// 28.10.2, state:</i>
@@ -1729,7 +1853,9 @@ namespace std {
     allocator_type get_allocator() const <ins>noexcept</ins>;
 
     <i>// 28.10.7, swap:</i>
-    void swap(match_results&amp; that) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
+    void swap(match_results&amp; that)
+      <ins>noexcept(allocator_traits&lt;Allocator&gt;::propagate_on_container_swap::value ||</ins>
+               <ins>allocator_traits&lt;Allocator&gt;::is_always_equal::value)</ins>;
   };
 }
 </pre></blockquote>
@@ -1767,6 +1893,7 @@ traceable pointer support, that interacts with newer C++ code using regions
 declared reachable may have different runtime behavior.
 </p>
 
+<!-- This dependend on having a single propagation trait
 <h4><ins>Clause 17: library introduction [diff.cpp14.library]</ins></h4>
 <p><ins>
 17.6.3.5
@@ -1789,10 +1916,49 @@ that customized these traits separately will now either propagate in all cases,
 or never, depending entirely on the value of
 <tt>propagate_on_container_swap::value</tt>.
 </ins></p>
+-->
+<h4><ins>C.4.X Clause 17: library introduction [diff.cpp14.library]</ins></h4>
+<p><ins>
+17.6.3.5
+</ins></p>
+<p><ins>
+<b>Change:</b> <tt>allocator_traits</tt> requires consistency of computed
+types, such as <tt>pointer</tt> and <tt>const_pointer</tt>.
+</ins></p>
+<p><ins>
+<b>Rationale:</b> Combinations of inconsistent traits added significant
+complexity to containers, without demonstrating any real benefit.
+</ins></p>
+<p><ins>
+<b>Effect on original feature:</b> Allocators that provided inconsistent
+<tt>pointer</tt>, <tt>connst_pointer</tt>, <tt>void_pointer</tt>,
+and <tt>const_void_pointer</tt> types may no longer work with standard
+containers, and similiarly for inconsisent <tt>difference_type</tt> and
+<tt>size_type</tt>.
+</ins></p>
+
+<h4><ins>C.4.Y Clause 20: general utilities library [diff.cpp03.utilities]</ins></h4>
+<p><ins>
+20.1.5
+</ins></p>
+<p><ins>
+<b>Change:</b> <tt>allocator_traits</tt> cannot be specialized to provide
+results not discovered from the allocator template parameter.
+</ins></p>
+<p><ins>
+<b>Rationale:</b> Simplify writing containers by having a more consistent
+allocator model.
+</ins></p>
+<p><ins>
+<b>Effect on original feature:</b> users could specialize
+<tt>allocator_traits</tt> for an allocator type in order to satisy the
+allocator requirements in a manner inconsistent with the allocator type
+itself.
+</ins></p>
 
 </blockquote>
 
-
+<!--
 <p>Add the following to Annex D:</p>
 
 <blockquote>
@@ -1808,9 +1974,12 @@ or never, depending entirely on the value of
 </pre></blockquote>
 
 </blockquote>
+-->
 
 <h2><a name="6.0">Acknowledements</h2>
 <p>
+Thanks to Howard Hinnant for the example of an alloctor model that propagates
+allocators on move-assignment and swap, but not on copy assignment.
 </p>
 
 
