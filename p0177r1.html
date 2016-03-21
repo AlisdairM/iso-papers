@@ -22,11 +22,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0177R0</td>
+  <td align="left">P0177R1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2016-02-15</td>
+  <td align="left">2016-03-01</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -46,36 +46,53 @@
 
 <h2>Table of Contents</h2>
 <ol>
-<li><a href="#0.0">Revision History</a></li>
+<li><a href="#rev.hist">Revision History</a></li>
   <ul>
-  <li><a href="#0.1">Revision 0</a></li>
+  <li><a href="#rev.0">Revision 0</a></li>
+  <li><a href="#rev.1">Revision 1</a></li>
   </ul>
 <li><a href="#1.0">Introduction</a></li>
 <li><a href="#2.0">Problems with <tt>allocator_traits></tt></a></li>
   <ul>
   <li><a href="#2.1">Consistency of propagation traits</a></li>
+  <li><a href="#2.2">Inconsistent propagation traits are hard to deal with</a></li>
+  <li><a href="#2.3">Default for propagation traits</a></li>
+  <li><a href="#2.4"><tt>noexcept</tt> Move Operations</a></li>
   </ul>
-<li><a href="#4.0">Acknowledgements</a></li>
-<li><a href="#5.0">References</a></li>
+<li><a href="#3.0">Ideas not Pursued</a></li>
+<li><a href="#4.0">Drive-by Fixed</a></li>
+  <ul>
+  <li><a href="#4.1">Tidying the Allocator Requirements Table</a></li>
+  <li><a href="#4.2">Annex C was not updated for C++11</a></h3>
+  <li><a href="#4.3">Regex <tt>match_results</tt> does not use <tt>noexcept</tt></a></li>
+  <li><a href="#4.4">Regex <tt>match_results</tt> does not use <tt>noexcept</tt></a></li>
+  <li><a href="#4.5"><tt>vector&lt;bool&gt;</tt> does not use <tt>noexcept</tt></a></li>
+  <li><a href="#4.6">Adding (nothrow) swappable traits</tt></a></li>
+  </ul>
+<li><a href="#5.0">Proposed Wording</a></li>
+<li><a href="#6.0">Acknowledgements</a></li>
+<li><a href="#7.0">References</a></li>
 </ol>
 
 
-<h2><a name="0.0">Revision History</a></h2>
+<h2><a name="rev.hist">Revision History</a></h2>
 
-<h3><a name="0.1">Revision 0</a></h3>
+<h3><a name="rev.0">Revision 0</a></h3>
 <p>
 Original version of the paper for the 2016 pre-Jacksonville mailing.
 </p>
 
-<!--
-<h6>To be done:</h6>
+<h3><a name="rev.1">Revision 1</a></h3>
+<p>
+Update reviewed at the Jacksonville 2016 meeting.
+</p>
 <ul>
-  <li>Propose updates to large parts of transcribed wording</li>
-  <li>Clearer examples of problems with mismatched traits</li>
-  <li>Defer <tt>swap</tt> problem to paper on Rob's issues</li>
-  <li>Clearly defer (with reference) issue of propagate-on-copy-construct to P0176</li>
+  <li>Fixed the table of contents to properly index this document</li>
+  <li>Drive-by fixes for identifiers in allocator and allocator-aware container tables</li>
+  <li>Restricted <tt>*_pointer</tt> types and <tt>size_type</tt> to be exactly their default</li>
 </ul>
--->
+
+
 
 <h2><a name="1.0">Introduction</a></h2>
 <p>
@@ -266,7 +283,7 @@ auto vector&lt;T, A&gt;::operator=(vector const&amp; other) -&gt; vector&amp;
 </pre></blockquote>
 
 
-<h3><a name="2.2">Default for propagation traits</a></h3>
+<h3><a name="2.3">Default for propagation traits</a></h3>
 <p>
 Note:
   <li><a href="http://cplusplus.github.io/LWG/lwg-defects.html#2103">LWG #2103</a> <tt>std::allocator_traits&lt;std::allocator&lt;T&gt;&gt;::propagate_on_container_move_assignment</tt></li>
@@ -275,7 +292,7 @@ Note:
 </p>
 
 
-<h3><a name="2.3"><tt>noexcept</tt> Move Operations</a></h3>
+<h3><a name="2.4"><tt>noexcept</tt> Move Operations</a></h3>
 <p>
 Two of the key operations of a container are its move-assignment operator and
 its <tt>swap</tt> overload.  While it is important that these are efficient, it
@@ -319,37 +336,6 @@ objects in addition to the stored elements, as even though a swap may not need
 to allocate, the functor objects may throw on move/swap.  This limits our scope
 to make changes, although it looks like <tt>deque::swap</tt> should take
 advantage.
-</p>
-
-
-<h3><a name="2.4">Tidying the Allocator Requirements Table</a></h3>
-<p>
-The allocator requirements table in clause 17 is long, so long that it spreads
-over three pages of the standard.  It is also complex with a lot of small
-identifiers used to simplify the specification, and there are so many of these
-that they have their own table in advance of the allocator requirements table
-that is the key to that table.  Unfortunately, the spelling of the short
-identifiers is not always obvious, which necessitates srolling up and down a
-few pages, every time the reader wants to clarify their understanding.  Worse,
-in some cases it is outright missleading, where <tt>X</tt> is the type of an
-allocator, but <tt>x</tt> is an object of a pointer type, not an allocator.
-Instead, and allocator of type <tt>X</tt> is spelled <tt>a</tt>.  This paper
-proposes a more intuitive set of spellings that are similarly terse, but will
-give the reader an intuition they can trust without scrolling back to the table
-key each time.
-</p>
-<p>
-Secondly, around half of the entries in the allocator requirements table are
-optional, denoted by the presence of the Defaults column.  However, most
-operations are specified directly in terms of the allocator member, when really
-they should be specified in terms of the default, which is obtained through
-<tt>allocator_traits</tt>.  There would be a risk of a circular definition if
-the specification of <tt>allocator_traits</tt> were in terms of this table, but
-that is not the case.  The specifcation for <tt>allocator_traits</tt> gives a
-formula for the default in each case without (normatively) referring back to
-the allocator requirements table.  This paper substitues the
-<tt>allocator_traits</tt> name for every optional property that is used in the
-specification of dependent requirements.
 </p>
 
 
@@ -397,34 +383,138 @@ instead, fully addressed to avoid confusion with multple resolutions
 interacting on the same wording.
 </p>
 
-<h3><a name="4.1">Annex C was not updated for C++11</a></h3>
+<h3><a name="4.1">Tidying the Allocator Requirements Table</a></h3>
+<p>
+The allocator requirements table in clause 17 is long, so long that it spreads
+over three pages of the standard.  It is also complex with a lot of small
+identifiers used to simplify the specification, and there are so many of these
+that they have their own table in advance of the allocator requirements table
+that is the key to that table.  Unfortunately, the spelling of the short
+identifiers is not always obvious, which necessitates srolling up and down a
+few pages, every time the reader wants to clarify their understanding.  Worse,
+in some cases it is outright missleading, where <tt>X</tt> is the type of an
+allocator, but <tt>x</tt> is an object of a pointer type, not an allocator.
+Instead, and allocator of type <tt>X</tt> is spelled <tt>a</tt>.  This paper
+proposes a more intuitive set of spellings that are similarly terse, but will
+give the reader an intuition they can trust without scrolling back to the table
+key each time.  This becomes consistent with the allocator-aware containre
+requirement tables, where <tt>X</tt> denotes a container using allocator-type
+<tt>A</tt>, reducing confusion when switching between tables.  Note that the
+container requirements still use <tt>a</tt> as the name of a container object,
+rather than allocator object, so additional clean-up in the container tables
+may be useful.
+</p>
+<table border="1" cellpadding="0" cellspacing="0">
+<tr>
+  <td><b>Old name</b></td>
+  <td><b>New name</b></td>
+  <td><b>Meaning</td>
+</tr>
+<tr>
+  <td><tt>X</tt></td>
+  <td><tt>A</tt></td>
+  <td>an Allocator class for type <tt>T</tt></td>
+</tr>
+<tr>
+  <td><tt>Y</tt></td>
+  <td><tt>B</tt></td>
+  <td>the corresponding Allocator class for type <tt>U</tt></td>
+</tr>
+<tr>
+  <td><tt>XX</tt></td>
+  <td><tt>AT</tt></td>
+  <td>the type <tt>allocator_traits&lt;A&gt;</td>
+</tr>
+<tr>
+  <td><tt>YY</tt></td>
+  <td><tt>BT</tt></td>
+  <td>the type <tt>allocator_traits&lt;B&gt;</td>
+</tr>
+<tr>
+  <td><tt>p</tt></td>
+  <td><tt>p</tt></td>
+  <td>
+<em>No change:</em> a value of type <tt>AT::pointer</tt>, obtained by calling
+<tt>a1.allocate</tt>, where <tt>a1 == a</tt>
+  </td>
+</tr>
+<tr>
+  <td><tt>q</tt></td>
+  <td><tt>cp</tt></td>
+  <td>
+a value of type <tt>AT::const_pointer</tt> obtained by conversion from a value
+<tt>p</tt>
+  </td>
+</tr>
+<tr>
+  <td><tt>w</tt></td>
+  <td><tt>vp</tt></td>
+  <td>
+a value of type <tt>AT::void_pointer</tt> obtained by conversion from a value
+<tt>p</tt>
+  </td>
+</tr>
+<tr>
+  <td><tt>x</tt></td>
+  <td><tt>cvp</tt></td>
+  <td>
+a value of type <tt>AT::const_void_pointer</tt> obtained by conversion from a
+value <tt>cp</tt> or a value <tt>vp</tt>
+  </td>
+</tr>
+<tr>
+  <td><tt>y</tt></td>
+  <td><tt>cvq</tt></td>
+  <td>
+a value of type <tt>AT::const_void_pointer</tt> obtained by conversion from a
+result value of <tt>BT::allocate</tt>, or else a value of type (possibly const)
+<tt>std::nullptr_t</tt>
+  </td>
+</tr>
+</table>
+
+<p>
+Secondly, around half of the entries in the allocator requirements table are
+optional, denoted by the presence of the Defaults column.  However, most
+operations are specified directly in terms of the allocator member, when really
+they should be specified in terms of the default, which is obtained through
+<tt>allocator_traits</tt>.  There would be a risk of a circular definition if
+the specification of <tt>allocator_traits</tt> were in terms of this table, but
+that is not the case.  The specifcation for <tt>allocator_traits</tt> gives a
+formula for the default in each case without (normatively) referring back to
+the allocator requirements table.  This paper substitues the
+<tt>allocator_traits</tt> name for every optional property that is used in the
+specification of dependent requirements.
+</p>
+
+<h3><a name="4.2">Annex C was not updated for C++11</a></h3>
 <p>
   <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2178">LWG #2178</a>  Annex C update for C++11 on allocators
 </p>
 
 
-<h3><a name="4.2">Regex <tt>match_results</tt> does not use <tt>noexcept</tt></a></h3>
+<h3><a name="4.3">Regex <tt>match_results</tt> does not use <tt>noexcept</tt></a></h3>
 <p>
   <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2183">LWG #2183</a>  regex <tt>match_results</tt> missing allocator-aware ctors
   <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2184">LWG #2184</a>  regex <tt>match_results</tt> assigment and allocator propagation
 </p>
 
-<h3><a name="4.3">Regex <tt>match_results</tt> does not use <tt>noexcept</tt></a></h3>
+<h3><a name="4.4">Regex <tt>match_results</tt> does not use <tt>noexcept</tt></a></h3>
 <p>
   <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2490">LWG #2490</a>  <tt>&lt;regex&gt; needs lots of noexcept</tt>
 
 Note that this issue is not fully addressed by this paper, but only one class.
 </p>
 
-<h3><a name="4.4"><tt>vector&lt;bool&gt;</tt> does not use <tt>noexcept</tt></a></h3>
+<h3><a name="4.5"><tt>vector&lt;bool&gt;</tt> does not use <tt>noexcept</tt></a></h3>
 <p>
 </p>
 
-<h3><a name="4.5">Adding (nothrow) swappable traits</tt></a></h3>
+<h3><a name="4.6">Adding (nothrow) swappable traits</tt></a></h3>
 <p>
 This paper should incorporate the improved support for portable detection of
 <tt>noexept</tt> swap functions in
-<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4511">N4511</a>,
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0185r0">P0185R0</a>,
 Adding [nothrow-]swappable traits, by Daniel Krügler.
 </p>
 
@@ -569,32 +659,38 @@ result value of <tt><del>YY</del><ins>BT</ins>::allocate</tt>, or else a value o
   <td><tt>T*</tt></td>
 </tr>
 <tr>
-  <td><tt><del>X</del><ins>A</ins>::const_pointer</tt></td>
-  <td><i></i></td>
+  <td><tt><del>X</del><ins>AT</ins>::const_pointer</tt></td>
+  <td><ins><tt>pointer_traits&lt;AT::pointer&gt;::rebind&lt;const T&gt;</tt></ins></td>
   <td><tt><del>X</del><ins>AT</ins>::pointer</tt> is convertible to <tt><del>X</del><ins>AT</ins>::const_pointer</tt></td>
-  <td><tt>pointer_traits&lt;<del>X</del><ins>AT</ins>::pointer&gt;::rebind&lt;const T&gt;</tt></td>
+  <td><del><tt>pointer_traits&lt;X::pointer&gt;::rebind&lt;const T&gt;</tt></del></td>
 </tr>
 <tr>
-  <td><tt><del>X</del><ins>A</ins>::void_pointer <del>Y</del><ins>B</ins>::void_pointer</tt></td>
-  <td><i></i></td>
+  <td>
+<pre><del>X</del><ins>AT</ins>::void_pointer
+<del>Y</del><ins>BT</ins>::void_pointer</pre>
+  </td>
+  <td><ins><tt>pointer_traits&lt;AT::pointer&gt;::rebind&lt;void&gt;</tt></ins></td>
   <td>
 <tt><del>X</del><ins>AT</ins>::pointer</tt> is convertible to <tt><del>X</del><ins>AT</ins>::void_pointer</tt>.
 <tt><del>X</del><ins>AT</ins>::void_pointer</tt> and <tt><del>Y</del><ins>BT</ins>::void_pointer</tt> are the same type.
   </td>
-  <td><tt>pointer_traits&lt;<del>X</del><ins>AT</ins>::pointer&gt;::rebind&lt;void&gt;</tt></td>
+  <td><del><tt>pointer_traits&lt;X::pointer&gt;::rebind&lt;void&gt;</tt></del></td>
 </tr>
 <tr>
-  <td><tt><del>X</del><ins>A</ins>::const_void_pointer <del>Y</del><ins>B</ins>::const_void_pointer</tt></td>
-  <td><i></i></td>
+  <td>
+<pre><del>X</del><ins>A</ins>::const_void_pointer
+<del>Y::const_void_pointer</del></pre>
+  </td>
+  <td><ins><tt>pointer_traits&lt;AT::void_pointer&gt;::rebind&lt;const void&gt;</tt></ins></td>
   <td>
 <tt><del>X</del><ins>AT</ins>::pointer</tt>,
 <tt><del>X</del><ins>AT</ins>::const_pointer</tt>, and
 <tt><del>X</del><ins>AT</ins>::void_pointer</tt> are convertible to
 <tt><del>X</del><ins>AT</ins>::const_void_pointer</tt>.
-<tt><del>X</del><ins>AT</ins>::const_void_pointer</tt> and
-<tt><del>Y</del><ins>BT</ins>::const_void_pointer</tt> are the same type.
+<del><tt>X::const_void_pointer</tt> and
+<tt>Y::const_void_pointer</tt> are the same type.</del>
   </td>
-  <td><tt>pointer_traits&lt;<del>X</del><ins>AT</ins>::pointer&gt;::rebind&lt;const void&gt;</tt></td>
+  <td><del><tt>pointer_traits&lt;X::pointer&gt;::rebind&lt;const void&gt;</tt></del></td>
 </tr>
 <tr>
   <td><tt><del>X</del><ins>A</ins>::value_type</tt></td>
@@ -604,12 +700,13 @@ result value of <tt><del>YY</del><ins>BT</ins>::allocate</tt>, or else a value o
 </tr>
 <tr>
   <td><tt><del>X</del><ins>A</ins>::size_type</tt></td>
-  <td>unsigned integer type</td>
-  <td>
+  <td><del>unsigned integer type</del>
+      <ins><tt>make_unsigned_t&lt;<ins>AT</ins>::difference_type&gt;</tt></ins></td>
+  <td><del>
 a type that can represent the size of the largest object in the allocation
 model.
-  </td>
-  <td><tt></tt></td>
+  </del></td>
+  <td><del><tt>make_unsigned_t&lt;X::difference_type&gt;</tt></del></td>
 </tr>
 <tr>
   <td><tt><del>X</del><ins>A</ins>::difference_type</tt></td>
@@ -618,7 +715,7 @@ model.
 a type that can represent the difference between any two pointers in the
 allocation model.
   </td>
-  <td><tt></tt></td>
+  <td><tt>pointer_traits&lt;<del>X</del><ins>AT</ins>::pointer&gt;::difference_type</tt></td>
 </tr>
 <tr>
   <td><tt>typename <del>X</del><ins>A</ins>::template rebind&lt;U&gt;::other</tt></td>
@@ -654,15 +751,15 @@ For all <tt>U</tt> (including <tt>T</tt>),
   <td><tt></tt></td>
 </tr>
 <tr>
-  <td><tt>static_cast&lt;<del>X</del><ins>A</ins>::pointer&gt;(<del>w</del><ins>vp</ins>)</tt></td>
+  <td><tt>static_cast&lt;<del>X</del><ins>AT</ins>::pointer&gt;(<del>w</del><ins>vp</ins>)</tt></td>
   <td><tt>pointer</tt></td>
-  <td><tt>static_cast&lt;<del>X</del><ins>A</ins>::pointer&gt;(<del>w</del><ins>vp</ins>) == p</tt></td>
+  <td><tt>static_cast&lt;<del>X</del><ins>AT</ins>::pointer&gt;(<del>w</del><ins>vp</ins>) == p</tt></td>
   <td><tt></tt></td>
 </tr>
 <tr>
-  <td><tt>static_cast&lt;<del>X</del><ins>A</ins>::const_pointer&gt;(<del>x</del><ins>cvp</ins>)</tt></td>
+  <td><tt>static_cast&lt;<del>X</del><ins>AT</ins>::const_pointer&gt;(<del>x</del><ins>cvp</ins>)</tt></td>
   <td><tt>const_pointer</tt></td>
-  <td><tt>static_cast&lt;<del>X</del><ins>A</ins>::const_pointer&gt;(<del>x</del><ins>cvp</ins>) == p</tt></td>
+  <td><tt>static_cast&lt;<del>X</del><ins>AT</ins>::const_pointer&gt;(<del>x</del><ins>cvp</ins>) == p</tt></td>
   <td><tt></tt></td>
 </tr>
 <tr>
@@ -700,7 +797,7 @@ intended as an aid to locality.
 </tr>
 <tr>
   <td><tt>a.max_size()</tt></td>
-  <td><tt><del>X</del><ins>A</ins>::size_type</tt></td>
+  <td><tt><del>X</del><ins>AT</ins>::size_type</tt></td>
   <td>the largest value that can meaningfully be passed to <tt><del>X</del><ins>A</ins>::allocate()</tt></td>
   <td><tt>numeric_limits&lt;size_type&gt;::max()/sizeof(value_type)</tt></td>
 </tr>
@@ -724,7 +821,7 @@ transitive, and shall not exit via an exception.
 <tr>
   <td><tt>a == b</tt></td>
   <td><tt>bool</tt></td>
-  <td>same as <tt>a == <del>Y</del><ins>B</ins>::rebind&lt;T&gt;::other(b)</tt></td>
+  <td>same as <tt>a == <del>Y</del><ins>BT</ins>::rebind<ins>_alloc</ins>&lt;T&gt;<del>::other</del>(b)</tt></td>
   <td><tt></tt></td>
 </tr>
 <tr>
@@ -734,7 +831,10 @@ transitive, and shall not exit via an exception.
   <td><tt></tt></td>
 </tr>
 <tr>
-  <td><tt><del>X</del><ins>A</ins> u(a);  <del>X</del><ins>A</ins> u = a;</tt></td>
+  <td>
+<pre><del>X</del><ins>A</ins> <del>u</del><ins>a1</ins>(a);
+<del>X</del><ins>A</ins> <del>u</del><ins>a1</ins> = a;</pre>
+  </td>
   <td><i></i></td>
   <td>
     Shall not exit via an exception.
@@ -743,7 +843,7 @@ transitive, and shall not exit via an exception.
   <td><tt></tt></td>
 </tr>
 <tr>
-  <td><tt><del>X</del><ins>A</ins> u(b);</tt></td>
+  <td><tt><del>X</del><ins>A</ins> <del>u</del><ins>a</ins>(b);</tt></td>
   <td><i></i></td>
   <td>
     Shall not exit via an exception.
@@ -752,7 +852,10 @@ transitive, and shall not exit via an exception.
   <td><tt></tt></td>
 </tr>
 <tr>
-  <td><tt><del>X</del><ins>A</ins> u(move(a));  <del>X</del><ins>A</ins> u = move(a);</tt></td>
+  <td>
+<pre><del>X</del><ins>A</ins> <del>u</del><ins>a1</ins>(move(a));
+<del>X</del><ins>A</ins> <del>u</del><ins>a1</ins> = move(a);</pre>
+  </td>
   <td><i></i></td>
   <td>
     Shall not exit via an exception.
@@ -761,7 +864,7 @@ transitive, and shall not exit via an exception.
   <td><tt></tt></td>
 </tr>
 <tr>
-  <td><tt><del>X</del><ins>A</ins> u(move(b));</tt></td>
+  <td><tt><del>X</del><ins>A</ins> <del>u</del><ins>a</ins>(move(b));</tt></td>
   <td><i></i></td>
   <td>
     Shall not exit via an exception.
@@ -823,7 +926,7 @@ moved when the client container is move-assigned</ins>. See Note B, below.
 <tt>true</tt> for any two (possibly const) values <tt>a1</tt>, <tt>a2</tt> of
 type <tt><del>X</del><ins>A</ins></tt>.
   </td>
-  <td><tt>is_empty<ins>_t</ins>&lt;<del>X</del><ins>A</ins>&gt;<del>::type</del></tt></td>
+  <td><tt>is_empty&lt;<del>X</del><ins>A</ins>&gt;::type</tt></td>
 </tr>
 </table>
 
@@ -845,17 +948,23 @@ are not template instantiations of the above form, no default is provided.
 </li>
 
 <li>
-Note B: If
-<tt><del>X</del><ins>AT</ins>::propagate_on_container_<ins>swap</ins><del>copy_assignment</del>::value</tt>
-is <tt>true</tt>, <tt><del>X</del><ins>A</ins></tt> shall satisfy the <tt>CopyAssignable</tt>
-requirements (Table 23) and the copy operation shall not throw exceptions. If
-<tt><del>X</del><ins>AT</ins>::propagate_on_container_<ins>swap</ins><del>move_assignment</del>::value</tt>
-is <tt>true</tt>, <tt><del>X</del><ins>A</ins></tt> shall satisfy the <tt>MoveAssignable</tt>
-requirements (Table 22) and the move operation shall not throw exceptions. If
-<tt><del>X</del><ins>AT</ins>::propagate_on_container_swap::value</tt> is <tt>true</tt>, lvalues of
-type <tt><del>X</del><ins>A</ins></tt> shall be swappable (17.6.3.2) and the <tt>swap</tt> operation
+Note B:<del>
+If <tt>X::propagate_on_container_copy_assignment::value</tt> is <tt>true</tt>,
+<tt>X</tt> shall satisfy the <tt>CopyAssignable</tt> requirements (Table 23)
+and the copy operation shall not throw exceptions. If
+<tt>X::propagate_on_container_move_assignment::value</tt> is <tt>true</tt>,
+<tt>X</tt> shall satisfy the <tt>MoveAssignable</tt> requirements (Table 22)
+and the move operation shall not throw exceptions. If
+<tt>X::propagate_on_container_swap::value</tt> is <tt>true</tt>, lvalues of
+type <tt>X</tt> shall be swappable (17.6.3.2) and the <tt>swap</tt> operation
 shall not throw exceptions.
-</li>
+</del><ins>
+If <tt>AT::propagate_on_container_swap::value</tt> is <tt>true</tt>, <tt>A</tt>
+shall satisfy the <tt>CopyAssignable</tt> requirements (Table 23) and the
+<tt>MoveAssignable</tt> requirements (Table 22), lvalues of type <tt>A</tt>
+shall be swappable (17.6.3.2), and the copy-assignment, move-assignment, and
+swap operations shall not throw exceptions.
+</ins></li>
 
 <li>
 An allocator type <tt><del>X</del><ins>A</ins></tt> shall satisfy the
@@ -980,13 +1089,13 @@ namespace std {
 
     typedef typename Alloc::value_type value_type;
 
-    typedef <i>see below</i> pointer;
-    typedef <i>see below</i> const_pointer;
-    typedef <i>see below</i> void_pointer;
-    typedef <i>see below</i> const_void_pointer;
+    typedef <i>see below</i>                                                           pointer;
+    typedef <del><i>see below</i></del><ins>typename pointer_traits&lt;pointer&gt;::rebind&lt;const value_type&gt;</ins> const_pointer;
+    typedef <del><i>see below</i></del><ins>typename pointer_traits&lt;pointer&gt;::rebind&lt;void&gt;</ins>             void_pointer;
+    typedef <del><i>see below</i></del><ins>typename pointer_traits&lt;pointer&gt;::rebind&lt;const void&gt;</ins>       const_void_pointer;
 
-    typedef <i>see below</i> difference_type;
-    typedef <i>see below</i> size_type;
+    typedef <i>see below</i>                                 difference_type;
+    typedef <del><i>see below</i></del><ins>make_unsigned_t&lt;difference_type&gt;</ins> size_type;
 
     <del>typedef <i>see below</i> propagate_on_container_copy_assignment;</del>
     <del>typedef <i>see below</i> propagate_on_container_move_assignment;</del>
@@ -1022,7 +1131,47 @@ namespace std {
 
 
 <h3>20.7.8.1 Allocator traits member types [allocator.traits.types]</h3>
-<ol start="7">
+<ol>
+<pre>typedef <i>see below</i> pointer;</pre>
+<li>
+<i>Type:</i> <tt>Alloc::pointer</tt> if the <i>qualified-id</i> <tt>Alloc::pointer</tt>
+is valid and denotes a type (14.8.2); otherwise, <tt>value_type*</tt>.
+</li>
+
+<pre><del>typedef <i>see below</i> const_pointer;</del></pre>
+<li><del>
+<i>Type:</i> <tt>Alloc::const_pointer</tt> if the <i>qualified-id</i>
+<tt>Alloc::const_pointer</tt> is valid and denotes a type (14.8.2); otherwise,
+<tt>pointer_traits&lt;pointer&gt;::rebind&lt;const value_type&gt;</tt>.
+</del></li>
+
+<pre><del>typedef <i>see below</i> void_pointer;</del></pre>
+<li><del>
+<i>Type:</i> <tt>Alloc::void_pointer</tt> if the <i>qualified-id</i>
+<tt>Alloc::void_pointer</tt> is valid and denotes a type (14.8.2); otherwise,
+<tt>pointer_traits&lt;pointer&gt;::rebind&lt;void&gt;</tt>.
+</del></li>
+
+<pre><del>typedef <i>see below</i> const_void_pointer;</del></pre>
+<li><del>
+<i>Type:</i> <tt>Alloc::const_void_pointer</tt> if the <i>qualified-id</i>
+<tt>Alloc::const_void_pointer</tt> is valid and de- notes a type (14.8.2); otherwise,
+<tt>pointer_traits&lt;pointer&gt;::rebind&lt;const void&gt;</tt>.
+</del></li>
+
+<pre>typedef <i>see below</i> difference_type;</pre>
+<li>
+<i>Type:</i> <tt>Alloc::difference_type</tt> if the <i>qualified-id</i>
+<tt>Alloc::difference_type</tt> is valid and denotes a type (14.8.2); otherwise,
+<tt>pointer_traits&lt;pointer&gt;::difference_type</tt>.
+</li>
+
+<pre><del>typedef <i>see below</i> size_type;</del></pre>
+<li><del>
+<i>Type:</i> <tt>Alloc::size_type</tt> if the <i>qualified-id</i> <tt>Alloc::size_type</tt> is
+valid and denotes a type (14.8.2); otherwise, <tt>make_unsigned_t&lt;difference_type&gt;</tt>.
+</del></li>
+
 <pre><del>typedef <i>see below</i> propagate_on_container_copy_assignment;</del></pre>
 <li><del>
 <i>Type:</i> <tt>Alloc::propagate_on_container_copy_assignment</tt> if the 
@@ -1166,25 +1315,26 @@ types obtain an allocator by calling
 <tt>allocator_traits&lt;allocator_type&gt;::select_on_container_copy_construction</tt>
 on the allocator belonging to the container being copied. Move constructors
 obtain an allocator by move construction from the allocator belonging to the
-container being moved. Such move construction of the allocator shall not exit
-via an exception. All other constructors for these container types take a <tt>const
-allocator_type&amp;</tt> argument.  [<i>Note:</i> If an invocation of a
-constructor uses the default value of an optional allocator argument, then the
-<tt>Allocator</tt> type must support value initialization. <i>- end note</i> ] A copy of
-this allocator is used for any memory allocation and element construction
-performed, by these constructors and by all member functions, during the
-lifetime of each container object or until the allocator is replaced. The
-allocator may be replaced only via assignment or <tt>swap()</tt>. Allocator replacement
-is performed by copy assignment, move assignment, or swapping of the allocator
-only if <del>
+container being moved. <del>Such move construction of the allocator shall not
+exit via an exception.</del> All other constructors for these container types
+take a <tt>const allocator_type&amp;</tt> argument.  [<i>Note:</i> If an
+invocation of a constructor uses the default value of an optional allocator
+argument, then the <tt>Allocator</tt> type must support value initialization.
+<i>- end note</i> ] A copy of this allocator is used for any memory allocation
+and element construction performed, by these constructors and by all member
+functions, during the lifetime of each container object or until the allocator
+is replaced. The allocator may be replaced only via assignment or
+<tt>swap()</tt>. Allocator replacement is performed by copy assignment, move
+assignment, or swapping of the allocator only if <del>
 <tt>allocator_traits&lt;allocator_type&gt;::propagate_on_container_copy_assignment::value</tt>,
 <tt>allocator_traits&lt;allocator_type&gt;::propagate_on_container_move_assignment::value</tt>,
 or</del>
 <tt>allocator_traits&lt;allocator_type&gt;::propagate_on_container_swap::value</tt>
-is <tt>true</tt> within the implementation of the corresponding container operation.
-In all container types defined in this Clause, the member <tt>get_allocator()</tt>
-returns a copy of the allocator used to construct the container or, if that
-allocator has been replaced, a copy of the most recent replacement.
+is <tt>true</tt> within the implementation of the corresponding container
+operation.  In all container types defined in this Clause, the member
+<tt>get_allocator()</tt> returns a copy of the allocator used to construct the
+container or, if that allocator has been replaced, a copy of the most recent
+replacement.
 </p>
 <p>
 9 The expression <tt>a.swap(b)</tt>, for containers <tt>a</tt> and <tt>b</tt>
@@ -1215,6 +1365,35 @@ the swap.
   <td><b>Complexity</b></td>
 </tr>
 <tr>
+  <td><b>...</b></td>
+  <td><b> </b></td>
+  <td><b> </b></td>
+  <td><b> </b></td>
+</tr>
+<tr>
+  <td>
+<pre>X(rv)
+X u(rv)</pre></td>
+  <td><b></b></td>
+  <td>
+<del><i>Requires:</i> move construction of <tt>A</tt> shall not exit via an
+exception.</del> <i>post:</i> <tt>u</tt> shall have the same elements as
+<tt>rv</tt> had before this construction; the value of
+<tt>u.get_allocator()</tt> shall be the same as the value of
+<tt>rv.get_allocator()</tt> before this construction.
+  </td>
+  <td>constant</td>
+</tr>
+
+
+<tr>
+  <td><b>...</b></td>
+  <td><b> </b></td>
+  <td><b> </b></td>
+  <td><b> </b></td>
+</tr>
+
+<tr>
   <td><tt>a = rv</tt></td>
   <td><tt>X&amp;</tt</td>
   <td>
@@ -1222,8 +1401,11 @@ the swap.
 <del><tt>allocator_traits&lt;allocator_type&gt;::propagate_on_container_move_assignment::value</tt>
 is <tt>false</tt></del>
 <ins><tt>propagate_may_throw_v&lt;allocator_type&gt;</tt></ins>, <tt>T</tt> is
-<tt>MoveInsertable</tt> into <tt>X</tt> and <tt>MoveAssignable</tt>.  All
-existing elements of a are either move assigned to or destroyed.
+<tt>MoveInsertable</tt> into <tt>X</tt> and <tt>MoveAssignable</tt>.
+</p>
+<ins><i>Effects:</i></ins>  All
+existing elements of <tt>a</tt> are either move assigned to or destroyed.
+<p/>
 <i>post:</i> <tt>a</tt> shall be equal to the value that <tt>rv</tt> had before this assignment.
   </td>
   <td>linear</td>
@@ -1277,15 +1459,13 @@ namespace std {
 
     ~vector();
     vector&amp; operator=(const vector&amp; x);
-    vector&amp; operator=(vector&amp;&amp; x)
-      <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>
+    vector&amp; operator=(vector&amp;&amp; x) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;);</ins>
       <del>noexcept(allocator_traits&lt;Allocator&gt;::propagate_on_container_move_assignment::value ||</del>
                <del>allocator_traits&lt;Allocator&gt;::is_always_equal::value);</del>
     vector&amp; operator=(initializer_list&lt;T&gt;);
 
 
-    void swap(vector&amp;)
-      <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>
+    void swap(vector&amp;) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;);</ins>
       <del>noexcept(allocator_traits&lt;Allocator&gt;::propagate_on_container_swap::value ||</del>
                <del>allocator_traits&lt;Allocator&gt;::is_always_equal::value);</del>
   };
@@ -1317,8 +1497,7 @@ namespace std {
     vector(initializer_list&lt;bool&gt;, const Allocator&amp; = Allocator()));
     ~vector();
     vector&lt;bool, Allocator&gt;&amp; operator=(const vector<del>&lt;bool, Allocator&gt;</del>&amp; x);
-    vector&lt;bool, Allocator&gt;&amp; operator=(vector<del>&lt;bool, Allocator&gt;</del>&amp;&amp; x)
-      <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
+    vector&lt;bool, Allocator&gt;&amp; operator=(vector<del>&lt;bool, Allocator&gt;</del>&amp;&amp; x) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
     vector&amp; operator=(initializer_list<bool>);
     template &lt;class InputIterator&gt;
       void assign(InputIterator first, InputIterator last);
@@ -1329,8 +1508,7 @@ namespace std {
 
     iterator erase(const_iterator position);
     iterator erase(const_iterator first, const_iterator last)
-    void swap(vector<del>&lt;bool, Allocator&gt;</del>&amp;)
-      <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
+    void swap(vector<del>&lt;bool, Allocator&gt;</del>&amp;) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
     static void swap(reference x, reference y) noexcept;
     void flip() noexcept; <i>// flips all bits</i>
     void clear() noexcept;
@@ -1500,8 +1678,7 @@ namespace std {
     <ins>match_results(const match_results&amp; m, const Allocator&amp; a);</ins>
     <ins>match_results(match_results&amp;&amp; m, const Allocator&amp; a);</ins>
     match_results&amp; operator=(const match_results&amp; m);
-    match_results&amp; operator=(match_results&amp;&amp; m)
-      <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
+    match_results&amp; operator=(match_results&amp;&amp; m) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
     ~match_results();
 
     <i>// 28.10.2, state:</i>
@@ -1552,8 +1729,7 @@ namespace std {
     allocator_type get_allocator() const <ins>noexcept</ins>;
 
     <i>// 28.10.7, swap:</i>
-    void swap(match_results&amp; that)
-      <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
+    void swap(match_results&amp; that) <ins>noexcept(!propagate_may_throw_v&lt;Allocator&gt;)</ins>;
   };
 }
 </pre></blockquote>
@@ -1633,12 +1809,12 @@ or never, depending entirely on the value of
 
 </blockquote>
 
-<h2><a name="4.0">Acknowledements</h2>
+<h2><a name="6.0">Acknowledements</h2>
 <p>
 </p>
 
 
-<h2><a name="5.0">References</h2>
+<h2><a name="7.0">References</h2>
 <ul>
   <li><a href="http://cplusplus.github.io/LWG/lwg-defects.html#2103">LWG #2103</a> <tt>std::allocator_traits&lt;std::allocator&lt;T&gt;&gt;::propagate_on_container_move_assignment</tt></li>
   <li><a href="http://cplusplus.github.io/LWG/lwg-defects.html#2108">LWG #2108</a> No way to identify allocator types that always compare equal</li>
@@ -1648,7 +1824,7 @@ or never, depending entirely on the value of
   <li><a href="http://cplusplus.github.io/LWG/lwg-active.html#2490">LWG #2490</a>  <tt>&lt;regex&gt; needs lots of noexcept</tt>
 
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4258">N4258</a> Cleaning‐up noexcept in the Library, Nicolai Josuttis</li>
-  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4511">N4511</a> Adding [nothrow-]swappable traits, Daniel Krügler</li>
+  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0185r0">P0185R0</a> Adding [nothrow-]swappable traits, Daniel Krügler</li>
 </ul>
 
 
