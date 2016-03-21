@@ -22,11 +22,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">D0177R1</td>
+  <td align="left">P0177R1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2016-02-15</td>
+  <td align="left">2016-03-01</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -84,28 +84,15 @@ Original version of the paper for the 2016 pre-Jacksonville mailing.
 
 <h3><a name="rev.1">Revision 1</a></h3>
 <p>
-Update for the 2016 post-Jacksonville mailing.
+Update reviewed at the Jacksonville 2016 meeting.
 </p>
 <ul>
   <li>Fixed the table of contents to properly index this document</li>
   <li>Drive-by fixes for identifiers in allocator and allocator-aware container tables</li>
   <li>Restricted <tt>*_pointer</tt> types and <tt>size_type</tt> to be exactly their default</li>
-  <li>...</li>
 </ul>
 
 
-<!-- -->
-<h6>To be done:</h6>
-<ul>
-  <li>FIX ALL OF THE ORIGINAL MISSING CONTENT, ESPECIALLY PARTS 2 AND 4</li>
-  <li>Limit sepcializizations to exact same behavior - i.e., compile time optimization</li>
-  <li>Note problem with (currently permitted) partial-specialization for generic allocator of user-defined value types</li>
-  <li>Rationale: Exactly specify pointer types and size_type, rather than default - other than ::pointer itself</li>
-  <li>Propose updates to large parts of transcribed wording</li>
-  <li>Clearer examples of problems with mismatched traits</li>
-  <li>Clearly defer (with reference) issue of propagate-on-copy-construct to P0176</li>
-</ul>
-<!-- -->
 
 <h2><a name="1.0">Introduction</a></h2>
 <p>
