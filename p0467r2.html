@@ -22,11 +22,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0467R1</td>
+  <td align="left">P0467R2</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2016-11-10</td>
+  <td align="left">2017-03-02</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -65,12 +65,63 @@ declarations have been duplicated in the body of the specifictation, so each
 edit should now be applied in two places.)
 </p>
 
+<h3><a name="0.3">Revision 2</a></h3>
+<p>
+Update following LWG review:
+</p>
+
+<p>
+Note which NB comments this paper addresses.
+</p>
+
+<p>
+Highlight the editors' note that there are implicit changes to the signatures
+repeated for each function specification.
+</p>
+
+<p>
+Remove redundant specification of functions covered under the editors' note.
+</p>
+
+<p>
+Update <i>Complexity</i> clause of <tt>equal</tt> to reflect the change
+of iterator type names.
+</p>
+
+<p>
+Update <i>Requires</i> clause of <tt>unique_copy</tt> to reflect the change
+of iterator type names.  Integrate Anthony Williams's note on performance hints.
+</p>
+
+<p>
+Update <i>Requires</i> clause of <tt>is_partitioned</tt> to reflect the change
+of iterator type names.  Integrate Anthony Williams's note on performance hints.
+</p>
+
+<p>
+Update <i>Requires</i> clause of <tt>partition_copy</tt> to reflect the change
+of iterator type names.  Integrate Anthony Williams's note on performance hints.
+</p>
+
+<p>
+Update the <i>Effects</i> clause for parallel <tt>reduce</tt> to reflect the change
+of iterator type names.
+</p>
+
+<p>
+Update <i>Requires</i> clause of <tt>adjacent_difference</tt> to reflect the change
+of iterator type names.  Integrate Anthony Williams's reformulation to better
+specify a parallel implementation.
+</p>
+
+
 <h2>Table of Contents</h2>
 <ol start="0">
 <li><a href="#0.0">Revision History</a></li>
   <ul>
   <li><a href="#0.1">Revision 0</a></li>
   <li><a href="#0.2">Revision 1</a></li>
+  <li><a href="#0.3">Revision 2</a></li>
   </ul>
 <li><a href="#1.0">Introduction</a></li>
 <li><a href="#2.0">Problems to be addressed</a></li>
@@ -98,12 +149,16 @@ edit should now be applied in two places.)
    <li><a href="#5.3">Ignore the Issue (bug?)</a></li>
    </ul>
 <li><a href="#6.0">Formal Wording</a></li>
-<li><a href="#7.0">References</a></li>
-<li><a href="#8.0">Acknowledgements</a></li>
+<li><a href="#7.0">Acknowledgements</a></li>
+<li><a href="#8.0">References</a></li>
 </ol>
 
 
 <h2><a name="1.0">1. Introduction</a></h2>
+<p>
+This paper addresses NB comments US-156, 162.
+</p>
+
 <p>
 The C++17 CD,
 <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4604">N4604</a>,
@@ -458,6 +513,28 @@ appear to cover the range of the behavior I encountered.
 
 <h2><a name="6.0">6. Formal Wording</a></h2>
 
+<p>
+Make the following changes to the sypopses for both the
+<tt>&lt;algorithm&gt;</tt> and <tt>&lt;numeric&gt;</tt>
+headers.  Diff-marks are as compared to
+The C++17 CD,
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4640">N4640</a>.
+</p>
+<blockquote class="note">
+Editor's note: Matching changes should be made to the corresponding function
+specifications, but detailed changes are provided only where the text of the
+formal specification must also be changed.  For the majority of cases, as only
+the iterator type names are changed, and not the function parameter names, the
+current specification needs no further change.
+</blockquote>
+
+<p>
+Note that we do not explicitly add a requriment that a <tt>ForwardIterator</tt>
+be a <i>mutable</i> <tt>ForwardIterator</tt> where we upgrade from an
+<tt>OutputIterator</tt> as there is already blanket wording covering that case
+in [algorithms.requirements]p4.
+</p>
+
 <blockquote>
 
 <h4>Header &lt;algorithm&gt;</h4>
@@ -466,53 +543,53 @@ appear to cover the range of the behavior I encountered.
 #include &lt;initializer_list&gt;
 
 namespace std {
-  // 25.3, non-modifying sequence operations:
+  <i>// 25.5, non-modifying sequence operations</i>
   template &lt;class InputIterator, class Predicate&gt;
     bool all_of(InputIterator first, InputIterator last, Predicate pred);
   template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Predicate&gt;
-    bool all_of(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool all_of(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                 <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, Predicate pred);
   template &lt;class InputIterator, class Predicate&gt;
     bool any_of(InputIterator first, InputIterator last, Predicate pred);
   template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Predicate&gt;
-    bool any_of(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool any_of(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                 <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, Predicate pred);
   template &lt;class InputIterator, class Predicate&gt;
     bool none_of(InputIterator first, InputIterator last, Predicate pred);
   template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Predicate&gt;
-    bool none_of(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool none_of(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                  <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, Predicate pred);
 
   template&lt;class InputIterator, class Function&gt;
     Function for_each(InputIterator first, InputIterator last, Function f);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Function&gt;
-     void for_each(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+     void for_each(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                    <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, Function f);
   template&lt;class InputIterator, class Size, class Function&gt;
     InputIterator for_each_n(InputIterator first, Size n, Function f);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Size, class Function&gt;
-    <del>Input</del><ins>Forward</ins>Iterator for_each_n(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Input</del><ins>Forward</ins>Iterator for_each_n(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                              <del>Input</del><ins>Forward</ins>Iterator first, Size n, Function f);
 
   template&lt;class InputIterator, class T&gt;
     InputIterator find(InputIterator first, InputIterator last,
                        const T&amp; value);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class T&gt;
-    <del>Input</del><ins>Forward</ins>Iterator find(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Input</del><ins>Forward</ins>Iterator find(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                        <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
                        const T&amp; value);
   template&lt;class InputIterator, class Predicate&gt;
     InputIterator find_if(InputIterator first, InputIterator last,
                           Predicate pred);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Predicate&gt;
-    <del>Input</del><ins>Forward</ins>Iterator find_if(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Input</del><ins>Forward</ins>Iterator find_if(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                           <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
                           Predicate pred);
   template&lt;class InputIterator, class Predicate&gt;
     InputIterator find_if_not(InputIterator first, InputIterator last,
                               Predicate pred);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Predicate&gt;
-    <del>Input</del><ins>Forward</ins>Iterator find_if_not(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Input</del><ins>Forward</ins>Iterator find_if_not(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                               <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
                               Predicate pred);
   template&lt;class ForwardIterator1, class ForwardIterator2&gt;
@@ -526,13 +603,13 @@ namespace std {
                BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class ForwardIterator1, class ForwardIterator2&gt;
     ForwardIterator1
-      find_end(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      find_end(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                ForwardIterator1 first1, ForwardIterator1 last1,
                ForwardIterator2 first2, ForwardIterator2 last2);
   template&lt;class ExecutionPolicy, class ForwardIterator1,
            class ForwardIterator2, class BinaryPredicate&gt;
     ForwardIterator1
-      find_end(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      find_end(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                ForwardIterator1 first1, ForwardIterator1 last1,
                ForwardIterator2 first2, ForwardIterator2 last2,
                BinaryPredicate pred);
@@ -547,13 +624,13 @@ namespace std {
                     ForwardIterator first2, ForwardIterator last2,
                     BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class ForwardIterator<ins>2</ins>&gt;
-    <del>InputIterator</del><ins>ForwardIterator1</ins> find_first_of(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>InputIterator</del><ins>ForwardIterator1</ins> find_first_of(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                 <del>InputIterator</del><ins>ForwardIterator1</ins> first1, <del>InputIterator</del><ins>ForwardIterator1</ins> last1,
                                 ForwardIterator<ins>2</ins> first2, ForwardIterator<ins>2</ins> last2);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>,
              class ForwardIterator<ins>2</ins>, class BinaryPredicate&gt;
     <del>InputIterator</del><ins>ForwardIterator1</ins>
-        find_first_of(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+        find_first_of(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                       <del>InputIterator</del><ins>ForwardIterator1</ins> first1, <del>InputIterator</del><ins>ForwardIterator1</ins> last1,
                       ForwardIterator<ins>2</ins> first2, ForwardIterator<ins>2</ins> last2,
                       BinaryPredicate pred);
@@ -566,11 +643,11 @@ namespace std {
                                   ForwardIterator last,
                                   BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class ForwardIterator&gt;
-    ForwardIterator adjacent_find(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator adjacent_find(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                   ForwardIterator first,
                                   ForwardIterator last);
   template&lt;class ExecutionPolicy, class ForwardIterator, class BinaryPredicate&gt;
-    ForwardIterator adjacent_find(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator adjacent_find(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                   ForwardIterator first,
                                   ForwardIterator last,
                                   BinaryPredicate pred);
@@ -580,14 +657,14 @@ namespace std {
       count(InputIterator first, InputIterator last, const T&amp; value);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class T&gt;
     typename iterator_traits&lt;<del>Input</del><ins>Forward</ins>Iterator&gt;::difference_type
-      count(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      count(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
             <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, const T&amp; value);
   template&lt;class InputIterator, class Predicate&gt;
     typename iterator_traits&lt;InputIterator&gt;::difference_type
       count_if(InputIterator first, InputIterator last, Predicate pred);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Predicate&gt;
     typename iterator_traits&lt;<del>Input</del><ins>Forward</ins>Iterator&gt;::difference_type
-      count_if(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      count_if(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, Predicate pred);
 
   template&lt;class InputIterator1, class InputIterator2&gt;
@@ -609,24 +686,24 @@ namespace std {
                BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2&gt;
     pair&lt;<del>Input</del><ins>Forward</ins>Iterator1, <del>Input</del><ins>Forward</ins>Iterator2&gt;
-      mismatch(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      mismatch(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                <del>Input</del><ins>Forward</ins>Iterator2 first2);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class BinaryPredicate&gt;
     pair&lt;<del>Input</del><ins>Forward</ins>Iterator1, <del>Input</del><ins>Forward</ins>Iterator2&gt;
-      mismatch(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      mismatch(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                <del>Input</del><ins>Forward</ins>Iterator2 first2, BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2&gt;
     pair&lt;<del>Input</del><ins>Forward</ins>Iterator1, <del>Input</del><ins>Forward</ins>Iterator2&gt;
-      mismatch(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      mismatch(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class BinaryPredicate&gt;
     pair&lt;<del>Input</del><ins>Forward</ins>Iterator1, <del>Input</del><ins>Forward</ins>Iterator2&gt;
-      mismatch(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      mismatch(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
                BinaryPredicate pred);
@@ -645,21 +722,21 @@ namespace std {
                InputIterator2 first2, InputIterator2 last2,
                BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2&gt;
-    bool equal(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool equal(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                <del>Input</del><ins>Forward</ins>Iterator2 first2);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class BinaryPredicate&gt;
-    bool equal(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool equal(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                <del>Input</del><ins>Forward</ins>Iterator2 first2, BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2&gt;
-    bool equal(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool equal(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class BinaryPredicate&gt;
-    bool equal(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool equal(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
                BinaryPredicate pred);
@@ -678,7 +755,7 @@ namespace std {
                         ForwardIterator2 first2, ForwardIterator2 last2,
                         BinaryPredicate pred);
 
-  // 25.3.13, search:
+  <i>// 25.5.13, search</i>
   template&lt;class ForwardIterator1, class ForwardIterator2&gt;
     ForwardIterator1 search(
     ForwardIterator1 first1, ForwardIterator1 last1,
@@ -690,12 +767,12 @@ namespace std {
       BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class ForwardIterator1, class ForwardIterator2&gt;
     ForwardIterator1 search(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       ForwardIterator1 first1, ForwardIterator1 last1,
       ForwardIterator2 first2, ForwardIterator2 last2);
   template&lt;class ExecutionPolicy, class ForwardIterator1, class ForwardIterator2,
            class BinaryPredicate&gt;
-    ForwardIterator1 search(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator1 search(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                             ForwardIterator1 first1, ForwardIterator1 last1,
                             ForwardIterator2 first2, ForwardIterator2 last2,
                             BinaryPredicate pred);
@@ -707,12 +784,12 @@ namespace std {
                              Size count, const T&amp; value,
                              BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Size, class T&gt;
-    ForwardIterator search_n(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator search_n(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                              ForwardIterator first, ForwardIterator last,
                              Size count, const T&amp; value);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Size, class T,
            class BinaryPredicate&gt;
-    ForwardIterator search_n(ExecutionPolicy&amp;&amp; exec, // see 25.2.5 
+    ForwardIterator search_n(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i> 
                              ForwardIterator first, ForwardIterator last,
                              Size count, const T&amp; value,
                              BinaryPredicate pred);
@@ -721,13 +798,13 @@ namespace std {
     ForwardIterator search(ForwardIterator first, ForwardIterator last,
                            const Searcher &amp;searcher);
 
-  // 25.4, modifying sequence operations:
-  // 25.4.1, copy:
+  <i>// 25.6, modifying sequence operations</i>
+  <i>// 25.6.1, copy</i>
   template&lt;class InputIterator, class OutputIterator&gt;
     OutputIterator copy(InputIterator first, InputIterator last,
                         OutputIterator result);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> copy(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> copy(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                         <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                         <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
   template&lt;class InputIterator, class Size, class OutputIterator&gt;
@@ -735,7 +812,7 @@ namespace std {
                           OutputIterator result);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class Size,
            class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> copy_n(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> copy_n(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                           <del>InputIterator</del><ins>ForwardIterator1</ins> first, Size n,
                           <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
   template&lt;class InputIterator, class OutputIterator, class Predicate&gt;
@@ -743,7 +820,7 @@ namespace std {
                            OutputIterator result, Predicate pred);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class Predicate&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> copy_if(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> copy_if(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                            <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                            <del>OutputIterator</del><ins>ForwardIterator2</ins> result, Predicate pred);
   template&lt;class BidirectionalIterator1, class BidirectionalIterator2&gt;
@@ -751,13 +828,13 @@ namespace std {
       BidirectionalIterator1 first, BidirectionalIterator1 last,
       BidirectionalIterator2 result);
 
-  // 25.4.2, move:
+  <i>// 25.6.2, move:</i>
   template&lt;class InputIterator, class OutputIterator&gt;
     OutputIterator move(InputIterator first, InputIterator last,
                         OutputIterator result);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>,
            class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
-  <del>OutputIterator</del><ins>ForwardIterator2</ins> move(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+  <del>OutputIterator</del><ins>ForwardIterator2</ins> move(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                       <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                       <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
   template&lt;class BidirectionalIterator1, class BidirectionalIterator2&gt;
@@ -765,12 +842,12 @@ namespace std {
       BidirectionalIterator1 first, BidirectionalIterator1 last,
       BidirectionalIterator2 result);
 
-  // 25.4.3, swap:
+  <i>// 25.6.3, swap</i>
   template&lt;class ForwardIterator1, class ForwardIterator2&gt;
     ForwardIterator2 swap_ranges(ForwardIterator1 first1, ForwardIterator1 last1,
                                  ForwardIterator2 first2);
   template&lt;class ExecutionPolicy, class ForwardIterator1, class ForwardIterator2&gt;
-    ForwardIterator2 swap_ranges(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator2 swap_ranges(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                  ForwardIterator1 first1, ForwardIterator1 last1,
                                  ForwardIterator2 first2);
   template&lt;class ForwardIterator1, class ForwardIterator2&gt;
@@ -786,12 +863,12 @@ namespace std {
                              BinaryOperation binary_op);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class UnaryOperation&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> transform(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> transform(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                              <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                              <del>OutputIterator</del><ins>ForwardIterator2</ins> result, UnaryOperation op);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator, class BinaryOperation&gt;
-    <del>Output</del><ins>Forward</ins>Iterator transform(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Output</del><ins>Forward</ins>Iterator transform(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                              <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                              <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Output</del><ins>Forward</ins>Iterator result,
                              BinaryOperation binary_op);
@@ -800,14 +877,14 @@ namespace std {
     void replace(ForwardIterator first, ForwardIterator last,
                  const T&amp; old_value, const T&amp; new_value);
   template&lt;class ExecutionPolicy, class ForwardIterator, class T&gt;
-    void replace(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void replace(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                  ForwardIterator first, ForwardIterator last,
                  const T&amp; old_value, const T&amp; new_value);
   template&lt;class ForwardIterator, class Predicate, class T&gt;
     void replace_if(ForwardIterator first, ForwardIterator last,
                     Predicate pred, const T&amp; new_value);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Predicate, class T&gt;
-    void replace_if(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void replace_if(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                     ForwardIterator first, ForwardIterator last,
                     Predicate pred, const T&amp; new_value);
   template&lt;class InputIterator, class OutputIterator, class T&gt;
@@ -815,7 +892,7 @@ namespace std {
                                 OutputIterator result,
                                 const T&amp; old_value, const T&amp; new_value);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>, class T&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> replace_copy(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> replace_copy(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                 <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                 <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                 const T&amp; old_value, const T&amp; new_value);
@@ -825,7 +902,7 @@ namespace std {
                                    Predicate pred, const T&amp; new_value);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class Predicate, class T&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> replace_copy_if(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> replace_copy_if(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                    <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                    <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                    Predicate pred, const T&amp; new_value);
@@ -834,40 +911,40 @@ namespace std {
     void fill(ForwardIterator first, ForwardIterator last, const T&amp; value);
   template&lt;class ExecutionPolicy, class ForwardIterator,
            class T&gt;
-    void fill(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void fill(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
               ForwardIterator first, ForwardIterator last, const T&amp; value);
   template&lt;class OutputIterator, class Size, class T&gt;
     OutputIterator fill_n(OutputIterator first, Size n, const T&amp; value);
   template&lt;class ExecutionPolicy, class <del>Output</del><ins>Forward</ins>Iterator,
            class Size, class T&gt;
-    <del>Output</del><ins>Forward</ins>Iterator fill_n(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Output</del><ins>Forward</ins>Iterator fill_n(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                           <del>Output</del><ins>Forward</ins>Iterator first, Size n, const T&amp; value);
 
   template&lt;class ForwardIterator, class Generator&gt;
     void generate(ForwardIterator first, ForwardIterator last,
                   Generator gen);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Generator&gt;
-    void generate(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void generate(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                   ForwardIterator first, ForwardIterator last,
                   Generator gen);
   template&lt;class OutputIterator, class Size, class Generator&gt;
     OutputIterator generate_n(OutputIterator first, Size n, Generator gen);
   template&lt;class ExecutionPolicy, class <del>Output</del><ins>Forward</ins>Iterator, class Size, class Generator&gt;
-    <del>Output</del><ins>Forward</ins>Iterator generate_n(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Output</del><ins>Forward</ins>Iterator generate_n(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                               <del>Output</del><ins>Forward</ins>Iterator first, Size n, Generator gen);
 
   template&lt;class ForwardIterator, class T&gt;
     ForwardIterator remove(ForwardIterator first, ForwardIterator last,
                            const T&amp; value);
   template&lt;class ExecutionPolicy, class ForwardIterator, class T&gt;
-    ForwardIterator remove(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator remove(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                            ForwardIterator first, ForwardIterator last,
                            const T&amp; value);
   template&lt;class ForwardIterator, class Predicate&gt;
     ForwardIterator remove_if(ForwardIterator first, ForwardIterator last,
                               Predicate pred);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Predicate&gt;
-    ForwardIterator remove_if(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator remove_if(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                               ForwardIterator first, ForwardIterator last,
                               Predicate pred);
   template&lt;class InputIterator, class OutputIterator, class T&gt;
@@ -875,7 +952,7 @@ namespace std {
                                OutputIterator result, const T&amp; value);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class T&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> remove_copy(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> remove_copy(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                <del>OutputIterator</del><ins>ForwardIterator2</ins> result, const T&amp; value);
   template&lt;class InputIterator, class OutputIterator, class Predicate&gt;
@@ -883,7 +960,7 @@ namespace std {
                                   OutputIterator result, Predicate pred);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class Predicate&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> remove_copy_if(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> remove_copy_if(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                   <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                   <del>OutputIterator</del><ins>ForwardIterator2</ins> result, Predicate pred);
 
@@ -893,10 +970,10 @@ namespace std {
     ForwardIterator unique(ForwardIterator first, ForwardIterator last,
                            BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class ForwardIterator&gt;
-    ForwardIterator unique(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator unique(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                            ForwardIterator first, ForwardIterator last);
   template&lt;class ExecutionPolicy, class ForwardIterator, class BinaryPredicate&gt;
-    ForwardIterator unique(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator unique(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                            ForwardIterator first, ForwardIterator last,
                            BinaryPredicate pred);
   template&lt;class InputIterator, class OutputIterator&gt;
@@ -906,26 +983,26 @@ namespace std {
     OutputIterator unique_copy(InputIterator first, InputIterator last,
                                OutputIterator result, BinaryPredicate pred);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> unique_copy(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> unique_copy(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class BinaryPredicate&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> unique_copy(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> unique_copy(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                <del>OutputIterator</del><ins>ForwardIterator2</ins> result, BinaryPredicate pred);
 
   template&lt;class BidirectionalIterator&gt;
     void reverse(BidirectionalIterator first, BidirectionalIterator last);
   template&lt;class ExecutionPolicy, class BidirectionalIterator&gt;
-    void reverse(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void reverse(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                  BidirectionalIterator first, BidirectionalIterator last);
   template&lt;class BidirectionalIterator, class OutputIterator&gt;
     OutputIterator reverse_copy(BidirectionalIterator first,
                                 BidirectionalIterator last,
                                 OutputIterator result);
   template&lt;class ExecutionPolicy, class BidirectionalIterator, class <del>Output</del><ins>Forward</ins>Iterator&gt;
-    <del>Output</del><ins>Forward</ins>Iterator reverse_copy(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Output</del><ins>Forward</ins>Iterator reverse_copy(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                 BidirectionalIterator first,
                                 BidirectionalIterator last,
                                 <del>Output</del><ins>Forward</ins>Iterator result);
@@ -935,7 +1012,7 @@ namespace std {
                            ForwardIterator middle,
                            ForwardIterator last);
   template&lt;class ExecutionPolicy, class ForwardIterator&gt;
-    ForwardIterator rotate(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator rotate(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                            ForwardIterator first,
                            ForwardIterator middle,
                            ForwardIterator last);
@@ -945,28 +1022,28 @@ namespace std {
       ForwardIterator last, OutputIterator result);
   template&lt;class ExecutionPolicy, class ForwardIterator<ins>1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
     <del>OutputIterator</del><ins>ForwardIterator2</ins> rotate_copy(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       ForwardIterator<ins>1</ins> first, ForwardIterator<ins>1</ins> middle,
       ForwardIterator<ins>1</ins> last, <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
 
-  // 25.4.12, sample:
+  <i>// 25.6.12, sample</i>
   template&lt;class PopulationIterator, class SampleIterator,
            class Distance, class UniformRandomBitGenerator&gt;
     SampleIterator sample(PopulationIterator first, PopulationIterator last,
                           SampleIterator out, Distance n,
                           UniformRandomBitGenerator&amp;&amp; g);
 
-  // 25.4.13, shuffle:
+  <i>// 25.6.13, shuffle</i>
   template&lt;class RandomAccessIterator, class UniformRandomBitGenerator&gt;
     void shuffle(RandomAccessIterator first,
                  RandomAccessIterator last,
                  UniformRandomBitGenerator&amp;&amp; g);
 
-  // 25.4.14, partitions:
+  <i>// 25.6.14, partitions</i>
   template &lt;class InputIterator, class Predicate&gt;
     bool is_partitioned(InputIterator first, InputIterator last, Predicate pred);
   template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Predicate&gt;
-    bool is_partitioned(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool is_partitioned(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                         <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, Predicate pred);
 
   template&lt;class ForwardIterator, class Predicate&gt;
@@ -974,7 +1051,7 @@ namespace std {
                               ForwardIterator last,
                               Predicate pred);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Predicate&gt;
-    ForwardIterator partition(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator partition(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                               ForwardIterator first,
                               ForwardIterator last,
                               Predicate pred);
@@ -983,7 +1060,7 @@ namespace std {
                                            BidirectionalIterator last,
                                            Predicate pred);
   template&lt;class ExecutionPolicy, class BidirectionalIterator, class Predicate&gt;
-    BidirectionalIterator stable_partition(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    BidirectionalIterator stable_partition(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                            BidirectionalIterator first,
                                            BidirectionalIterator last,
                                            Predicate pred);
@@ -996,7 +1073,7 @@ namespace std {
   template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class <del>Output</del><ins>Forward</ins>Iterator1,
             class <del>Output</del><ins>Forward</ins>Iterator2, class Predicate&gt;
     pair&lt;<del>Output</del><ins>Forward</ins>Iterator1, <del>Output</del><ins>Forward</ins>Iterator2&gt;
-    partition_copy(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    partition_copy(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                    <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
                    <del>Output</del><ins>Forward</ins>Iterator1 out_true, <del>Output</del><ins>Forward</ins>Iterator2 out_false,
                    Predicate pred);
@@ -1005,18 +1082,18 @@ namespace std {
                                     ForwardIterator last,
                                     Predicate pred);
 
-  // 25.5, sorting and related operations:
-  // 25.5.1, sorting:
+  <i>// 25.7, sorting and related operations</i>
+  <i>// 25.7.1, sorting</i>
   template&lt;class RandomAccessIterator&gt;
     void sort(RandomAccessIterator first, RandomAccessIterator last);
   template&lt;class RandomAccessIterator, class Compare&gt;
     void sort(RandomAccessIterator first, RandomAccessIterator last,
               Compare comp);
   template&lt;class ExecutionPolicy, class RandomAccessIterator&gt;
-    void sort(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void sort(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
               RandomAccessIterator first, RandomAccessIterator last);
   template&lt;class ExecutionPolicy, class RandomAccessIterator, class Compare&gt;
-    void sort(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void sort(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
               RandomAccessIterator first, RandomAccessIterator last, Compare comp);
 
   template&lt;class RandomAccessIterator&gt;
@@ -1025,10 +1102,10 @@ namespace std {
     void stable_sort(RandomAccessIterator first, RandomAccessIterator last,
                    Compare comp);
   template&lt;class ExecutionPolicy, class RandomAccessIterator&gt;
-    void stable_sort(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void stable_sort(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                      RandomAccessIterator first, RandomAccessIterator last);
   template&lt;class ExecutionPolicy, class RandomAccessIterator, class Compare&gt;
-    void stable_sort(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void stable_sort(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                      RandomAccessIterator first, RandomAccessIterator last,
                      Compare comp);
 
@@ -1041,12 +1118,12 @@ namespace std {
                       RandomAccessIterator middle,
                       RandomAccessIterator last, Compare comp);
   template&lt;class ExecutionPolicy, class RandomAccessIterator&gt;
-    void partial_sort(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void partial_sort(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                       RandomAccessIterator first,
                       RandomAccessIterator middle,
                       RandomAccessIterator last);
   template&lt;class ExecutionPolicy, class RandomAccessIterator, class Compare&gt;
-    void partial_sort(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void partial_sort(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                       RandomAccessIterator first,
                       RandomAccessIterator middle,
                       RandomAccessIterator last, Compare comp);
@@ -1063,13 +1140,13 @@ namespace std {
       Compare comp);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class RandomAccessIterator&gt;
     RandomAccessIterator partial_sort_copy(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
       RandomAccessIterator result_first,
       RandomAccessIterator result_last);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class RandomAccessIterator, class Compare&gt;
     RandomAccessIterator partial_sort_copy(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
       RandomAccessIterator result_first,
       RandomAccessIterator result_last,
@@ -1080,10 +1157,10 @@ namespace std {
     bool is_sorted(ForwardIterator first, ForwardIterator last,
                    Compare comp);
   template&lt;class ExecutionPolicy, class ForwardIterator&gt;
-    bool is_sorted(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool is_sorted(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                    ForwardIterator first, ForwardIterator last);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Compare&gt;
-    bool is_sorted(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool is_sorted(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                    ForwardIterator first, ForwardIterator last,
                    Compare comp);
   template&lt;class ForwardIterator&gt;
@@ -1092,10 +1169,10 @@ namespace std {
     ForwardIterator is_sorted_until(ForwardIterator first, ForwardIterator last,
                                     Compare comp);
   template&lt;class ExecutionPolicy, class ForwardIterator&gt;
-    ForwardIterator is_sorted_until(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator is_sorted_until(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                     ForwardIterator first, ForwardIterator last);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Compare&gt;
-    ForwardIterator is_sorted_until(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator is_sorted_until(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                     ForwardIterator first, ForwardIterator last,
                                     Compare comp);
 
@@ -1106,15 +1183,15 @@ namespace std {
     void nth_element(RandomAccessIterator first, RandomAccessIterator nth,
                      RandomAccessIterator last, Compare comp);
   template&lt;class ExecutionPolicy, class RandomAccessIterator&gt;
-    void nth_element(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void nth_element(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                      RandomAccessIterator first, RandomAccessIterator nth,
                      RandomAccessIterator last);
   template&lt;class ExecutionPolicy, class RandomAccessIterator, class Compare&gt;
-    void nth_element(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void nth_element(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                      RandomAccessIterator first, RandomAccessIterator nth,
                      RandomAccessIterator last, Compare comp);
 
-  // 25.5.3, binary search:
+  <i>// 25.7.3, binary search</i>
   template&lt;class ForwardIterator, class T&gt;
     ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last,
                                 const T&amp; value);
@@ -1145,7 +1222,7 @@ namespace std {
     bool binary_search(ForwardIterator first, ForwardIterator last,
                        const T&amp; value, Compare comp);
 
-  // 25.5.4, merge:
+  <i>// 25.7.4, merge</i>
   template&lt;class InputIterator1, class InputIterator2, class OutputIterator&gt;
     OutputIterator merge(InputIterator1 first1, InputIterator1 last1,
                          InputIterator2 first2, InputIterator2 last2,
@@ -1157,13 +1234,13 @@ namespace std {
                          OutputIterator result, Compare comp);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator&gt;
-    <del>Output</del><ins>Forward</ins>Iterator merge(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Output</del><ins>Forward</ins>Iterator merge(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                          <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                          <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
                          <del>Output</del><ins>Forward</ins>Iterator result);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator, class Compare&gt;
-    <del>Output</del><ins>Forward</ins>Iterator merge(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Output</del><ins>Forward</ins>Iterator merge(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                          <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                          <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
                          <del>Output</del><ins>Forward</ins>Iterator result, Compare comp);
@@ -1177,17 +1254,17 @@ namespace std {
                        BidirectionalIterator middle,
                        BidirectionalIterator last, Compare comp);
   template&lt;class ExecutionPolicy, class BidirectionalIterator&gt;
-    void inplace_merge(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void inplace_merge(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                        BidirectionalIterator first,
                        BidirectionalIterator middle,
                        BidirectionalIterator last);
   template&lt;class ExecutionPolicy, class BidirectionalIterator, class Compare&gt;
-    void inplace_merge(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    void inplace_merge(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                        BidirectionalIterator first,
                        BidirectionalIterator middle,
                        BidirectionalIterator last, Compare comp);
 
-  // 25.5.5, set operations:
+  <i>// 25.7.5, set operations</i>
   template&lt;class InputIterator1, class InputIterator2&gt;
     bool includes(InputIterator1 first1, InputIterator1 last1,
                   InputIterator2 first2, InputIterator2 last2);
@@ -1195,11 +1272,11 @@ namespace std {
     bool includes(InputIterator1 first1, InputIterator1 last1,
                   InputIterator2 first2, InputIterator2 last2, Compare comp);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2&gt;
-    bool includes(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool includes(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                   <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                   <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2, class Compare&gt;
-    bool includes(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool includes(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                   <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                   <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2, Compare comp);
 
@@ -1213,13 +1290,13 @@ namespace std {
                              OutputIterator result, Compare comp);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator&gt;
-    <del>Output</del><ins>Forward</ins>Iterator set_union(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Output</del><ins>Forward</ins>Iterator set_union(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                              <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                              <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
                              <del>Output</del><ins>Forward</ins>Iterator result);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator, class Compare&gt;
-    <del>Output</del><ins>Forward</ins>Iterator set_union(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>Output</del><ins>Forward</ins>Iterator set_union(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                              <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                              <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
                              <del>Output</del><ins>Forward</ins>Iterator result, Compare comp);
@@ -1237,14 +1314,14 @@ namespace std {
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator&gt;
     <del>Output</del><ins>Forward</ins>Iterator set_intersection(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
       <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
       <del>Output</del><ins>Forward</ins>Iterator result);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator, class Compare&gt;
     <del>Output</del><ins>Forward</ins>Iterator set_intersection(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
       <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
       <del>Output</del><ins>Forward</ins>Iterator result, Compare comp);
@@ -1262,14 +1339,14 @@ namespace std {
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator&gt;
     <del>Output</del><ins>Forward</ins>Iterator set_difference(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
       <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
       <del>Output</del><ins>Forward</ins>Iterator result);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator, class Compare&gt;
     <del>Output</del><ins>Forward</ins>Iterator set_difference(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
       <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
       <del>Output</del><ins>Forward</ins>Iterator result, Compare comp);
@@ -1287,19 +1364,19 @@ namespace std {
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator&gt;
     <del>Output</del><ins>Forward</ins>Iterator set_symmetric_difference(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
       <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
       <del>Output</del><ins>Forward</ins>Iterator result);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
            class <del>Output</del><ins>Forward</ins>Iterator, class Compare&gt;
     <del>Output</del><ins>Forward</ins>Iterator set_symmetric_difference(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
       <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
       <del>Output</del><ins>Forward</ins>Iterator result, Compare comp);
 
-  // 25.5.6, heap operations:
+  <i>// 25.7.6, heap operations</i>
   template&lt;class RandomAccessIterator&gt;
     void push_heap(RandomAccessIterator first, RandomAccessIterator last);
   template&lt;class RandomAccessIterator, class Compare&gt;
@@ -1329,10 +1406,10 @@ namespace std {
   template&lt;class RandomAccessIterator, class Compare&gt;
     bool is_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
   template&lt;class ExecutionPolicy, class RandomAccessIterator&gt;
-    bool is_heap(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool is_heap(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                  RandomAccessIterator first, RandomAccessIterator last);
   template&lt;class ExecutionPolicy, class RandomAccessIterator, class Compare&gt;
-    bool is_heap(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    bool is_heap(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                  RandomAccessIterator first, RandomAccessIterator last, Compare comp);
   template&lt;class RandomAccessIterator&gt;
     RandomAccessIterator is_heap_until(RandomAccessIterator first, RandomAccessIterator last);
@@ -1340,14 +1417,14 @@ namespace std {
     RandomAccessIterator is_heap_until(RandomAccessIterator first, RandomAccessIterator last,
                                        Compare comp);
   template&lt;class ExecutionPolicy, class RandomAccessIterator&gt;
-    RandomAccessIterator is_heap_until(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    RandomAccessIterator is_heap_until(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                        RandomAccessIterator first, RandomAccessIterator last);
   template&lt;class ExecutionPolicy, class RandomAccessIterator, class Compare&gt;
-    RandomAccessIterator is_heap_until(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    RandomAccessIterator is_heap_until(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                        RandomAccessIterator first, RandomAccessIterator last,
                                        Compare comp);
 
-  // 25.5.7, minimum and maximum:
+  <i>// 25.7.7, minimum and maximum</i>
   template&lt;class T&gt; constexpr const T&amp; min(const T&amp; a, const T&amp; b);
   template&lt;class T, class Compare&gt;
     constexpr const T&amp; min(const T&amp; a, const T&amp; b, Compare comp);
@@ -1378,10 +1455,10 @@ namespace std {
     constexpr ForwardIterator min_element(ForwardIterator first, ForwardIterator last,
                                           Compare comp);
   template&lt;class ExecutionPolicy, class ForwardIterator&gt;
-    ForwardIterator min_element(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator min_element(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                 ForwardIterator first, ForwardIterator last);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Compare&gt;
-    ForwardIterator min_element(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator min_element(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                 ForwardIterator first, ForwardIterator last,
                                 Compare comp);
 
@@ -1391,10 +1468,10 @@ namespace std {
     constexpr ForwardIterator max_element(ForwardIterator first, ForwardIterator last,
                                           Compare comp);
   template&lt;class ExecutionPolicy, class ForwardIterator&gt;
-    ForwardIterator max_element(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator max_element(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                 ForwardIterator first, ForwardIterator last);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Compare&gt;
-    ForwardIterator max_element(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    ForwardIterator max_element(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                 ForwardIterator first, ForwardIterator last,
                                 Compare comp);
 
@@ -1406,20 +1483,20 @@ namespace std {
       minmax_element(ForwardIterator first, ForwardIterator last, Compare comp);
   template&lt;class ExecutionPolicy, class ForwardIterator&gt;
     pair&lt;ForwardIterator, ForwardIterator&gt;
-      minmax_element(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      minmax_element(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                      ForwardIterator first, ForwardIterator last);
   template&lt;class ExecutionPolicy, class ForwardIterator, class Compare&gt;
     pair&lt;ForwardIterator, ForwardIterator&gt;
-      minmax_element(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      minmax_element(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                      ForwardIterator first, ForwardIterator last, Compare comp);
 
-  // 25.5.8, bounded value
+  <i>// 25.7.8, bounded value</i>
   template&lt;class T&gt;
     constexpr const T&amp; clamp(const T&amp; v, const T&amp; lo, const T&amp; hi);
   template&lt;class T, class Compare&gt;
     constexpr const T&amp; clamp(const T&amp; v, const T&amp; lo, const T&amp; hi, Compare comp);
 
-  // 25.5.9, lexicographical comparison
+  <i>// 25.7.9, lexicographical comparison</i>
   template&lt;class InputIterator1, class InputIterator2&gt;
     bool lexicographical_compare(
       InputIterator1 first1, InputIterator1 last1,
@@ -1431,17 +1508,17 @@ namespace std {
       Compare comp);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2&gt;
     bool lexicographical_compare(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
       <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2, class Compare&gt;
     bool lexicographical_compare(
-      ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
       <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
       <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
       Compare comp);
 
-  // 25.5.10, permutations:
+  <i>// 25.7.10, permutations</i>
   template&lt;class BidirectionalIterator&gt;
     bool next_permutation(BidirectionalIterator first,
                           BidirectionalIterator last);
@@ -1457,113 +1534,182 @@ namespace std {
 }
 </pre></blockquote>
 
-<h4>25.3.4 For each [alg.foreach]</h4>
 
+<h4>25.5.11 Equal [alg.equal]</h4>
 <blockquote><pre>
-template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Function&gt;
-  void for_each(ExecutionPolicy&amp;&amp; exec,
-           <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
-           Function f);
+template&lt;class InputIterator1, class InputIterator2&gt;
+  bool equal(InputIterator1 first1, InputIterator1 last1,
+             InputIterator2 first2);
+template&lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;
+  bool equal(InputIterator1 first1, InputIterator1 last1,
+             InputIterator2 first2, BinaryPredicate pred);
+template&lt;class InputIterator1, class InputIterator2&gt;
+  bool equal(InputIterator1 first1, InputIterator1 last1,
+             InputIterator2 first2, InputIterator2 last2);
+template&lt;class InputIterator1, class InputIterator2, class BinaryPredicate&gt;
+  bool equal(InputIterator1 first1, InputIterator1 last1,
+             InputIterator2 first2, InputIterator2 last2,
+             BinaryPredicate pred);
+template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2&gt;
+  bool equal(ExecutionPolicy&amp;&amp; exec,
+             <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
+             <del>Input</del><ins>Forward</ins>Iterator2 first2);
+template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
+         class BinaryPredicate&gt;
+  bool equal(ExecutionPolicy&amp;&amp; exec,
+             <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
+             <del>Input</del><ins>Forward</ins>Iterator2 first2, BinaryPredicate pred);
+template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2&gt;
+  bool equal(ExecutionPolicy&amp;&amp; exec,
+             <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
+             <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2);
+template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
+         class BinaryPredicate&gt;
+  bool equal(ExecutionPolicy&amp;&amp; exec,
+             <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
+             <del>Input</del><ins>Forward</ins>Iterator2 first2, <del>Input</del><ins>Forward</ins>Iterator2 last2,
+             BinaryPredicate pred);
 </pre></blockquote>
-<ol start="6">
-<li>
-<i>Requires:</i> <tt>Function</tt> shall meet the requirements of
-<tt>CopyConstructible</tt>.
-</li>
-<li>
-<i>Effects:</i> Applies <tt>f</tt> to the result of dereferencing every
-iterator in the range <tt>[first, last)</tt>. [ <i>Note:</i> If the type of
-<tt>first</tt> satisfies the requirements of a mutable iterator, <tt>f</tt> may
-apply nonconstant functions through the dereferenced iterator. &mdash; <i>end
-note</i> ]
-</li>
-<li>
-<i>Complexity:</i> Applies <tt>f</tt> exactly <tt>last - first</tt> times.
-</li>
-<li>
-<i>Remarks:</i> If <tt>f</tt> returns a result, the result is ignored.
-</li>
-<li>
-<i>Notes:</i> Does not return a copy of its <tt>Function</tt> parameter, since
-parallelization may not permit efficient state accumulation.
-</li>
-</ol>
 
-<blockquote><pre>
-template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Size, class Function&gt;
-    <del>Input</del><ins>Forward</ins>Iterator for_each_n(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
-                             <del>Input</del><ins>Forward</ins>Iterator first, Size n, Function f);
-</pre></blockquote>
-<ol start="16">
+<ol>
 <li>
-<i>Requires:</i> <tt>Function</tt> shall meet the requirements of
-<tt>CopyConstructible</tt>.
+<i>Remarks:</i> If <tt>last2</tt> was not given in the argument list, it denotes <tt>first2 + (last1 - first1)</tt> below.
 </li>
 <li>
-<i>Requires:</i> <tt>n &gt;= 0</tt>.
+<i>Returns:</i> If <tt>last1 - first1 != last2 - first2</tt>, return <tt>false</tt>. Otherwise return <tt>true</tt> if for every iterator <tt>i</tt> in the range <tt>[first1, last1)</tt> the following corresponding conditions hold: <tt>*i == *(first2 + (i - first1))</tt>, <tt>pred(*i, *(first2 + (i - first1))) != false</tt>. Otherwise, returns <tt>false</tt>.
 </li>
 <li>
-<i>Effects:</i> Applies <tt>f</tt> to the result of dereferencing every
-iterator in the range <tt>[first, first + n)</tt>. [ <i>Note:</i> If the type of
-<tt>first</tt> satisfies the requirements of a mutable iterator, <tt>f</tt> may
-apply nonconstant functions through the dereferenced iterator. &mdash; <i>end
-note</i> ]
-</li>
-<li>
-<i>Returns:</i> <tt>first + n</tt>.
-</li>
-<li>
-<i>Remarks:</i> If <tt>f</tt> returns a result, the result is ignored.
+<i>Complexity:</i> <ins>For the overloads with no <tt>ExecutionPolicy</tt>, n</ins><del>N</del>o applications of the corresponding predicate if <tt>InputIterator1</tt> and <tt>InputIterator2</tt> meet the requirements of random access iterators and <tt>last1 - first1 != last2 - first2</tt><del>. O</del><ins>; o</ins>therwise, at most <tt>min(last1 - first1, last2 - first2)</tt> applications of the corresponding predicate.
+
+<ins>For the overloads with an <tt>ExecutionPolicy</tt>, no applications of the corresponding predicate if <tt>ForwardIterator1</tt> and <tt>ForwardIterator2</tt> meet the requirements of random access iterators and <tt>last1 - first1 != last2 - first2</tt>; otherwise, <tt>O(min(last1 - first1, last2 - first2))</tt> applications of the corresponding predicate.</ins>
+
 </li>
 </ol>
 
 
-<h4>25.4.1 Copy [alg.copy]</h4>
-
+<h4>25.6.9 Unique [alg.unique]</h4>
 <blockquote><pre>
+template&lt;class InputIterator, class OutputIterator&gt;
+  OutputIterator unique_copy(InputIterator first, InputIterator last,
+                             OutputIterator result);
+template&lt;class InputIterator, class OutputIterator, class BinaryPredicate&gt;
+  OutputIterator unique_copy(InputIterator first, InputIterator last,
+                             OutputIterator result, BinaryPredicate pred);
 template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
-  <del>OutputIterator</del><ins>ForwardIterator2</ins> copy(ExecutionPolicy&amp;&amp; policy, <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
-                 <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
+  <del>OutputIterator</del><ins>ForwardIterator2</ins> unique_copy(ExecutionPolicy&amp;&amp; exec,
+                             <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
+                             <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
+template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
+         class BinaryPredicate&gt;
+  <del>OutputIterator</del><ins>ForwardIterator2</ins> unique_copy(ExecutionPolicy&amp;&amp; exec,
+                             <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
+                             <del>OutputIterator</del><ins>ForwardIterator2</ins> result, BinaryPredicate pred);
 </pre></blockquote>
 <ol start="5">
 <li>
-<i>Requires:</i> The ranges <tt>[first, last)</tt> and <tt>[result, result + (last - first))</tt> shall not overlap.
+<i>Requires:</i> The comparison function shall be an equivalence relation. The
+ranges <tt>[first, last)</tt> and <tt>[result, result+(last-first))</tt> shall
+not overlap. The expression <tt>*result = *first</tt> shall be valid. <ins>For
+the overloads with no <tt>ExecutionPolicy</tt>, l</ins><del>L</del>et
+<tt>T</tt> be the value type of <tt>InputIterator</tt>. If
+<tt>InputIterator</tt> meets the forward iterator requirements, then there are
+no additional requirements for <tt>T</tt>. Otherwise, if
+<tt>OutputIterator</tt> meets the forward iterator requirements and its value
+type is the same as <tt>T</tt>, then <tt>T</tt> shall be
+<tt>CopyAssignable</tt> (Table 26). Otherwise, <tt>T</tt> shall be both
+<tt>CopyConstructible</tt> (Table 24) and <tt>CopyAssignable</tt>. <ins>[
+<i>Note:</i> For the overloads with an <tt>ExecutionPolicy</tt>, there may be a
+performance cost if the value type of <tt>ForwardIterator1</tt> is not both <tt>CopyConstructible</tt> (Table
+24) and <tt>CopyAssignable</tt>. &mdash; <i>end note</i>]</ins>
 </li>
 <li>
-<i>Effects:</i> Copies elements in the range <tt>[first, last)</tt> into the
-range <tt>[result, result + (last - first))</tt>. For each non-negative integer
-<tt>n &lt; (last - first)</tt>, performs <tt>*(result + n) = *(first + n)</tt>.
+<i>Effects:</i> Copies only the first element from every consecutive group of
+equal elements referred to by the iterator <tt>i</tt> in the range
+<tt>[first, last)</tt> for which the following corresponding conditions hold:
+<tt>*i == *(i - 1)</tt> or <tt>pred(*i, *(i - 1)) != false</tt>.
 </li>
 <li>
-<i>Returns:</i> <tt>result + (last - first)</tt>.
+<i>Returns:</i> The end of the resulting range.
 </li>
 <li>
-<i>Complexity:</i> Exactly <tt>last - first</tt> assignments.
+<i>Complexity:</i> For nonempty ranges, exactly <tt>last - first - 1</tt>
+applications of the corresponding predicate.
 </li>
 </ol>
 
 
-<h4>25.4.2 Move [alg.move]</h4>
+<h4>25.7.4 Partitions [alg.partitions]</h4>
+<blockquote><pre>
+template &lt;class InputIterator, class Predicate&gt;
+  bool is_partitioned(InputIterator first, InputIterator last, Predicate pred);
+template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class Predicate&gt;
+  bool is_partitioned(ExecutionPolicy&amp;&amp; exec,
+                      <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, Predicate pred);
+</pre></blockquote>
+<ol>
+<li>
+<i>Requires:</i> <ins>For the overload with no <tt>ExecutionPolicy</tt>,</ins>
+<tt>InputIterator</tt>'s value type shall be convertible to
+<tt>Predicate</tt>'s argument type.  <ins>For the overload with an
+<tt>ExecutionPolicy</tt>, <tt>ForwardIterator</tt>'s value type shall be
+convertible to <tt>Predicate</tt>'s argument type.</ins>
+</li>
+<li>
+<i>Returns:</i> <tt>true</tt> if <tt>[first, last)</tt> is empty or if
+<tt>[first, last)</tt> is partitioned by <tt>pred</tt>, i.e. if all elements
+that satisfy <tt>pred</tt> appear before those that do not.
+</li>
+<li>
+<i>Complexity:</i> Linear. At most <tt>last - first</tt> applications of pred.
+</li>
+</ol>
 
 <blockquote><pre>
-template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
-  <del>OutputIterator</del><ins>ForwardIterator2</ins> move(ExecutionPolicy&amp;&amp; policy, <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
-                 <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
+template &lt;class InputIterator, class OutputIterator1,
+          class OutputIterator2, class Predicate&gt;
+  pair&lt;OutputIterator1, OutputIterator2&gt;
+  partition_copy(InputIterator first, InputIterator last,
+                 OutputIterator1 out_true, OutputIterator2 out_false,
+                 Predicate pred);
+template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class <del>Output</del><ins>Forward</ins>Iterator1,
+          class <del>Output</del><ins>Forward</ins>Iterator2, class Predicate&gt;
+  pair&lt;<del>Output</del><ins>Forward</ins>Iterator1, <del>Output</del><ins>Forward</ins>Iterator2&gt;
+  partition_copy(ExecutionPolicy&amp;&amp; exec,	
+                 <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
+                 <del>Output</del><ins>Forward</ins>Iterator1 out_true, <del>Output</del><ins>Forward</ins>Iterator2 out_false,
+                 Predicate pred);
 </pre></blockquote>
-<ol start="5">
+<ol start="12">
 <li>
-<i>Requires:</i> The ranges <tt>[first, last)</tt> and <tt>[result, result + (last - first))</tt> shall not overlap.
+<i>Requires:</i> <ins>For the overload with no <tt>ExecutionPolicy</tt>,</ins>
+<tt>InputIterator</tt>'s value type shall be <tt>CopyAssignable</tt>, and shall
+be writable (24.2.1) to the <tt>out_true</tt> and <tt>out_false</tt>
+<tt>OutputIterator</tt>s, and shall be convertible to <tt>Predicate</tt>'s
+argument type.  <ins>For the overload with an <tt>ExecutionPolicy</tt>,
+<tt>ForwardIterator</tt>'s value type shall be <tt>CopyAssignable</tt>, and
+shall be writable (24.2.1) to the <tt>out_true</tt> and <tt>out_false</tt>
+<tt>ForwardIterator</tt>s, and shall be convertible to <tt>Predicate</tt>'s
+argument type.</ins>
+<ins>For both overloads, t</ins><del>T</del>he input range shall not overlap
+with either of the output ranges.
+<ins>[ <i>Note:</i> For the overload with an <tt>ExecutionPolicy</tt>, there
+may be a performance cost if <tt>ForwardIterator</tt>'s value type is not
+<tt>CopyConstructible</tt>. &mdash; <i>end note</i> ]</ins>
 </li>
 <li>
-<i>Effects:</i> Moves elements in the range <tt>[first, last)</tt> into the
-range <tt>[result, result + (last - first))</tt>. For each non-negative integer
-<tt>n &lt; (last - first)</tt>, performs <tt>*(result + n) = std::move(*(first + n))</tt>.
+<i>Effects:</i> For each iterator <tt>i</tt> in <tt>[first, last)</tt>, copies
+<tt>*i</tt> to the output range beginning with <tt>out_true</tt> if
+<tt>pred(*i)</tt> is <tt>true</tt>, or to the output range beginning with
+<tt>out_false</tt> otherwise.
 </li>
 <li>
-<i>Returns:</i> <tt>result + (last - first)</tt>.
+<i>Returns:</i> A pair <tt>p</tt> such that <tt>p.first</tt> is the end of the
+output range beginning at <tt>out_true</tt> and <tt>p.second</tt> is the end of
+the output range beginning at <tt>out_false</tt>.
 </li>
 <li>
-<i>Complexity:</i> Exactly <tt>last - first</tt> assignments.
+<i>Complexity:</i> Exactly <tt>last - first</tt> applications of <tt>pred</tt>.
+
 </li>
 </ol>
 
@@ -1588,13 +1734,13 @@ namespace std {
              BinaryOperation binary_op);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator&gt;
     typename iterator_traits&lt;<del>Input</del><ins>Forward</ins>Iterator&gt;::value_type
-      reduce(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+      reduce(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
            <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class T&gt;
-    T reduce(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    T reduce(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
              <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, T init);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator, class T, class BinaryOperation&gt;
-    T reduce(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    T reduce(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
              <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last, T init,
              BinaryOperation binary_op);
 
@@ -1603,7 +1749,7 @@ namespace std {
                        UnaryOperation unary_op, T init, BinaryOperation binary_op);
   template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator,
            class UnaryFunction, class T, class BinaryOperation&gt;
-    T transform_reduce(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    T transform_reduce(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                        <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last,
                        UnaryOperation unary_op, T init, BinaryOperation binary_op);
 
@@ -1618,12 +1764,12 @@ namespace std {
                     BinaryOperation2 binary_op2);
   template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
             class T&gt;
-    T inner_product(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    T inner_product(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                     <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                     <del>Input</del><ins>Forward</ins>Iterator2 first2, T init);
   template &lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator1, class <del>Input</del><ins>Forward</ins>Iterator2,
             class T, class BinaryOperation1, class BinaryOperation2&gt;
-    T inner_product(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    T inner_product(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                   <del>Input</del><ins>Forward</ins>Iterator1 first1, <del>Input</del><ins>Forward</ins>Iterator1 last1,
                   <del>Input</del><ins>Forward</ins>Iterator2 first2, T init,
                   BinaryOperation1 binary_op1,
@@ -1648,13 +1794,13 @@ namespace std {
                                   OutputIterator result,
                                   T init, BinaryOperation binary_op);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>, class T&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> exclusive_scan(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> exclusive_scan(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                   <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                   <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                   T init);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>, class T,
            class BinaryOperation&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> exclusive_scan(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> exclusive_scan(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                   <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                   <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                   T init, BinaryOperation binary_op);
@@ -1670,18 +1816,18 @@ namespace std {
                                   OutputIterator result,
                                   BinaryOperation binary_op, T init);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> inclusive_scan(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> inclusive_scan(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                   <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                   <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
 class BinaryOperation&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> inclusive_scan(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> inclusive_scan(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                   <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                   <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                   BinaryOperation binary_op);
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class BinaryOperation, class T&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> inclusive_scan(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> inclusive_scan(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                   <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                   <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                   BinaryOperation binary_op, T init);
@@ -1696,7 +1842,7 @@ class BinaryOperation&gt;
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class UnaryOperation,
            class T, class BinaryOperation&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> transform_exclusive_scan(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> transform_exclusive_scan(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                             <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                             <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                             UnaryOperation unary_op,
@@ -1718,7 +1864,7 @@ class BinaryOperation&gt;
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class UnaryOperation,
            class BinaryOperation&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> transform_inclusive_scan(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> transform_inclusive_scan(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                             <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                             <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                             UnaryOperation unary_op,
@@ -1726,7 +1872,7 @@ class BinaryOperation&gt;
   template&lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
            class UnaryOperation,
            class BinaryOperation, class T&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> transform_inclusive_scan(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> transform_inclusive_scan(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                             <del>InputIterator</del><ins>ForwardIterator1</ins> first, <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                             <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
                                             UnaryOperation unary_op,
@@ -1742,13 +1888,13 @@ class BinaryOperation&gt;
                                        OutputIterator result,
                                        BinaryOperation binary_op);
   template &lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> adjacent_difference(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> adjacent_difference(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                        <del>InputIterator</del><ins>ForwardIterator1</ins> first,
                                        <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                        <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
   template &lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
             class BinaryOperation&gt;
-    <del>OutputIterator</del><ins>ForwardIterator2</ins> adjacent_difference(ExecutionPolicy&amp;&amp; exec, // see 25.2.5
+    <del>OutputIterator</del><ins>ForwardIterator2</ins> adjacent_difference(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
                                        <del>InputIterator</del><ins>ForwardIterator1</ins> first,
                                        <del>InputIterator</del><ins>ForwardIterator1</ins> last,
                                        <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
@@ -1757,22 +1903,128 @@ class BinaryOperation&gt;
   template &lt;class ForwardIterator, class T&gt;
     void iota(ForwardIterator first, ForwardIterator last, T value);
 
-  // 26.8.13, greatest common divisor
+  <i>// 26.8.13, greatest common divisor</i>
   template &lt;class M, class N&gt;
     constexpr common_type_t&lt;M,N&gt; gcd(M m, N n);
 
-  // 26.8.14, least common multiple
+  <i>// 26.8.14, least common multiple</i>
   template &lt;class M, class N&gt;
     constexpr common_type_t&lt;M,N&gt; lcm(M m, N n);
 }
 </pre></blockquote>
 
+
+<h4>26.8.3 Reduce [reduce]</h4>
+<blockquote><pre>
+template&lt;class ExecutionPolicy, class <del>Input</del><ins>Forward</ins>Iterator&gt;
+  typename iterator_traits&lt;<del>Input</del><ins>Forward</ins>Iterator&gt;::value_type
+    reduce(ExecutionPolicy&amp;&amp; exec, <i>// see 25.4.5</i>
+         <del>Input</del><ins>Forward</ins>Iterator first, <del>Input</del><ins>Forward</ins>Iterator last);
+</pre></blockquote>
+<ol start="2">
+<li>
+<i>Effects:</i> Equivalent to:
+<blockquote><pre>
+return reduce(std::forward&lt;ExecutionPolicy&gt;(exec), first, last,
+	      typename iterator_traits&lt;<del>Input</del><ins>Forward</ins>Iterator&gt;::value_type{});
+</pre></blockquote>
+</li>
+</ol>
+
+<h4>26.8.11 Adjacent difference [adjacent.difference]</h4>
+<blockquote><pre>
+template &lt;class InputIterator, class OutputIterator&gt;
+  OutputIterator adjacent_difference(InputIterator first,
+                                     InputIterator last,
+                                     OutputIterator result);
+template &lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
+  OutputIterator adjacent_difference(InputIterator first,
+                                     InputIterator last,
+                                     OutputIterator result,
+                                     BinaryOperation binary_op);
+template &lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>&gt;
+  <del>OutputIterator</del><ins>ForwardIterator2</ins> adjacent_difference(ExecutionPolicy&amp;&amp; exec,
+                                     <del>InputIterator</del><ins>ForwardIterator1</ins> first,
+                                     <del>InputIterator</del><ins>ForwardIterator1</ins> last,
+                                     <del>OutputIterator</del><ins>ForwardIterator2</ins> result);
+template &lt;class ExecutionPolicy, class <del>InputIterator</del><ins>ForwardIterator1</ins>, class <del>OutputIterator</del><ins>ForwardIterator2</ins>,
+          class BinaryOperation&gt;
+  <del>OutputIterator</del><ins>ForwardIterator2</ins> adjacent_difference(ExecutionPolicy&amp;&amp; exec,
+                                     <del>InputIterator</del><ins>ForwardIterator1</ins> first,
+                                     <del>InputIterator</del><ins>ForwardIterator1</ins> last,
+                                     <del>OutputIterator</del><ins>ForwardIterator2</ins> result,
+                                     BinaryOperation binary_op);
+</pre></blockquote>
+<ol>
+<li>
+<i>Requires:</i>
+<ins>For the overloads with no <code>ExecutionPolicy</code></ins>
+<tt>InputIterator</tt>'s value type shall be <tt>MoveAssignable</tt> (Table 25)
+and shall be constructible from the type of <tt>*first</tt>.  <tt>acc</tt>
+<ins>(defined below)</ins> shall be writable (24.2.1) to the <tt>result</tt>
+output iterator. The result of the expression <tt>val - acc</tt> or
+<tt>binary_op(val, acc)</tt> shall be writable to the <tt>result</tt> output
+iterator.
+</li>
+<li><ins>
+<ins>For the overloads with an <tt>ExecutionPolicy</tt> the value
+type of <tt>ForwardIterator1</tt> shall be <tt>CopyConstructible</tt> (Table
+24), constructible from the expression <tt>*first - *first</tt> or
+<tt>binary_op(*first, *first)</tt>, and assignable to the value type of
+<tt>ForwardIterator2</tt>.
+</ins></li>
+<li>
+<ins>For all overloads, i</ins><del>I</del>n the ranges <tt>[first, last]</tt>
+and <tt>[result, result + (last - first)]</tt>, <tt>binary_op</tt> shall
+neither modify elements nor invalidate iterators or subranges.<sup>285</sup>
+</ins></li>
+<li>
+<i>Effects:</i>
+<ins>For the overloads with no <tt>ExecutionPolicy</tt> and</ins><del>For</del>
+a non-empty range, the function creates an accumulator <tt>acc</tt> whose type
+is <tt>InputIterator</tt>'s value type, initializes it with <tt>*first</tt>,
+and assigns the result to <tt>*result</tt>. For every iterator <tt>i</tt> in
+[<tt>first + 1</tt>,<tt> last</tt>) in order, creates an object <tt>val</tt>
+whose type is <tt>InputIterator</tt>'s value type, initializes it with
+<tt>*i</tt>, computes <tt>val - acc</tt> or <tt>binary_op(val, acc)</tt>,
+assigns the result to <tt>*(result + (i - first))</tt>, and move
+assigns from <tt>val</tt> to <tt>acc</tt>.
+</li>
+<li><ins>
+For the overloads with an <tt>ExecutionPolicy</tt> and a non-empty range, first
+the function creates an object whose type is <tt>ForwardIterator1</tt>'s value
+type, initializes it with <tt>*first</tt>, and assigns the result to
+<tt>*result</tt>.  Then for every <tt>d</tt> in <tt>[1, last - first - 1]</tt>,
+creates an object <tt>val</tt> whose type is <tt>ForwardIterator1</tt>'s value
+type, initializes it with <tt>*(first + d) - *(first + d - 1)</tt> or
+<tt>binary_op(*(first + d), *(first + d - 1))</tt>, and assigns the result to
+<tt>*(result + d)</tt>.
+</ins></li>
+<li>
+<i>Returns:</i> <tt>result + (last - first)</tt>.
+</li>
+<li>
+<i>Complexity:</i> Exactly <tt>(last - first) - 1</tt> applications of the binary operation.
+</li>
+<li>
+<i>Remarks:</i> <tt>result</tt> may be equal to <tt>first</tt>.
+</li>
+</ol>
+
 </blockquote>
+
 
 <h2><a name="7.0">7. Acknowledgements</h2>
 <p>
 Thanks to David Sankel and Dietmar Kühl for early reviews of this paper,
-without necessarily endorsing it.
+without necessarily endorsing it.  Special thanks to Antony Polukhin for
+performing tne exhaustive line-by-line review to catch several omissions
+before the final LWG review, and to Bryce Lelbach for support and
+encouragemnet to see this through to the end!
+</p>
+<p>
+Extra thanks to the folks in the Library Working Group who patiently
+re-reviewed drafts of this paper until it was ready.  Now get some sleep!
 </p>
 
 
