@@ -37,11 +37,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0619R0</td>
+  <td align="left">P0619R1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2017-03-17</td>
+  <td align="left">2017-03-19</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -110,6 +110,16 @@
 <p>
 Original version of the paper for the 2017 post-Kona mailing.
 </p>
+
+<h3><a name="rev.0">Revision 0</a></h3>
+<p>
+First update for the 2017 pre-Toronto mailing:
+</p>
+
+<ul>
+  <li>cross-reference library issues: 2155</li>
+  <li>weak recommendation to undeprecate <tt>strstream</tt>s</li>
+</ul>
 
 
 <h2><a name="1.0">1 Introduction</a></h2>
@@ -508,6 +518,11 @@ headers.  There should be minimal harm in removing these headers,
 and it would remove a possible risk of confusion, with users trying
 to understand if this is some clever compatibility story for mixed
 C/C++ projects.
+</p>
+
+<p>
+LWG Issue 2155 specifically talks about removing
+<tt>__bool_true_false_are_defined</tt>
 </p>
 
 <blockquote class="recommend">
@@ -1123,8 +1138,16 @@ Draft compatibility note for Annex C.
 The <tt>char*</tt> streams were provided, pre-deprecated, in C++98 and
 have been considered for removal before.  The underlying principle of
 not removing them until a suitable replacement is available still holds,
-so there should be nothing further to do at this point.
+so there should be nothing further to do at this point.  However, it is
+looking increasingly likely that any future replacement facility will be
+part of the <tt>std2</tt> library initiative, providing a wholesale
+replacement for the current iostreams facility.  If we believe that the
+future replacement is more likely to come from this direction, it would
+be better to integrate this facility back into the main standard, as it
+would clearly not be due a replacement within namespace <tt>std</tt> at
+that point.
 </p>
+
 <blockquote class="recommend">
 <b>Strong recommendation:</b>
 take no action.
@@ -1137,11 +1160,11 @@ No change.
 
 <blockquote class="recommend">
 <b>Weak recommendation:</b>
-still take no action.
+Undeprecate the <tt>char*</tt> streams.
 </blockquote>
 
 <blockquote class="note">
-No change.
+Wording to follow on demand, moving subclause D.6 into clause 30.
 </blockquote>
 
 
