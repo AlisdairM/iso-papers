@@ -37,11 +37,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0718R0</td>
+  <td align="left">D0718R1</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2017-06-19</td>
+  <td align="left">2017-07-10</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -98,6 +98,28 @@
 <p>
 Original version of the paper for the 2017 pre-Toronto mailing.
 </p>
+
+<h3><a name="rev.1">Revision 1</a></h3>
+<p>
+Minor edits following SG1 review in Toronto:
+</p>
+<ul>
+<li>Removed <tt>atomic_shared_ptr&lt;T&gt;</tt> and  <tt>atomic_weak_ptr&lt;T&gt;</tt> alias templates</li>
+<li>Removed rvalue-reference overloaded signatures where the passed parameter is truly used as read-only</li>
+</ul>
+<p>
+Additional fixes:
+</p>
+<ul>
+<li>
+note that exposition-only <tt>p</tt> is a smart pointer member, and not a
+pointer-to-smart-pointer.  Adjust specification for <tt>atomic</tt> operations
+accordingly.
+</li>
+<li>
+Fixed occasional font issue to correctly use code-font, such as <tt>order</tt>.
+</li>
+</ul>
 
 <h2><a name="1.0">1 Introduction</a></h2>
 <p>
@@ -474,8 +496,8 @@ template &lt;class T&gt; struct hash&lt;shared_ptr&lt;T&gt;&gt;;
 <ins>template template &lt;class T&gt; struct atomic&lt;shared_ptr&lt;T&gt;&gt;;</ins>
 <ins>template template &lt;class T&gt; struct atomic&lt;weak_ptr&lt;T&gt;&gt;;</ins>
 
-<ins>template template &lt;class T&gt; using atomic_shared_ptr = atomic&lt;shared_ptr&lt;T&gt;&gt;;</ins>
-<ins>template template &lt;class T&gt; using atomic_weak_ptr   = atomic&lt;weak_ptr&lt;T&gt;&gt;;</ins>
+<del>template template &lt;class T&gt; using atomic_shared_ptr = atomic&lt;shared_ptr&lt;T&gt;&gt;;</del>
+<del>template template &lt;class T&gt; using atomic_weak_ptr   = atomic&lt;weak_ptr&lt;T&gt;&gt;;</del>
 
 // ...
 }
@@ -535,21 +557,21 @@ pointer value.
 
     <ins>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, const shared_ptr&lt;T&gt;&amp; desired,</ins>
           <ins>memory_order success, memory_order failure) noexcept;</ins>
-    <ins>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-          <ins>memory_order success, memory_order failure) noexcept;</ins>
+    <del>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</del>
+          <del>memory_order success, memory_order failure) noexcept;</del>
     <ins>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, const shared_ptr&lt;T&gt;&amp; desired,</ins>
           <ins>memory_order success, memory_order failure) noexcept;</ins>
-    <ins>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-          <ins>memory_order success, memory_order failure) noexcept;</ins>
+    <del>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</del>
+          <del>memory_order success, memory_order failure) noexcept;</del>
 
     <ins>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, const shared_ptr&lt;T&gt;&amp; desired,</ins>
           <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
-    <ins>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-          <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
+    <del>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</del>
+          <del>memory_order order = memory_order_seq_cst) noexcept;</del>
     <ins>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, const shared_ptr&lt;T&gt;&amp; desired,</ins>
           <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
-    <ins>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-          <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
+    <del>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</del>
+          <del>memory_order order = memory_order_seq_cst) noexcept;</del>
 
     <ins>constexpr atomic() noexcept = default;</ins>
     <ins>atomic(shared_ptr&lt;T&gt; desired) noexcept;</ins>
@@ -593,15 +615,14 @@ the receiving thread. This results in undefined behavior. <i>&mdash; end note</i
 </pre></blockquote>
 
 <li><ins>
-<i>Requires:</i> The order argument shall not be <tt>memory_order_consume</tt>,
+<i>Requires:</i> The <tt>order</tt> argument shall not be <tt>memory_order_consume</tt>,
 <tt>memory_order_acquire</tt>, nor <tt>memory_order_acq_rel</tt>.
 </ins></li>
 
 <li><ins>
 <i>Effects:</i> Atomically replaces the value pointed to by <tt>this</tt> with
-the value of <tt>desired</tt> as if by <tt>p-&gt;swap(desired)</tt>. Memory is
-affected according to the value of
-<tt>order</tt>.
+the value of <tt>desired</tt> as if by <tt>p.swap(desired)</tt>. Memory is
+affected according to the value of <tt>order</tt>.
 </ins></li>
 
 
@@ -628,7 +649,7 @@ affected according to the value of
 </ins></li>
 
 <li><ins>
-<i>Returns:</i> Atomically returns <tt>*p</tt>.
+<i>Returns:</i> Atomically returns <tt>p</tt>.
 </ins></li>
 
 
@@ -647,25 +668,25 @@ affected according to the value of
 
 <li><ins>
 <i>Effects:</i> Atomically replaces <tt>p</tt> with <tt>desired</tt> as if by
-<tt>p-&gt;swap(desired)</tt>. Memory is affected according to the value of
+<tt>p.swap(desired)</tt>. Memory is affected according to the value of
 <tt>order</tt>.  This is an atomic read-modify-write operation (4.7.1
 [intro.races]).
 </ins></li>
 
 <li><ins>
-<i>Returns:</i> Atomically returns the value of <tt>*p</tt> immediately before the effects.
+<i>Returns:</i> Atomically returns the value of <tt>p</tt> immediately before the effects.
 </ins></li>
 
 
 <blockquote><pre>
 <ins>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, const shared_ptr&lt;T&gt;&amp; desired,</ins>
       <ins>memory_order success, memory_order failure) noexcept;</ins>
-<ins>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-      <ins>memory_order success, memory_order failure) noexcept;</ins>
+<del>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</del>
+      <del>memory_order success, memory_order failure) noexcept;</del>
 <ins>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, const shared_ptr&lt;T&gt;&amp; desired,</ins>
       <ins>memory_order success, memory_order failure) noexcept;</ins>
-<ins>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-      <ins>memory_order success, memory_order failure) noexcept;</ins>
+<del>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</del>
+      <del>memory_order success, memory_order failure) noexcept;</del>
 </pre></blockquote>
 
 <li><ins>
@@ -701,13 +722,13 @@ existing value read from the <tt>atomic</tt> object in the attempted atomic
 update.  The <tt>use_count</tt> update corresponding to the write to
 <tt>expected</tt> is part of the atomic operation.  The write to
 <tt>expected</tt> itself is not required to be part of the atomic operation.
-<li><ins>
+</ins></li>
 
-<li><ins>
+<li><del>
 If the <tt>desired</tt> value is passed by rvalue reference and the operation
 returns <tt>true</tt>, then <tt>desired</tt> is empty after the atomic update
 step.
-</li></ins>
+</del></li>
 
 
 
@@ -725,17 +746,17 @@ shall be replaced by the value <tt>memory_order_relaxed</tt>.
 </ins></li>
 
 <blockquote><pre>
-<ins>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-      <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
+<del>bool compare_exchange_weak(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</del>
+      <del>memory_order order = memory_order_seq_cst) noexcept;</del>
 </pre></blockquote>
 
-<li><ins>
+<li><del>
 <i>Effects:</i> Equivalent to: <tt>return compare_exchange_weak(expected, std::move(desired), order, fail_order);</tt>
 where <tt>fail_order</tt> is the same as <tt>order</tt> except that a value of
 <tt>memory_order_acq_rel</tt> shall be replaced by the value
 <tt>memory_order_acquire</tt> and a value of <tt>memory_order_release</tt>
 shall be replaced by the value <tt>memory_order_relaxed</tt>.
-</ins></li>
+</del></li>
 
 <blockquote><pre>
 <ins>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, const shared_ptr&lt;T&gt;&amp; desired,</ins>
@@ -751,17 +772,17 @@ shall be replaced by the value <tt>memory_order_relaxed</tt>.
 </ins></li>
 
 <blockquote><pre>
-<ins>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-      <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
+<del>bool compare_exchange_strong(shared_ptr&lt;T&gt;&amp; expected, shared_ptr&lt;T&gt;&amp;&amp; desired,</del>
+      <del>memory_order order = memory_order_seq_cst) noexcept;</del>
 </pre></blockquote>
 
-<li><ins>
+<li><del>
 <i>Effects:</i> Equivalent to: <tt>return compare_exchange_strong(expected, std::move(desired), order, fail_order);</tt>
 where <tt>fail_order</tt> is the same as <tt>order</tt> except that a value of
 <tt>memory_order_acq_rel</tt> shall be replaced by the value
 <tt>memory_order_acquire</tt> and a value of <tt>memory_order_release</tt>
 shall be replaced by the value <tt>memory_order_relaxed</tt>.
-</ins></li>
+</del></li>
 
 
 </ol>
@@ -783,21 +804,21 @@ shall be replaced by the value <tt>memory_order_relaxed</tt>.
 
     <ins>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, const weak_ptr&lt;T&gt;&amp; desired,</ins>
           <ins>memory_order success, memory_order failure) noexcept;</ins>
-    <ins>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-          <ins>memory_order success, memory_order failure) noexcept;</ins>
+    <del>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</del>
+          <del>memory_order success, memory_order failure) noexcept;</del>
     <ins>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, const weak_ptr&lt;T&gt;&amp; desired,</ins>
           <ins>memory_order success, memory_order failure) noexcept;</ins>
-    <ins>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-          <ins>memory_order success, memory_order failure) noexcept;</ins>
+    <del>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</del>
+          <del>memory_order success, memory_order failure) noexcept;</del>
 
     <ins>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, const weak_ptr&lt;T&gt;&amp; desired,</ins>
           <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
-    <ins>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-          <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
+    <del>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</del>
+          <del>memory_order order = memory_order_seq_cst) noexcept;</del>
     <ins>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, const weak_ptr&lt;T&gt;&amp; desired,</ins>
           <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
-    <ins>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-          <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
+    <del>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</del>
+          <del>memory_order order = memory_order_seq_cst) noexcept;</del>
 
     <ins>constexpr atomic() noexcept = default;</ins>
     <ins>atomic(weak_ptr&lt;T&gt; desired) noexcept;</ins>
@@ -838,15 +859,14 @@ the receiving thread. This results in undefined behavior. <i>&mdash; end note</i
 </pre></blockquote>
 
 <li><ins>
-<i>Requires:</i> The order argument shall not be <tt>memory_order_consume</tt>,
+<i>Requires:</i> The <tt>order</tt> argument shall not be <tt>memory_order_consume</tt>,
 <tt>memory_order_acquire</tt>, nor <tt>memory_order_acq_rel</tt>.
 </ins></li>
 
 <li><ins>
 <i>Effects:</i> Atomically replaces the value pointed to by <tt>this</tt> with
-the value of <tt>desired</tt> as if by <tt>p-&gt;swap(desired)</tt>. Memory is
-affected according to the value of
-<tt>order</tt>.
+the value of <tt>desired</tt> as if by <tt>p.swap(desired)</tt>. Memory is
+affected according to the value of <tt>order</tt>.
 </ins></li>
 
 
@@ -873,7 +893,7 @@ affected according to the value of
 </ins></li>
 
 <li><ins>
-<i>Returns:</i> Atomically returns <tt>*p</tt>.
+<i>Returns:</i> Atomically returns <tt>p</tt>.
 </ins></li>
 
 
@@ -892,25 +912,25 @@ affected according to the value of
 
 <li><ins>
 <i>Effects:</i> Atomically replaces <tt>p</tt> with <tt>desired</tt> as if by
-<tt>p-&gt;swap(desired)</tt>. Memory is affected according to the value of
+<tt>p.swap(desired)</tt>. Memory is affected according to the value of
 <tt>order</tt>.  This is an atomic read-modify-write operation (4.7.1
 [intro.races]).
 </ins></li>
 
 <li><ins>
-<i>Returns:</i> Atomically returns the value of <tt>*p</tt> immediately before the effects.
+<i>Returns:</i> Atomically returns the value of <tt>p</tt> immediately before the effects.
 </ins></li>
 
 
 <blockquote><pre>
 <ins>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, const weak_ptr&lt;T&gt;&amp; desired,</ins>
       <ins>memory_order success, memory_order failure) noexcept;</ins>
-<ins>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-      <ins>memory_order success, memory_order failure) noexcept;</ins>
+<del>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</del>
+      <del>memory_order success, memory_order failure) noexcept;</del>
 <ins>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, const weak_ptr&lt;T&gt;&amp; desired,</ins>
       <ins>memory_order success, memory_order failure) noexcept;</ins>
-<ins>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-      <ins>memory_order success, memory_order failure) noexcept;</ins>
+<del>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</del>
+      <del>memory_order success, memory_order failure) noexcept;</del>
 </pre></blockquote>
 
 <li><ins>
@@ -946,13 +966,13 @@ existing value read from the <tt>atomic</tt> object in the attempted atomic
 update.  The <tt>use_count</tt> update corresponding to the write to
 <tt>expected</tt> is part of the atomic operation.  The write to
 <tt>expected</tt> itself is not required to be part of the atomic operation.
-<li><ins>
+</ins></li>
 
-<li><ins>
+<li><del>
 If the <tt>desired</tt> value is passed by rvalue reference and the operation
 returns <tt>true</tt>, then <tt>desired</tt> is empty after the atomic update
 step.
-</li></ins>
+</del></li>
 
 
 
@@ -970,17 +990,17 @@ shall be replaced by the value <tt>memory_order_relaxed</tt>.
 </ins></li>
 
 <blockquote><pre>
-<ins>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-      <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
+<del>bool compare_exchange_weak(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</del>
+      <del>memory_order order = memory_order_seq_cst) noexcept;</del>
 </pre></blockquote>
 
-<li><ins>
+<li><del>
 <i>Effects:</i> Equivalent to: <tt>return compare_exchange_weak(expected, std::move(desired), order, fail_order);</tt>
 where <tt>fail_order</tt> is the same as <tt>order</tt> except that a value of
 <tt>memory_order_acq_rel</tt> shall be replaced by the value
 <tt>memory_order_acquire</tt> and a value of <tt>memory_order_release</tt>
 shall be replaced by the value <tt>memory_order_relaxed</tt>.
-</ins></li>
+</del></li>
 
 <blockquote><pre>
 <ins>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, const weak_ptr&lt;T&gt;&amp; desired,</ins>
@@ -996,17 +1016,17 @@ shall be replaced by the value <tt>memory_order_relaxed</tt>.
 </ins></li>
 
 <blockquote><pre>
-<ins>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</ins>
-      <ins>memory_order order = memory_order_seq_cst) noexcept;</ins>
+<del>bool compare_exchange_strong(weak_ptr&lt;T&gt;&amp; expected, weak_ptr&lt;T&gt;&amp;&amp; desired,</del>
+      <del>memory_order order = memory_order_seq_cst) noexcept;</del>
 </pre></blockquote>
 
-<li><ins>
+<li><del>
 <i>Effects:</i> Equivalent to: <tt>return compare_exchange_strong(expected, std::move(desired), order, fail_order);</tt>
 where <tt>fail_order</tt> is the same as <tt>order</tt> except that a value of
 <tt>memory_order_acq_rel</tt> shall be replaced by the value
 <tt>memory_order_acquire</tt> and a value of <tt>memory_order_release</tt>
 shall be replaced by the value <tt>memory_order_relaxed</tt>.
-</ins></li>
+</del></li>
 </ol>
 </blockquote>
 
