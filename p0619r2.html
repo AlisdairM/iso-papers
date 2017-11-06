@@ -30,6 +30,22 @@
       padding-top: 1px;
       padding-bottom: 1px;
     }
+    blockquote.review
+    {
+      background-color:#b0ffb0;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
+    blockquote.review_note
+    {
+      background-color:#ffffcc;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
   </style>
 </head>
 
@@ -37,11 +53,11 @@
 <table>
 <tr>
   <td align="left">Doc. no.</td>
-  <td align="left">P0619R1</td>
+  <td align="left">P0619R2</td>
 </tr>
 <tr>
   <td align="left">Date:</td>
-  <td align="left">2017-03-19</td>
+  <td align="left">2017-11-06</td>
 </tr>
 <tr>
   <td align="left">Project:</td>
@@ -49,10 +65,10 @@
 </tr>
 <tr>
   <td align="left">Audience:</td>
-  <td align="left">Evolution Working Group</td>
+  <td align="left">Core Working Group</td>
 </tr><tr>
   <td align="left"></td>
-  <td align="left">Library Evolution Working Group</td>
+  <td align="left">Library Working Group</td>
 </tr>
 <tr>
   <td align="left">Reply to:</td>
@@ -111,7 +127,7 @@
 Original version of the paper for the 2017 post-Kona mailing.
 </p>
 
-<h3><a name="rev.0">Revision 0</a></h3>
+<h3><a name="rev.1">Revision 1</a></h3>
 <p>
 First update for the 2017 pre-Toronto mailing:
 </p>
@@ -119,6 +135,20 @@ First update for the 2017 pre-Toronto mailing:
 <ul>
   <li>cross-reference library issues: 2155</li>
   <li>weak recommendation to undeprecate <tt>strstream</tt>s</li>
+</ul>
+
+
+<h3><a name="rev.2">Revision 2</a></h3>
+<p>
+Update following the 2017 Toronto review:
+</p>
+
+<ul>
+  <li>Note review results on each section</li>
+  <li>Merge proposed resolutions into one common change-set for LWG/CWG review</li>
+  <li>Update integrated wording to reflect latest working draft:
+      <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3201">N4700</a></li>
+  <li>Write Annex C wording for removals that passed (L)EWG review</li>
 </ul>
 
 
@@ -308,6 +338,20 @@ We do not anticipate any impact on library wording by this removal.
 </blockquote>
 
 
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, take no action yet.
+We will consider again for C++23.
+</blockquote>
+
+<blockquote class="review_note">
+It seems early to be making this change, and it was not clear that it would
+improve teachability of this corner of the language.  There was a suggestion
+that with a little more experience, we might also consider undeprecation for
+C++23
+</blockquote>
+
+
+
 <!-------------------------- SECTION BREAK ------------------------>
 
 
@@ -398,6 +442,30 @@ the standard that will permit both ABI and API breakage.
 <blockquote class="note">
 No change.
 </blockquote>
+
+
+<blockquote class="review">
+<b>Toronto Review:</b> Accept weak recommendation, take no action yet.
+We will consider again for C++23.
+</blockquote>
+
+<blockquote class="review_note">
+There is little data yet on how much code this would break, but few
+implementations provide warnings, and vendors suggest they have no
+interest in adding warnings for this deprecation, as they would be
+&quot;too noisy&quot;.
+</blockquote>
+
+
+<blockquote class="review_note">
+It seems plausible that the linkage of the copy operations would be
+less disruptive than linking the destructor to the copy operations,
+and some future progress might be made in that direction, if enough
+interest remains.  WE might also consider undeprecation in a future
+standard.  It seems a paper with real analysis of impact is needed
+to make progress in either direction (undeprecation or removal).
+</blockquote>
+
 
 
 <!-------------------------- SECTION BREAK ------------------------>
@@ -502,6 +570,21 @@ has a non-throwing exception specification. &mdash; <i>end example</i> ]
 Draft compatibility note for Annex C.
 </blockquote>
 </blockquote>
+
+
+<blockquote class="review">
+<b>Toronto Review:</b> Accept weak recommendation, remove the feature
+from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference to remove noise that adds little value to the
+standard, as long as vendors are free to continue supporting a
+&quot;conforming extension&quot; and manage actual removal (outside
+of strict conformance modes) at their own leisure.
+</blockquote>
+
+
 
 
 <!-------------------------- SECTION BREAK ------------------------>
@@ -794,6 +877,21 @@ take no action now, and plan to remove this feature in C++23.
 <blockquote class="note">
 No change.
 </blockquote>
+
+
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, remove the feature
+from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference to remove noise that adds little value to the
+standard, as long as vendors are free to continue supporting a
+&quot;conforming extension&quot; and manage actual removal (outside
+of strict conformance modes) at their own leisure.
+</blockquote>
+
+
 
 <!-------------------------- SECTION BREAK ------------------------>
 
@@ -1130,6 +1228,33 @@ Draft compatibility note for Annex C.
 </blockquote>
 
 
+<blockquote class="review">
+<b>Toronto Review:</b> No recommendation, take no action without a
+more detailed paper.
+</blockquote>
+
+<blockquote class="review_note">
+It will be difficult to reach a consensus to take any action here.
+Some folks want to remove the dependency on C entirely, and remove
+these headers from the C++ Standard.  Another group agree with the
+strong recommendation that these headers really cannot be removed
+from a real implementation, so should be recognized and maintained
+as a regular non-deprecated feature.  There was no consensus for
+the smaller matter of removing the vacuuous C headers, as the
+<tt>#include</tt> itself is seen as part of the compatibility layer.
+However, there was insufficient enthusiasm to push through the C11
+vacuous headers that were deliberately not adopted for C++17 either.
+</blockquote>
+
+<blockquote class="review_note">
+Related to a future paper on this topic, Walter Brown has a paper,
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0657r0.pdf">P0657R0</a>,
+that addresses a stronger deprecation on the use of the global
+namespace by the C (and by implication, C++) headers.
+</blockquote>
+
+
+
 <!-------------------------- SECTION BREAK ------------------------>
 
 
@@ -1165,6 +1290,16 @@ Undeprecate the <tt>char*</tt> streams.
 
 <blockquote class="note">
 Wording to follow on demand, moving subclause D.6 into clause 30.
+</blockquote>
+
+
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, take no action for C++20.
+</blockquote>
+
+<blockquote class="review_note">
+It seems that there will be papers addressing the required replacement facility
+within the C++20 timeframe.  We will revisit this topic again for C++23.
 </blockquote>
 
 
@@ -1241,6 +1376,19 @@ The header <tt>&lt;exception&gt;</tt> has the following addition:
 <blockquote class="note">
 Draft compatibility note for Annex C.
 </blockquote>
+
+
+<blockquote class="review">
+<b>Toronto Review:</b> Accept weak recommendation, strike from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference for removing replaced facilities from the standard
+at the earliest opportunity, and letting the vendors remove the zombie
+implementations at a time of their own choosing, assessing their own
+customer demand.
+</blockquote>
+
 
 
 <!-------------------------- SECTION BREAK ------------------------>
@@ -1766,6 +1914,19 @@ Draft compatibility note for Annex C.
 </blockquote>
 
 
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, strike from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference for removing replaced facilities from the standard
+at the earliest opportunity, and letting the vendors remove the zombie
+implementations at a time of their own choosing, assessing their own
+customer demand.
+</blockquote>
+
+
+
 <!-------------------------- SECTION BREAK ------------------------>
 
 
@@ -1810,7 +1971,7 @@ namespace std {
 
     allocator() noexcept;
     allocator(const allocator&amp;) noexcept;
-    template <class U> allocator(const allocator&lt;U&gt;&amp;) noexcept;
+    template &lt;class U&gt; allocator(const allocator&lt;U&gt;&amp;) noexcept;
     ~allocator();
 
     T* allocate(size_t n);
@@ -1929,7 +2090,7 @@ namespace std {
 
     allocator() noexcept;
     allocator(const allocator&amp;) noexcept;
-    template <class U> allocator(const allocator&lt;U&gt;&amp;) noexcept;
+    template &lt;class U&gt; allocator(const allocator&lt;U&gt;&amp;) noexcept;
     ~allocator();
 
     T* allocate(size_t n);
@@ -1985,6 +2146,20 @@ Draft compatibility note for Annex C.
 
 
 </blockquote>
+
+
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, strike from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference for removing replaced facilities from the standard
+at the earliest opportunity, and letting the vendors remove the zombie
+implementations at a time of their own choosing, assessing their own
+customer demand.
+</blockquote>
+
+
 
 
 <!-------------------------- SECTION BREAK ------------------------>
@@ -2164,6 +2339,30 @@ No change.
 </blockquote>
 
 
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, strike from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference for removing replaced facilities from the standard
+at the earliest opportunity, and letting the vendors remove the zombie
+implementations at a time of their own choosing, assessing their own
+customer demand.
+</blockquote>
+
+
+<blockquote class="review_note">
+There was some concern that the iterator may still be safely used in
+special circumstances, where the user knowa that the copy constructor
+will not throw, and that allocators are not involved (requiring a call
+to <tt>construt</tt>).  However, users able to reason that they can
+safely use the iterator are also (generally) capable of providing their
+own solution, and we prefer to remove a potentially dangerous tool from
+the standard.
+</blockquote>
+
+
+
 <!-------------------------- SECTION BREAK ------------------------>
 
 
@@ -2270,6 +2469,29 @@ Details are deferred to a follow-up paper, if desired.
 </blockquote>
 
 
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, strike from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference for removing replaced facilities from the standard
+at the earliest opportunity, and letting the vendors remove the zombie
+implementations at a time of their own choosing, assessing their own
+customer demand.
+</blockquote>
+
+
+<blockquote class="review_note">
+It is worth noting that the domain itself is not dead, as SG 12
+continues to work in this space.  However, this C++98 API still
+offers more than it actually provides, behind an API requiring
+the user to provide their own resource wrappers, so reminng this
+feature gives SG 12 the most freedom to pursue a correct solution
+in the future.
+</blockquote>
+
+
+
 <!-------------------------- SECTION BREAK ------------------------>
 
 
@@ -2359,6 +2581,19 @@ take no action at this time.
 <blockquote class="note">
 No change.
 </blockquote>
+
+
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, strike from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference for removing replaced facilities from the standard
+at the earliest opportunity, and letting the vendors remove the zombie
+implementations at a time of their own choosing, assessing their own
+customer demand.
+</blockquote>
+
 
 
 <!-------------------------- SECTION BREAK ------------------------>
@@ -2498,6 +2733,19 @@ take no action yet.
 <blockquote class="note">
 No change.
 </blockquote>
+
+
+<blockquote class="review">
+<b>Toronto Review:</b> Accept strong recommendation, strike from C++20.
+</blockquote>
+
+<blockquote class="review_note">
+There is a preference for removing replaced facilities from the standard
+at the earliest opportunity, and letting the vendors remove the zombie
+implementations at a time of their own choosing, assessing their own
+customer demand.
+</blockquote>
+
 
 
 <!-------------------------- SECTION BREAK ------------------------>
@@ -3148,7 +3396,10 @@ reviews of each facility above.
 </p>
 
 
-<h2><a name="5.0">5 Formal Wording</a></h2>
+<!-------------------------- SECTION BREAK ------------------------>
+
+
+<h2><a name="5.0">5 Library Fixes for Deprecated Features</a></h2>
 <p>
 For now, this section does not contain any wording for feature removal or
 undeprecation, as the proposed drafting for (re)moving each facility is
@@ -3260,7 +3511,7 @@ namespace std {
 
     allocator() noexcept;
     allocator(const allocator&amp;) noexcept;
-    template <class U> allocator(const allocator&lt;U&gt;&amp;) noexcept;
+    template &lt;class U&gt; allocator(const allocator&lt;U&gt;&amp;) noexcept;
     ~allocator();
     <ins>allocator&amp; operator=(const allocator&amp;) noexcept = default;</ins>
 
@@ -3383,7 +3634,7 @@ namespace std {
     using reference         = void;
     using char_type         = charT;
     using traits_type       = traits;
-    using ostream_type      = basic_istream&lt;charT,traits&gt;;
+    using ostream_type      = basic_ostream&lt;charT,traits&gt;;
 
     ostream_iterator(ostream_type&amp; s);
     ostream_iterator(ostream_type&amp; s, const charT* delimiter);
@@ -3416,7 +3667,7 @@ namespace std {
     using reference         = void;
     using char_type         = charT;
     using traits_type       = traits;
-    using ostream_type      = basic_istream&lt;charT,traits&gt;;
+    using istream_type      = basic_istream&lt;charT,traits&gt;;
 
     class proxy;                          <i>// exposition only</i>
 
@@ -3554,14 +3805,1772 @@ no change of existing semantics.
 
 </blockquote>
 
-<h2><a name="6.0">6 Acknowledements</h2>
+
+<!-------------------------- SECTION BREAK ------------------------>
+
+
+<h2><a name="6.0">6 Integrated Proposed Wording</a></h2>
+
+<p>
+This section integrates the proposed wording of the above
+recommendations as the various working groups approve them
+for review by the Core and Library Working Groups.  It
+immediately adopts the proposed Library Fixes for Deprecated
+Features, with the expectation that libary will want to
+review one integrated set of words when this paper reaches
+that group.
+</p>
+
+<p>
+Collected summary of recommendations:
+</p>
+<table>
+  <tr>
+    <td><b>Subclause</b></td>
+    <td><b>Feature</b></td>
+    <td><b>Adopted Recommendation</b></td>
+    <td>Action</td>
+  </tr>
+  <tr>
+    <td>D.1</td>
+    <td>Reclare <tt>constexpr</tt> members</td>
+    <td>Strong recommendation</td>
+    <td>Take no action</td>
+  </tr>
+  <tr>
+    <td>D.2</td>
+    <td>Implicit special members</td>
+    <td>Weak recommendation</td>
+    <td>Take no action</td>
+  </tr>
+  <tr>
+    <td>D.3</td>
+    <td><tt>throw()</tt> specifications</td>
+    <td>Weak recommendation</td>
+    <td>Remove the feature</td>
+  </tr>
+  <tr>
+    <td>D.4</td>
+    <td>Vacuous C++ headers</td>
+    <td>Strong recommendation</td>
+    <td>remove all now</td>
+  </tr>
+  <tr>
+    <td>D.5</td>
+    <td>C <tt>&lt;*.h&gt;</tt> headers</td>
+    <td>Need more info</td>
+    <td>Recommend a paper addressing support for C headers in C++</td>
+  </tr>
+  <tr>
+    <td>D.6</td>
+    <td><tt>char *</tt> streams</td>
+    <td>Strong recommendation</td>
+    <td>Take no action <i>yet</i></td>
+  </tr>
+  <tr>
+    <td>D.7</td>
+    <td><tt>uncaught_exception</tt></td>
+    <td>Weak recommendation</td>
+    <td>Remove all now</td>
+  </tr>
+  <tr>
+    <td>D.8</td>
+    <td>Adaptable function protocol</td>
+    <td>Strong recommendation</td>
+    <td>Remove all now</td>
+  </tr>
+  <tr>
+    <td>D.9</td>
+    <td>Deduable <tt>allocator</tt> members</td>
+    <td>Strong recommendation</td>
+    <td>Remove now, with fix</td>
+  </tr>
+  <tr>
+    <td>D.10</td>
+    <td><tt>raw_storage_iterator</tt></td>
+    <td>Strong recommendation</td>
+    <td>Remove all now</td>
+  </tr>
+  <tr>
+    <td>D.11</td>
+    <td>Temporary buffers API</td>
+    <td>Strong recommendation</td>
+    <td>Remove all now</td>
+  </tr>
+  <tr>
+    <td>D.12</td>
+    <td>Deprecated type traits</td>
+    <td>Strong recommendation</td>
+    <td>Remove all now</td>
+  </tr>
+  <tr>
+    <td>D.13</td>
+    <td><tt>std::iterator</tt></td>
+    <td>No action</td>
+    <td>Welcome paper for traits deduction, tentatively defer removal to C++23</td>
+  </tr>
+  <tr>
+    <td>D.14</td>
+    <td><tt>shared_ptr::unique</tt></td>
+    <td>Strong recommendation</td>
+    <td>Remove now</td>
+  </tr>
+  <tr>
+    <td>D.15</td>
+    <td><tt>&ltcodecvt&gt;</tt></td>
+    <td>Need more info</td>
+    <td>Recommend a paper addressing D15/16</td>
+  </tr>
+  <tr>
+    <td>D.16</td>
+    <td><tt>wstring_convert</tt> et al.</td>
+    <td>Need more info</td>
+    <td>Recommend a paper addressing D15/16</td>
+  </tr>
+</table>
+
+<p>
+Full wording follows:
+</p>
+
+<blockquote>
+<h4>18.4 Exception specifications [except.spec]</h4>
+<ol>
+<li>
+The predicate indicating whether a function cannot exit via an exception is
+called the <i>exception specification</i> of the function. If the predicate is false,
+the function has a <i>potentially-throwing exception specification</i>, otherwise it
+has a <i>non-throwing exception specification</i>. The exception specification is
+either defined implicitly, or defined explicitly by using a <i>noexcept-specifier</i>
+as a suffix of a function declarator (11.3.5).
+
+<blockquote><pre>
+<i>noexcept-specifier</i> :
+  <tt>noexcept</tt> ( <i>constant-expression</i> )</tt>
+  <tt>noexcept</tt>
+  <del><tt>throw</tt> ( )</del>
+</pre></blockquote>
+</li>
+<li>
+In a <i>noexcept-specifier</i>, the <i>constant-expression</i>, if supplied,
+shall be a contextually converted constant expression of type <tt>bool</tt>
+(8.20); that constant expression is the exception specification of the function
+type in which the <i>noexcept-specifier</i> appears. A ( token that follows
+<tt>noexcept</tt> is part of the <i>noexcept-specifier</i> and does not
+commence an initializer (11.6). The <i>noexcept-specifier</i> <tt>noexcept</tt>
+without a <i>constant-expression</i> is equivalent to the <i>noexcept-specifier</i>
+<tt>noexcept(true)</tt>. <del>The <i>noexcept-specifier</i> <tt>throw()</tt> is
+deprecated (D.3), and equivalent to the <i>noexcept-specifier</i>
+<tt>noexcept(true)</tt>.</del>
+</li>
+</ol>
+
+<ol start="11">
+<li>[ <i>Example:</i>
+<pre>
+   struct A {
+     A(int = (A(5), 0)) noexcept;
+     A(const A&amp;) noexcept;
+     A(A&amp;&amp;) noexcept;
+     ~A();
+   };
+   struct B {
+     B() <del>throw()</del><ins>noexcept</ins>;
+     B(const B&amp;) = default;  <i>// implicit exception specification is <tt>noexcept(true)</tt></i>
+     B(B&amp;&amp;, int = (throw Y(), 0)) noexcept;
+     ~B() noexcept(false);
+   };
+   int n = 7;
+   struct D : public A, public B {
+     int * p = new int[n];
+     <i>// D::D() potentially-throwing, as the new operator may throw <tt>bad_alloc</tt> or <tt>bad_array_new_length</tt></i>
+     <i>// D::D(const D&amp;) non-throwing</i>
+     <i>// D::D(D&amp;&amp;) potentially-throwing, as the default argument for B's constructor may throw</i>
+     <i>// D::~D() potentially-throwing</i>
+   };
+</pre>
+Furthermore, if <tt>A::~A()</tt> were virtual, the program would be ill-formed
+since a function that overrides a virtual function from a base class shall not
+have a potentially-throwing exception specification if the base class function
+has a non-throwing exception specification. &mdash; <i>end example</i> ]
+</li>
+</ol>
+
+
+<h4>20.5.1.2 Headers [headers]</h4>
+<p>
+Table 17 &mdash; C++ headers for C library facilities
+</p>
+<table>
+  <tr>
+    <td><tt>&lt;cassert&gt;</tt></td>
+    <td><tt>&lt;cinttypes&gt;</tt></td>
+    <td><tt>&lt;csignal&gt;</tt></td>
+    <td><tt>&lt;cstdio&gt;</tt></td>
+    <td><tt>&lt;cwchar&gt;</tt></td>
+  </tr>
+  <tr>
+    <td><tt><del>&lt;ccomplex&gt;</del></tt></td>
+    <td><tt><del>&lt;ciso646&gt;</del></tt></td>
+    <td><tt><del>&lt;cstdalign&gt;</del></tt></td>
+    <td><tt>&lt;cstdlib&gt;</tt></td>
+    <td><tt>&lt;cwctype&gt;</tt></td>
+  </tr>
+  <tr>
+    <td><tt>&lt;cctype&gt;</tt></td>
+    <td><tt>&lt;climits&gt;</tt></td>
+    <td><tt>&lt;cstdarg&gt;</tt></td>
+    <td><tt>&lt;cstring&gt;</tt></td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
+    <td><tt>&lt;cerrno&gt;</tt></td>
+    <td><tt>&lt;clocale&gt;</tt></td>
+    <td><tt><del>&lt;cstdbool&gt;</del></tt></td>
+    <td><tt><del>&lt;ctgmath&gt;</del></tt></td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
+    <td><tt>&lt;cfenv&gt;</tt></td>
+    <td><tt>&lt;cmath&gt;</tt></td>
+    <td><tt>&lt;cstddef&gt;</tt></td>
+    <td><tt>&lt;ctime&gt;</tt></td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
+    <td><tt>&lt;cfloat&gt;</tt></td>
+    <td><tt>&lt;csetjmp&gt;</tt></td>
+    <td><tt>&lt;cstdint&gt;</tt></td>
+    <td><tt>&lt;cuchar&gt;</tt></td>
+    <td><tt></tt></td>
+  </tr>
+</table>
+
+<h4>20.5.1.3 Freestanding implementations [compliance]</h4>
+<p>
+Table 19 &mdash; C++ headers for freestanding implementations
+</p>
+<table>
+  <tr>
+    <td></td>
+    <td><b>subclause</b></td>
+    <td><b>header</b></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td><tt><del>&lt;ciso646&gt;</del></tt></td>
+  </tr>
+  <tr>
+    <td>21.2</td>
+    <td>Types</td>
+    <td><tt>&lt;cstddef&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>21.3</td>
+    <td>Implementation properties</td>
+    <td><tt>&lt;cfloat&gt;</tt> <tt>&lt;limits&gt;</tt> <tt>&lt;climits&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>21.4</td>
+    <td>Integer types</td>
+    <td><tt>&lt;cstdint&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>21.5</td>
+    <td>Start and termination</td>
+    <td><tt>&lt;cstdlib&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>21.6</td>
+    <td>Dynamic memory management</td>
+    <td><tt>&lt;new&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>21.7</td>
+    <td>Type identification</td>
+    <td><tt>&lt;typeinfo&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>21.8</td>
+    <td>Exception handling</td>
+    <td><tt>&lt;exception&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>21.9</td>
+    <td>Initializer lists</td>
+    <td><tt>&lt;initializer_list&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>21.10</td>
+    <td>Other runtime support</td>
+    <td><tt>&lt;cstdarg&gt;</tt> </td>
+  </tr>
+  <tr>
+    <td>23.15</td>
+    <td>Type traits</td>
+    <td><tt>&lt;type_traits&gt;</tt></td>
+  </tr>
+  <tr>
+    <td>32</td>
+    <td>Atomics</td>
+    <td><tt>&lt;atomic&gt;</tt></td>
+  </tr>
+  <tr>
+    <td><del>D.4.2, D.4.3</del></td>
+    <td><del>Deprecated headers</del></td>
+    <td><del><tt>&lt;cstdalign&gt;</tt> <tt>&lt;cstdbool&gt;</tt></del></td>
+  </tr>
+</table>
+
+
+<h4>20.5.4.3.1 Zombie names [zombie.names]</h4>
+<ol>
+<li>
+In namespace <tt>std</tt>, the following names are reserved for previous
+standardization:
+<ol>
+  <li>&mdash; <tt>auto_ptr</tt>,</li>
+  <li>&mdash; <ins><tt>auto_ptr_ref</tt>,</ins></li>
+  <li>&mdash; <tt>binary_function</tt>,</li>
+  <li>&mdash; <ins><tt>binary_negate</tt>,</ins></li>
+  <li>&mdash; <tt>bind1st</tt>,</li>
+  <li>&mdash; <tt>bind2nd</tt>,</li>
+  <li>&mdash; <tt>binder1st</tt>,</li>
+  <li>&mdash; <tt>binder2nd</tt>,</li>
+  <li>&mdash; <tt>const_mem_fun1_ref_t</tt>,</li>
+  <li>&mdash; <tt>const_mem_fun1_t</tt>,</li>
+  <li>&mdash; <tt>const_mem_fun_ref_t</tt>,</li>
+  <li>&mdash; <tt>const_mem_fun_t</tt>,</li>
+  <li>&mdash; <ins><tt>get_temporary_buffer</tt>,</ins></li>
+  <li>&mdash; <tt>get_unexpected</tt>,</li>
+  <li>&mdash; <ins><tt>gets</tt>, <tt>is_literal_type</tt>,</ins></li>
+  <li>&mdash; <ins><tt>is_literal_type_v</tt>,</ins></li>
+  <li>&mdash; <tt>mem_fun1_ref_t</tt>,</li>
+  <li>&mdash; <tt>mem_fun1_t</tt>,</li>
+  <li>&mdash; <tt>mem_fun_ref_t</tt>,</li>
+  <li>&mdash; <tt>mem_fun_ref</tt>,</li>
+  <li>&mdash; <tt>mem_fun_t</tt>,</li>
+  <li>&mdash; <tt>mem_fun</tt>,</li>
+  <li>&mdash; <ins><tt>not1</tt>,</ins></li>
+  <li>&mdash; <ins><tt>not2</tt>,</ins></li>
+  <li>&mdash; <tt>pointer_to_binary_function</tt>,</li>
+  <li>&mdash; <tt>pointer_to_unary_function</tt>,</li>
+  <li>&mdash; <tt>ptr_fun</tt>,</li>
+  <li>&mdash; <tt>random_shuffle</tt>,</li>
+  <li>&mdash; <ins><tt>raw_storage_iterator</tt>,</ins></li>
+  <li>&mdash; <ins><tt>result_of</tt>,</ins></li>
+  <li>&mdash; <ins><tt>result_of_t</tt>,</ins></li>
+  <li>&mdash; <ins><tt>return_temporary_buffer</tt>,</ins></li>
+  <li>&mdash; <tt>set_unexpected</tt>,</li>
+  <li>&mdash; <tt>unary_function</tt>,</li>
+  <li>&mdash; <ins><tt>unary_negate</tt>,</ins></li>
+  <li>&mdash; <ins><tt>uncaught_exception</tt>,</ins></li>
+  <li>&mdash; <tt>unexpected</tt>, and</li>
+  <li>&mdash; <tt>unexpected_handler</tt>.</li>
+</ol>
+</li>
+<li><ins>
+The following names are reserved as member types for previous standardization,
+and may not be used as names for object-like macros in portable code:
+<ol>
+  <li><ins>&mdash; <tt>argument_type</tt>,</ins></li>
+  <li><ins>&mdash; <tt><tt>first_argument_type</tt></tt>,</ins></li>
+  <li><ins>&mdash; <tt>io_state</tt>,</ins></li>
+  <li><ins>&mdash; <tt>open_mode</tt>,</ins></li>
+  <li><ins>&mdash; <tt>second_argument_type</tt>, and</ins></li>
+  <li><ins>&mdash; <tt>seek_dir</tt>.</ins></li>
+</ol>
+</ins></li>
+<li><ins>
+The name <tt>stossc</tt> is reserved as a member function for previous
+standardization, and may not be used as names for function-like macros in
+portable code.
+</ins></li>
+
+<li><ins>
+The header names <tt>&lt;ccomplex&gt;</tt>, <tt>&lt;ciso646&gt;</tt>,
+<tt>&lt;cstdalign&gt;</tt>, <tt>&lt;cstdbool&gt;</tt>, and
+<tt>&lt;ctgmath&gt;</tt> are reserved for previous standardization.
+</ins></li>
+</ol>
+
+
+<h4>23.9.2 Class template bitset [template.bitset]</h4>
+<blockquote><pre>
+namespace std {
+  template&lt;size_t N&gt; class bitset {
+  public:
+    <i>// bit reference:</i>
+    class reference {
+      friend class bitset;
+      reference() noexcept;
+    public:
+      <ins>reference(const reference&amp;) = default;</ins>
+      ~reference() <del>noexcept</del>;
+      reference&amp; operator=(bool x) noexcept;             <i>// for</i> b[i] = x;
+      reference&amp; operator=(const reference&amp;) noexcept;   <i>// for</i> b[i] = b[j];
+      bool operator~() const noexcept;                   <i>// flips the bit</i>
+      operator bool() const noexcept;                    <i>// for</i> x = b[i];
+      reference&amp; flip() noexcept;                        <i>// for</i> b[i].flip();
+    };
+
+    <i>// 23.9.2.1, constructors</i>
+    ...
+};
+</pre></blockquote>
+
+
+<h4>23.10.9 The default allocator [default.allocator]</h4>
+<blockquote><pre>
+namespace std {
+  template &lt;class T&gt; class allocator {
+  public:
+    using value_type      = T;
+    <ins>using size_type       = size_t;</ins>
+    <ins>using difference_type = ptrdiff_t;</ins>
+    using propagate_on_container_move_assignment = true_type;
+    using is_always_equal = true_type;
+
+    allocator() noexcept;
+    allocator(const allocator&amp;) noexcept;
+    template &lt;class U&gt; allocator(const allocator&lt;U&gt;&amp;) noexcept;
+    ~allocator();
+    <ins>allocator&amp; operator=(const allocator&amp;) noexcept = default;</ins>
+
+
+    T* allocate(size_t n);
+    void deallocate(T* p, size_t n);
+  };
+}
+</pre></blockquote>
+
+
+<h4>23.12.2 Class memory_resource [mem.res.class]</h4>
+<blockquote><pre>
+namespace std {
+  class memory_resource {
+    static constexpr size_t max_align = alignof(max_align_t); <i>// exposition only</i>
+
+  public:
+    <ins>memory_resource(const memory_resource&amp;) = default;</ins>
+    virtual ~memory_resource();
+
+    <ins>memory_resource&amp; operator=(const memory_resource&amp;) = default;</ins>
+
+    void* allocate(size_t bytes, size_t alignment = max_align);
+    void deallocate(void* p, size_t bytes, size_t alignment = max_align);
+
+    bool is_equal(const memory_resource&amp; other) const noexcept;
+
+  private:
+    virtual void* do_allocate(size_t bytes, size_t alignment) = 0;
+    virtual void do_deallocate(void* p, size_t bytes, size_t alignment) = 0;
+
+    virtual bool do_is_equal(const memory_resource&amp; other) const noexcept = 0;
+  };
+}
+</pre></blockquote>
+
+
+<h4>26.3.12 Class <tt>vector&lt;bool&gt;</tt></h4>
+<blockquote><pre>
+namespace std {
+  template &lt;class Allocator&gt;
+  class vector&lt;bool, Allocator&gt; {
+  public:
+    <i>// types:</i>
+    ...
+
+    <i>// bit reference:</i>
+    class reference {
+      friend class vector;
+      reference() noexcept;
+
+    <i>public:</i>
+      <ins>reference(const reference&amp;) = default;</ins>
+      ~reference();
+      operator bool() const noexcept;
+      reference&amp; operator=(const bool x) noexcept;
+      reference&amp; operator=(const reference&amp; x) noexcept;
+      void flip() noexcept; // flips the bit
+    };
+
+    <i>// construct/copy/destroy:</i>
+    ...
+  };
+}
+</pre></blockquote>
+
+<h4>27.6.1 Class template istream_iterator [istream.iterator]</h4>
+<blockquote><pre>
+namespace std {
+  template &lt;class T, class charT = char, class traits = char_traits&lt;charT&gt;,
+      class Distance = ptrdiff_t&gt;
+  class istream_iterator {
+  public:
+    using iterator_category = input_iterator_tag;
+    using value_type        = T;
+    using difference_type   = Distance;
+    using pointer           = const T*;
+    using reference         = const T&amp;;
+    using char_type         = charT;
+    using traits_type       = traits;
+    using istream_type      = basic_istream&lt;charT,traits&gt;;
+
+    constexpr istream_iterator();
+    istream_iterator(istream_type&amp; s);
+    istream_iterator(const istream_iterator&amp; x) = default;
+    ~istream_iterator() = default;
+
+    <ins>istream_iterator&amp; (istream_type&amp; s); = default;</ins>
+    const T&amp; operator*() const;
+    const T* operator-&gt;() const;
+    istream_iterator&amp; operator++();
+    istream_iterator  operator++(int);
+  private:
+    basic_istream&lt;charT,traits&gt;* in_stream; <i>// exposition only</i>
+    T value;                                <i>// exposition only</i>
+  };
+}
+</pre></blockquote>
+
+
+<h4>27.6.2 Class template ostream_iterator [ostream.iterator]</h4>
+<blockquote><pre>
+namespace std {
+  template &lt;class charT = char, class traits = char_traits&lt;charT&gt;&gt;
+  class ostream_iterator {
+  public:
+    using iterator_category = ouput_iterator_tag;
+    using value_type        = void;
+    using difference_type   = void;
+    using pointer           = void;
+    using reference         = void;
+    using char_type         = charT;
+    using traits_type       = traits;
+    using ostream_type      = basic_ostream&lt;charT,traits&gt;;
+
+    ostream_iterator(ostream_type&amp; s);
+    ostream_iterator(ostream_type&amp; s, const charT* delimiter);
+    ostream_iterator(const ostream_iterator&amp; x);
+    ~ostream_iterator();
+
+    <ins>ostream_iterator&amp; operator=(const ostream_iterator&amp; x);</ins>
+    ostream_iterator&amp; operator=(const T&amp; value);
+    ostream_iterator&amp; operator*();
+    ostream_iterator&amp; operator++();
+    ostream_iterator&amp; operator++(int);
+  private:
+    basic_ostream&lt;charT,traits&gt;* out_stream;  <i>// exposition only</i>
+    const charT* delim;                       <i>// exposition only</i>
+  };
+}
+</pre></blockquote>
+
+
+<h4>27.6.3 Class template istreambuf_iterator 	[istreambuf.iterator]</h4>
+<blockquote><pre>
+namespace std {
+  template &lt;class T, class charT = char, class traits = char_traits&lt;charT&gt;&gt;
+  class ostream_iterator {
+  public:
+    using iterator_category = ouput_iterator_tag;
+    using value_type        = void;
+    using difference_type   = void;
+    using pointer           = void;
+    using reference         = void;
+    using char_type         = charT;
+    using traits_type       = traits;
+    using istream_type      = basic_istream&lt;charT,traits&gt;;
+
+    class proxy;                          <i>// exposition only</i>
+
+    constexpr istreambuf_iterator() noexcept;
+    istreambuf_iterator(const istreambuf_iterator&amp;) noexcept = default;
+    ~istreambuf_iterator() = default;
+    istreambuf_iterator(istream_type&amp; s) noexcept;
+    istreambuf_iterator(streambuf_type* s) noexcept;
+    istreambuf_iterator(const proxy&amp; p) noexcept;
+
+    <ins>istreambuf_iterator&amp; operator=(const istreambuf_iterator&amp;) noexcept = default;</ins>
+    charT operator*() const;
+    pointer operator-&gt;() const;
+    istreambuf_iterator&amp; operator++();
+    proxy operator++(int);
+    bool equal(const istreambuf_iterator&amp; b) const;
+  private:
+    streambuf_type* sbuf_;               <i>// exposition only</i>
+  };
+}
+</pre></blockquote>
+
+
+<h4>29.5.3 complex specializations [complex.special]</h4>
+<blockquote><pre>
+namespace std {
+  template&lt;&gt; class complex&lt;float&gt; {
+  public:
+    using value_type = float;
+
+    <ins>complex(const complex&amp;) = default;</ins>
+    constexpr complex(float re = 0.0f, float im = 0.0f);
+    constexpr explicit complex(const complex&lt;double&gt;&amp;);
+    constexpr explicit complex(const complex&lt;long double&gt;&amp;);
+
+    constexpr float real() const;
+    void real(float);
+    constexpr float imag() const;
+    void imag(float);
+
+    complex&lt;float&gt;&amp; operator= (float);
+    complex&lt;float&gt;&amp; operator+=(float);
+    complex&lt;float&gt;&amp; operator-=(float);
+    complex&lt;float&gt;&amp; operator*=(float);
+    complex&lt;float&gt;&amp; operator/=(float);
+
+    complex&lt;float&gt;&amp; operator=(const complex&lt;float&gt;&amp;);
+    template&lt;class X&gt; complex&lt;float&gt;&amp; operator= (const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;float&gt;&amp; operator+=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;float&gt;&amp; operator-=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;float&gt;&amp; operator*=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;float&gt;&amp; operator/=(const complex&lt;X&gt;&amp;);
+  };
+
+  template&lt;&gt; class complex&lt;double&gt; {
+  public:
+    using value_type = double;
+
+    <ins>complex(const complex&amp;) = default;</ins>
+    constexpr complex(double re = 0.0, double im = 0.0);
+    constexpr complex(const complex&lt;float&gt;&amp;);
+    constexpr explicit complex(const complex&lt;long double&gt;&amp;);
+
+    constexpr double real() const;
+    void real(double);
+    constexpr double imag() const;
+    void imag(double);
+
+    complex&lt;double&gt;&amp; operator= (double);
+    complex&lt;double&gt;&amp; operator+=(double);
+    complex&lt;double&gt;&amp; operator-=(double);
+    complex&lt;double&gt;&amp; operator*=(double);
+    complex&lt;double&gt;&amp; operator/=(double);
+
+    complex&lt;double&gt;&amp; operator=(const complex&lt;double&gt;&amp;);
+    template&lt;class X&gt; complex&lt;double&gt;&amp; operator= (const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;double&gt;&amp; operator+=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;double&gt;&amp; operator-=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;double&gt;&amp; operator*=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;double&gt;&amp; operator/=(const complex&lt;X&gt;&amp;);
+  };
+
+  template&lt;&gt; class complex&lt;long double&gt; {
+  public:
+    using value_type = long double;
+
+    <ins>complex(const complex&amp;) = default;</ins>
+    constexpr complex(long double re = 0.0L, long double im = 0.0L);
+    constexpr complex(const complex&lt;float&gt;&amp;);
+    constexpr complex(const complex&lt;double&gt;&amp;);
+
+    constexpr long double real() const;
+    void real(long double);
+    constexpr long double imag() const;
+    void imag(long double);
+
+    complex&lt;long double&gt;&amp; operator=(const complex&lt;long double&gt;&amp;);
+    complex&lt;long double&gt;&amp; operator= (long double);
+    complex&lt;long double&gt;&amp; operator+=(long double);
+    complex&lt;long double&gt;&amp; operator-=(long double);
+    complex&lt;long double&gt;&amp; operator*=(long double);
+    complex&lt;long double&gt;&amp; operator/=(long double);
+    
+    template&lt;class X&gt; complex&lt;long double&gt;&amp; operator= (const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;long double&gt;&amp; operator+=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;long double&gt;&amp; operator-=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;long double&gt;&amp; operator*=(const complex&lt;X&gt;&amp;);
+    template&lt;class X&gt; complex&lt;long double&gt;&amp; operator/=(const complex&lt;X&gt;&amp;);
+  }; 
+}
+</pre></blockquote>
+
+
+<h4>30.5.3.1.6 Class ios_base::Init [ios::Init]</h4>
+<blockquote><pre>
+namespace std {
+  class ios_base::Init {
+  public:
+    Init();
+    <ins>Init(const Init&amp;) = default;</ins>
+    ~Init();
+
+    <ins>Init&amp; operator=(const Init&amp;) = default;</ins>
+  private:
+    static int init_cnt; <i>// exposition only</i>
+  };
+}
+</pre></blockquote>
+
+
+<h4><ins>C.5.2 Clause 18: exception handling  [diff.cpp17.except]</ins></h4>
+<p><ins>
+18.4
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove <tt>throw()</tt> exception specifications.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> The empty dynammic exception specfication was
+retained for one additional C++ Standard to ease the transition
+away from this features.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++ 2017 function declaration,
+member function declaration, function pointer declaration, or function
+reference declaration that uses <tt>throw()</tt> for its exception
+specification will be rejected as ill-formed in this International Standard.
+It should simply be replaced with <tt>noexcept</tt> for no change of meaning
+since C++ 2017.
+</ins></p>
+
+
+<h4><ins>C.5.3 Clause 20: Library introduction [diff.cpp17.library]</ins></h4>
+<p><ins>
+20.5.1.2
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove vacuous C++ header files.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> The empty headers implied a false requirement to
+achieve C compatibility with the C++ header headers.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++ 2017 program that
+includes of the the following headers might not compile:
+<tt>&lt;ccomplex&gt;</tt>, <tt>&lt;ciso646&gt;</tt>,
+<tt>&lt;cstdalign&gt;</tt>, <tt>&lt;cstdbool&gt;</tt>, and
+<tt>&lt;ctgmath&gt;</tt>.  The <tt>#include</tt> directives can
+simply be removed with no loss of meaining.
+</ins></p>
+
+
+
+<h4><ins>C.5.4 Annex D: compatibility features [diff.cpp17.depr]</ins></h4>
+<p><ins>
+D.7
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove <tt>uncaught_exception</tt>.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> The function did not have a clear specification
+when multiple exceptions were active, so has been superceded by
+<tt>uncaught_exceptions</tt>.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++ 2017 program that calls
+<tt>std::uncaught_exception</tt> might not compile. It might be revised to use
+<tt>std::uncaught_exceptions</tt> instead, for clear and portable semantics.
+</ins></p>
+
+
+<p><ins>
+D.8
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove support for adaptable function API.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> The deprecated support relied on a limited convention that could
+not be extended to support the genaral case or new language features.  It has been
+superceded by direct language support with <tt>decltype</tt>, and by the
+<tt>std::bind</tt> and <tt>std::not_fn</tt> libraries.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++2017 program that relies on the presence
+of <tt>result_type</tt>, <tt>argument_type</tt>, <tt>first_argument_type</tt>, or
+<tt>second_argument_type</tt> in a standard library class might no longer compile. 
+A valid C++2017 program that calls <tt>not1</tt> or <tt>not2</tt>, or uses the class
+templates <tt>unary_negate</tt> or <tt>binary_negate</tt>, might not compile.
+</ins></p>
+
+
+
+<p><ins>
+D.9
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove redundant members from <tt>std::allocator</tt>.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> <tt>std::allocator</tt> was overspecified, encouraging direct
+usage in user containers rather than relying on <tt>std::allocator_traits</tt>,
+leading to poor containers.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++2017 program the directly makes use
+of the <tt>pointer</tt>, <tt>const_pointer</tt>, <tt>reference</tt>,
+<tt>const_reference</tt>, <tt>rebind</tt>, <tt>address</tt>, <tt>construct</tt>,
+<tt>destory</tt>, or <tt>max_size</tt> members of <tt>std::allocator</tt>, or to
+directly call  <tt>allocate</tt> with an additional hint argument, may not longer
+compile.
+</ins></p>
+
+
+<p><ins>
+D.10
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove <tt>raw_memory_iterator</tt>.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> The iterator encouraged use of algorithms that
+might throuw exceptions, but did not return the number of elements
+successfully constructed that might need to be destroyed in order
+to avoid leaks.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++2017 program that uses
+this iterator class might no longer compile.
+</ins></p>
+
+
+
+<p><ins>
+D.11
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove temporary buffers API.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> The temporary buffer facility was intended to
+provide an efficient optimization for small memory requests, but
+there is little evidence this was achieved in practice, while
+requiring the user to provide their own exception-safe wrappers
+to guard use of the facility in many cases.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++2017 program that
+calls <tt>get_temporary_buffer</tt> or <tt>return_temporary_buffer</tt>
+might no longer compile.
+</ins></p>
+
+
+
+<p><ins>
+D.12
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove deprecated type traits.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> The traits had unreliable or awkward interfaces.
+The <tt>is_literal_type</tt> trait provided no way to detect which
+subset of constructors and member functions of a type were declared
+<tt>constexpr</tt>.  The <tt>result_of</tt> trait had a surprising
+syntax that could not reportcthe result of a regular function type.
+It has been superceded by the <tt>invoke_result</tt> trait.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++2017 program that relies
+on the <tt>is_literal_type</tt> or <tt>result_of</tt> type traits, on
+the <tt>is_literal_type_v</tt> variable template, or on the
+<tt>result_of_t</tt> alias template might no longer compile.
+</ins></p>
+
+
+<p><ins>
+D.14
+</ins></p>
+
+<p><ins>
+<b>Change:</b> Remove <tt>shared_ptr::unique</tt>.
+</ins></p>
+
+<p><ins>
+<b>Rationale:</b> The result of a call to this member function is
+not reliable in the presence of multiple threads and weak pointers.
+The member function <tt>use_count</tt> is similarly unreliable, but
+has a clearer contract in such cases, and remains available for well
+defined use in single-threaded cases.
+</ins></p>
+
+<p><ins>
+<b>Effect on original feature:</b> A valid C++2017 program that calls
+<tt>unique</tt> on a <tt>shared_ptr</tt> object might no longer compile.
+</ins></p>
+
+
+
+<h4>C.6.1 Modifications to headers [diff.mods.to.headers]</h4>
+<ol>
+<li>
+For compatibility with the C standard library, the C++ standard library provides the
+C headers enumerated in D.5, but their use is deprecated in C++.
+</li>
+<li>
+There are no C++ headers for the C headers <tt>&lt;stdatomic.h&gt;</tt>,
+<tt>&lt;stdnoreturn.h&gt;</tt>, and <tt>&lt;threads.h&gt;</tt>, nor are the C headers
+themselves part of C++.
+</li>
+<li>
+The <del>headers <tt>&lt;ccomplex&gt;</tt> (D.4.1) and <tt>&lt;ctgmath&gt;</tt>
+(D.4.4), as well as their corresponding</del> C headers <tt>&lt;complex.h&gt;</tt>
+and <tt>&lt;tgmath.h&gt;</tt><del>,</del> do not contain any of the content from the C
+standard library and instead merely include other headers from the C++ standard library.
+</li>
+<li><del>
+The headers <tt>&lt;ciso646&gt;</tt>, <tt>&lt;cstdalign&gt;</tt> (D.4.2), and
+<tt>&lt;cstdbool&gt;</tt> (D.4.3) are meaningless in C++. Use of the C++ headers
+<tt>&lt;ccomplex&gt;</tt>,  <tt>&lt;cstdalign&gt;</tt>, <tt>&lt;cstdbool&gt;</tt>, and
+<tt>&lt;ctgmath&gt;</tt> is deprecated (D.5).
+</del></li>
+</ol>
+
+<h4>C.6.2.4 Header <tt>&lt;iso646.h&gt;</tt> [diff.header.iso646.h]</h4>
+<ol>
+<li>
+The tokens <tt>and</tt>, <tt>and_eq</tt>, <tt>bitand</tt>, <tt>bitor</tt>, <tt>compl</tt>,
+<tt>not_eq</tt>, <tt>not</tt>, <tt>or</tt>, <tt>or_eq</tt>, <tt>xor</tt>, and <tt>xor_eq</tt>
+are keywords in this International Standard (5.11).
+<del>They do not appear as macro names defined in <tt>&lt;ciso646&gt;</tt>.</del>
+</li>
+</ol>
+
+<h4>C.6.2.5 Header <tt>&lt;stdalign.h&gt;</tt> [diff.header.stdalign.h]</h4>
+<ol>
+<li>
+The token <tt>alignas</tt> is a keyword in this International Standard (5.11).
+<del>It does not appear as a macro name defined in <tt>&lt;cstdalign&gt;</tt> (D.4.2).</del>
+</li>
+</ol>
+
+<h4>C.6.2.6 Header <tt>&lt;stdbool.h&gt;</tt> [diff.header.stdbool.h]</h4>
+<ol>
+<li>
+The tokens <tt>bool</tt>, <tt>true</tt>, and <tt>false</tt> are keywords in this International Standard (5.11).
+<del>They do not appear as macro names defined in <tt>&lt;cstdbool&gt;</tt> (D.4.3).</del>
+</li>
+</ol>
+
+
+<h4><del>D.3 Deprecated exception specifications [depr.except.spec]</del></h4>
+<ol>
+<li><del>The <i>noexcept-specifier</i> <tt>throw()</tt> is deprecated.</del></li>
+</ol>
+
+
+<h4><del>D.4 C++ standard library headers [depr.cpp.headers]</del></h4>
+<ol>
+<li><del>
+For compatibility with prior C++ International Standards, the C++ standard
+library provides headers &lt;ccomplex&gt; (D.4.1), &lt;cstdalign&gt; (D.4.2), &lt;cstdbool&gt;
+(D.4.3), and &lt;ctgmath&gt; (D.4.4). The use of these headers is deprecated.
+</del></li>
+</ol>
+
+<h4><del>D.4.1 Header &lt;ccomplex&gt; synopsis [depr.ccomplex.syn]</del></h4>
+<blockquote><pre>
+<del>#include &lt;complex&gt;</del>
+</pre></blockquote>
+<ol>
+<li><del>
+The header &lt;ccomplex&gt; behaves as if it simply includes the header &lt;complex&gt; (29.5.1).
+</del></li>
+</ol>
+
+<h4><del>D.4.2 Header &lt;cstdalign&gt; synopsis [depr.cstdalign.syn]</del></h4>
+<blockquote><pre>
+<del>#define __alignas_is_defined 1</del>
+</pre></blockquote>
+<ol>
+<li><del>
+The contents of the header &lt;cstdalign&gt; are the same as the C standard library
+header &lt;stdalign.h&gt;, with the following changes: The header <cstdalign> and the
+header &lt;stdalign.h&gt; shall not define a macro named alignas.
+<br/>
+See also: ISO C 7.15.
+</del></li>
+</ol>
+
+<h4><del>D.4.3 Header &lt;cstdbool&gt; synopsis [depr.cstdbool.syn]</del></h4>
+<blockquote><pre>
+<del>#define __bool_true_false_are_defined 1</del>
+</pre></blockquote>
+<ol>
+<li><del>
+1 The contents of the header &lt;cstdbool&gt; are the same as the C standard
+library header &lt;stdbool.h&gt;, with the following changes: The header
+&lt;cstdbool&gt; and the header &lt;stdbool.h&gt; shall not define macros named bool,
+true, or false.  <br/>
+See also: ISO C 7.18.
+</del></li>
+</ol>
+
+<h4><del>D.4.4 Header &lt;ctgmath&gt; synopsis [depr.ctgmath.syn]</del></h4>
+<blockquote><pre>
+<del>#include &lt;complex&gt;</del>
+<del>#include &lt;cmath&gt;</del>
+</pre></blockquote>
+<ol>
+<li><del>
+The header &lt;ctgmath&gt; simply includes the headers &lt;complex&gt; (29.5.1) and &lt;cmath&gt; (29.9.1).
+</del></li>
+<li><del>
+[ <i>Note:</i> The overloads provided in C by type-generic macros are already
+provided in &lt;complex&gt; and &lt;cmath&gt; by &quot;sufficient&quot; additional overloads. &mdash; end note ]
+</del></li>
+</ol>
+
+<h4><del>D.7 uncaught_exception [depr.uncaught]</del></h4>
+<ol>
+<li><del>
+The header <tt>&lt;exception&gt;</tt> has the following addition:
+</del></li>
+<pre><blockquote>
+<del>namespace std {</del>
+  <del>bool uncaught_exception() noexcept;</del>
+<del>}</del>
+</blockquote></pre>
+<pre><del>bool uncaught_exception() noexcept;</del></pre>
+<li><del>
+<i>Returns:</i> <tt>uncaught_exceptions() &gt; 0</tt>.
+</del></li>
+</ol>
+
+
+<h4><del>D.8 Old Adaptable Function Bindings  [depr.func.adaptor.binding]</del></h3>
+<h4><del>D.8.1 Weak Result Types [depr.weak.result_type]</del></h4>
+<ol>
+  <li><del>A call wrapper (23.14.2) may have a <i>weak result type</i>.  If it does, the type
+      of its member type <tt>result_type</tt> is based on the type <tt>T</tt> of the wrapper's
+      target object:
+  </del></li>
+  <ol>
+    <li><del>if <tt>T</tt> is a pointer to function type, <tt>result_type</tt> shall be a
+        synonym for the return type of <tt>T</tt>;</del></li>
+    <li><del>if <tt>T</tt> is a pointer to member function, <tt>result_type</tt> shall be a
+        synonym for the return type of <tt>T</tt>;</del></li>
+    <li><del>if <tt>T</tt> is a class type and the qualified-id <tt>T::result_type</tt> is
+        valid and denotes a type (17.8.2), then <tt>result_type</tt> shall be a synonym for
+        <tt>T::result_type</tt>;</del></li>
+    <li><del>otherwise <tt>result_type</tt> shall not be defined.</del></li>
+  </ol>
+</ol>
+
+
+<h4><del>D.8.2 Typedefs to Support Function Binders [depr.func.adaptor.typedefs]</del></h4>
+<ol>
+<li><del>
+To enable old function adaptors to manipulate function objects that take one or
+two arguments, many of the function objects in this International Standard correspondingly
+provide <i>typedef-name</i>s <tt>argument_type</tt> and <tt>result_type</tt> for function
+objects that take one argument and <tt>first_argument_type</tt>,
+<tt>second_argument_type</tt>, and <tt>result_type</tt> for function objects
+that take two arguments.
+</del></li>
+
+<li><del>
+The following member names are defined in addition to names specified in Clause 23.14:
+</del>
+
+<blockquote><pre>
+<del>namespace std {</del>
+  <del>template&lt;class T&gt; struct owner_less&lt;shared_ptr&lt;T&gt; &gt; {</del>
+    <del>using result_type          = bool;</del>
+    <del>using first_argument_type  = shared_ptr&lt;T&gt;;</del>
+    <del>using second_argument_type = shared_ptr&lt;T&gt;;</del>
+  <del>};</del>
+
+  <del>template&lt;class T&gt; struct owner_less&lt;weak_ptr&lt;T&gt; &gt; {</del>
+    <del>using result_type          = bool;</del>
+    <del>using first_argument_type  = weak_ptr&lt;T&gt;;</del>
+    <del>using second_argument_type = weak_ptr&lt;T&gt;;</del>
+  <del>};</del>
+
+  <del>template &lt;class T&gt; class reference_wrapper {</del>
+  <del>public :</del>
+    <del>using result_type          = <i>see below</i>; <i>// not always defined</i></del>
+    <del>using argument_type        = <i>see below</i>; <i>// not always defined</i></del>
+    <del>using first_argument_type  = <i>see below</i>; <i>// not always defined</i></del>
+    <del>using second_argument_type = <i>see below</i>; <i>// not always defined</i></del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct plus {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct minus {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct multiplies {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct divides {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct modulus {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct negate {</del>
+    <del>using argument_type = T;</del>
+    <del>using result_type   = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct equal_to {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct not_equal_to {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct greater {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct less {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct greater_equal {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct less_equal {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct logical_and {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct logical_or {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct logical_not {</del>
+    <del>using argument_type = T;</del>
+    <del>using result_type   = bool;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct bit_and {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct bit_or {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct bit_xor {</del>
+    <del>using first_argument_type  = T;</del>
+    <del>using second_argument_type = T;</del>
+    <del>using result_type          = T;</del>
+  <del>};</del>
+
+  <del>template &lt;class T = void&gt; struct bit_not {</del>
+    <del>using argument_type = T;</del>
+    <del>using result_type   = T;</del>
+  <del>};</del>
+
+  <del>template&lt;class R, class T1&gt;</del>
+  <del>class function&lt;R(T1)&gt; {</del>
+  <del>public:</del>
+    <del>using argument_type = T1;</del>
+  <del>};</del>
+
+  <del>template&lt;class R, class T1, class T2&gt;</del>
+  <del>class function&lt;R(T1, T2)&gt; {</del>
+  <del>public:</del>
+    <del>using first_argument_type  = T1;</del>
+    <del>using second_argument_type = T2;</del>
+  <del>};</del>
+<del>}</del>
+</blockquote></pre>
+</li>
+
+<li><del><tt>reference_wrapper&lt;T&gt;</tt> has a weak result type (D.7.1). If
+<tt>T</tt> is a function type, <tt>result_type</tt> shall be a synonym for the
+return type of <tt>T</tt>.
+</del></li>
+<li><del>
+The template specialization <tt>reference_wrapper&lt;T&gt;</tt> shall define
+a nested type named <tt>argument_type</tt> as a synonym for <tt>T1</tt> only if
+the type <tt>T</tt> is any of the following:
+</del>
+<ol>
+<li><del>
+&mdash; a function type or a pointer to function type taking one argument of
+type <tt>T1</tt>
+</del></li>
+<li><del>
+&mdash; a pointer to member function <tt>R T0::f <i>cv</i></tt> (where
+<tt><i>cv</i></tt> represents the member function's <i>cv</i>-qualifiers); the
+type <tt>T1</tt> is <tt><i>cv</i> T0*</tt>
+</del></li>
+<li><del>
+&mdash; a class type where the <i>qualified-id</i> <tt>T::argument_type</tt> is valid
+and denotes a type (14.8.2); the type <tt>T1</tt> is <tt>T::argument_type</tt>.
+</del></li>
+</ol></li>
+<li><del>
+The template instantiation <tt>reference_wrapper&lt;T&gt;</tt> shall define
+two nested types named <tt>first_argument_type</tt> and
+<tt>second_argument_type</tt> as synonyms for <tt>T1</tt> and <tt>T2</tt>,
+respectively, only if the type <tt>T</tt> is any of the following:
+</del>
+<ol>
+<li><del>
+&mdash; a function type or a pointer to function type taking two arguments of
+types <tt>T1</tt> and <tt>T2</tt>
+</del></li>
+<li><del>
+&mdash; a pointer to member function <tt>R T0::f(T2) <i>cv</i></tt> (where
+<tt><i>cv</i></tt> represents the member function's <i>cv</i>-qualifiers); the
+type <tt>T1</tt> is <tt><i>cv</i> T0*</tt>
+</del></li>
+<li><del>
+&mdash; a class type where the <i>qualified-id</i>s <tt>T::first_argument_type</tt>
+and <tt>T::second_argument_type</tt> are both valid and both denote types
+(14.8.2); the type <tt>T1</tt> is <tt>T::first_argument_type</tt> and the type
+<tt>T2</tt> is <tt>T::second_argument_type</tt>.
+</li>
+</ol></li>
+<li><del>
+All enabled specializations <tt>hash&lt;Key&gt;</tt> of <tt>hash</tt> (23.14.15) provide
+two nested types, <tt>result_type</tt> and <tt>argument_type</tt>, which shall be
+synonyms for <tt>size_t</tt> and <tt>Key</tt>, respectively.
+</del></li>
+<li><del>
+The forwarding call wrapper <tt>g</tt> returned by a call to
+<tt>bind(f, bound_args...)</tt> (23.14.11.3) shall have a weak result type (D.7.1).
+</del></li>
+<li><del>
+The forwarding call wrapper <tt>g</tt> returned by a call to
+<tt>bind&lt;R&gt;(f, bound_args...)</tt> (23.14.11.3) shall have a nested type
+<tt>result_type</tt> defined as a synonym for <tt>R</tt>.
+</del></li>
+<li><del>
+The simple call wrapper returned from a call to
+<tt>mem_fn(pm)</tt> shall have a nested type <tt>result_type</tt> that is a
+synonym for the return type of <tt>pm</tt> when <tt>pm</tt> is a pointer to
+member function.
+</del></li>
+<li><del>
+The simple call wrapper returned from a call to
+<tt>mem_fn(pm)</tt> shall define two nested types named
+<tt>argument_type</tt> and <tt>result_type</tt> as synonyms for
+<tt><i>cv</i> T*</tt> and <tt>Ret</tt>, respectively, when <tt>pm</tt> is a
+pointer to member function with <i>cv</i>-qualifier <i>cv</i> and taking no
+arguments, where <tt>Ret</tt> is <tt>pm</tt>'s return type.
+</del></li>
+<li><del>
+The simple call wrapper returned from a call to
+<tt>mem_fn(pm)</tt> shall define three nested types named
+<tt>first_argument_type</tt>, <tt>second_argument_type</tt>, and
+<tt>result_type</tt> as synonyms for <tt>cv T*</tt>, <tt>T1</tt>, and
+<tt>Ret</tt>, respectively, when <tt>pm</tt> is a pointer to member function
+with <i>cv</i>-qualifier <i>cv</i> and taking one argument of type <tt>T1</tt>,
+where <tt>Ret</tt> is <tt>pm</tt>'s return type.
+</del></li>
+<li><del>
+The following member names are defined in addition to names specified in Clause 26:
+</del>
+<blockquote><pre>
+<del>namespace std {</del>
+  <del>template &lt;class Key, class T, class Compare = less&lt;Key&gt;,</del>
+            <del>class Allocator = allocator&lt;pair&lt;const Key, T&gt;&gt;&gt;</del>
+  <del>class map {</del>
+  <del>public:</del>
+     <del>class value_compare {</del>
+     <del>public:</del>
+       <del>using result_type          = bool;</del>
+       <del>using first_argument_type  = value_type;</del>
+       <del>using second_argument_type = value_type;</del>
+       <del>}</del>
+    <del>};</del>
+  <del>};</del>
+
+  <del>template &lt;class Key, class T, class Compare = less&lt;Key&gt;,</del>
+            <del>class Allocator = allocator&lt;pair&lt;const Key, T&gt;&gt;&gt;</del>
+  <del>class multimap {</del>
+  <del>public:</del>
+     <del>class value_compare {</del>
+     <del>public:</del>
+       <del>using result_type          = bool;</del>
+       <del>using first_argument_type  = value_type;</del>
+       <del>using second_argument_type = value_type;</del>
+    <del>};</del>
+  <del>};</del>
+<del>}</del>
+</pre></blockquote>
+</li>
+</ol>
+
+<h4><del>D.8.3 Negators [depr.negators]</del></h4>
+<ol>
+<li><del>
+The header <tt>&lt;functional&gt;</tt> has the following additions:</del>
+<blockquote><pre>
+<del>namespace std {</del>
+  <del>template &lt;class Predicate&gt; class unary_negate;</del>
+  <del>template &lt;class Predicate&gt;</del>
+    <del>constexpr unary_negate&lt;Predicate&gt; not1(const Predicate&amp;);</del>
+  <del>template &lt;class Predicate&gt; class binary_negate;</del>
+  <del>template &lt;class Predicate&gt;</del>
+    <del>constexpr binary_negate&lt;Predicate&gt; not2(const Predicate&amp;);</del>
+<del>}</del>
+</pre></blockquote>
+</li>
+<li><del>
+Negators <tt>not1</tt> and <tt>not2</tt> take a unary and a binary predicate,
+respectively, and return their logical negations (8.3.1).
+</del></li>
+
+<p><pre><blockquote>
+   <del>template &lt;class Predicate&gt;</del>
+     <del>class unary_negate {</del>
+   <del>public:</del>
+     <del>constexpr explicit unary_negate(const Predicate&amp; pred);</del>
+     <del>constexpr bool operator()(const typename Predicate::argument_type&amp; x) const;</del>
+     <del>using argument_type = typename Predicate::argument_type;</del>
+     <del>using result_type   = bool;</del>
+   <del>};</del>
+</blockquote></pre></p>
+
+<li><del>
+<tt>operator()</tt> returns <tt>!pred(x)</tt>.
+</del></li>
+
+<p><pre><blockquote>
+ <del>template &lt;class Predicate&gt;</del>
+     <del>constexpr unary_negate&lt;Predicate&gt; not1(const Predicate&amp; pred);</del>
+</blockquote></pre></p>
+
+<li><del>
+<i>Returns:</i> <tt>unary_negate&lt;Predicate&gt;(pred)</tt>.
+</del></li>
+
+<p><pre><blockquote>
+  <del>template &lt;class Predicate&gt;</del>
+  <del>class binary_negate {</del>
+  <del>public:</del>
+    <del>constexpr explicit binary_negate(const Predicate&amp; pred);</del>
+    <del>constexpr bool operator()(const typename Predicate::first_argument_type&amp; x,</del>
+                              <del>const typename Predicate::second_argument_type&amp; y) const;</del>
+    <del>using first_argument_type = typename Predicate::first_argument_type;</del>
+    <del>using second_argument_type = typename Predicate::second_argument_type;</del>
+    <del>using result_type = bool;</del>
+  <del>};</del>
+</blockquote></pre></p>
+
+<li><del>
+<tt>operator()</tt> returns <tt>!pred(x,y)</tt>.
+</del></li>
+
+<p><pre><blockquote>
+<del>template &lt;class Predicate&gt;</del>
+  <del>constexpr binary_negate&lt;Predicate&gt; not2(const Predicate&amp; pred);</del>
+</blockquote></pre></p>
+
+<li><del>
+<i>Returns:</i> <tt>binary_negate&lt;Predicate&gt;(pred)</tt>.
+</del></li>
+</ol>
+
+</ol>
+
+
+<h4><del>D.9 The default allocator [depr.default.allocator]</del></h4>
+<ol>
+<li><del>The following members are defined in addition to those specified in Clause 20:</del></li>
+<pre>
+<del>namespace std {</del>
+  <del>template &lt;&gt; class allocator&lt;void&gt; {</del>
+  <del>public:</del>
+    <del>using value_type    = void;</del>
+    <del>using pointer       = void*;</del>
+    <del>using const_pointer = const void*;</del>
+    <del><i>// reference-to-void members are impossible.</i></del>
+    <del>template &lt;class U&gt; struct rebind { using other = allocator&lt;U&gt;; };</del>
+  <del>};</del>
+
+  <del>template &lt;class T&gt; class allocator {</del>
+  <del>public:</del>
+    <del>using size_type       = size_t;</del>
+    <del>using difference_type = ptrdiff_t;</del>
+    <del>using pointer         = T*;</del>
+    <del>using const_pointer   = const T*;</del>
+    <del>using reference       = T&amp;;</del>
+    <del>using const_reference = const T&amp;;</del>
+    <del>template &lt;class U&gt; struct rebind { using other = allocator&lt;U&gt;; };</del>
+
+    <del>T* address(reference x) const noexcept;</del>
+    <del>const T* address(const_reference x) const noexcept;</del>
+
+    <del>T* allocate(size_t, const void* hint);</del>
+
+    <del>template&lt;class U, class... Args&gt;</del>
+      <del>void construct(U* p, Args&amp;&amp;... args);</del>
+    <del>template &lt;class U&gt;</del>
+      <del>void destroy(U* p);</del>
+
+    <del>size_t max_size() const noexcept;</del>
+  <del>};</del>
+<del>}</del>
+</pre>
+
+<pre><del>T* address(reference x) const noexcept;</del>
+<del>const T* address(const_reference x) const noexcept;</del></pre>
+<li><del>
+<i>Returns:</i> The actual address of the object referenced by <tt>x</tt>, even
+in the presence of an overloaded <tt>operator&amp;</tt>.
+</del></li>
+
+<pre><del>T* allocate(size_t, const void* hint);</del></pre>
+<li><del>
+<i>Returns:</i> A pointer to the initial element of an array of storage of size
+<tt>n * sizeof(T)</tt>, aligned appropriately for objects of type <tt>T</tt>.
+It is implementation-defined whether over-aligned types are supported (3.11).
+</del></li>
+<li><del>
+<i>Remark:</i> the storage is obtained by calling
+<tt>::operator new(std::size_t)</tt> (18.6.1), but it is unspecified when or
+how often this function is called.
+</del></li>
+<li><del>
+<i>Throws:</i> <tt>bad_alloc</tt> if the storage cannot be obtained.
+</del></li>
+
+<pre>
+<del>template &lt;class U, class... Args&gt;</del>
+  <del>void construct(U* p, Args&amp;&amp;... args);</del>
+</pre>
+<li><del>
+<i>Effects:</i> <tt>::new((void *)p) U(std::forward&lt;Args&gt;(args)...)</tt>
+</del></li>
+
+<pre>
+<del>template &lt;class U&gt;</del>
+  <del>void destroy(U* p);</del>
+</pre>
+<li><del>
+<i>Effects:</i> <tt>p-&gt;~U()</tt>
+</del></li>
+
+<pre><del>size_type max_size() const noexcept;</del></pre>
+<li><del>
+<i>Returns:</i> The largest value <tt>N</tt> for which the call
+<tt>allocate(N)</tt> might succeed.
+</del></li>
+</ol>
+
+
+<h4><del>D.10 Raw storage iterator [depr.storage.iterator]</del></h4>
+<ol>
+<p><del>
+The header <tt>&lt;memory&gt;</tt> has the following addition:</del>
+</del></p>
+
+<pre>
+  <del>namespace std {</del>
+    <del>template &lt;class OutputIterator, class T&gt;</del>
+    <del>class raw_storage_iterator {</del>
+    <del>public:</del>
+      <del>using iterator_category = output_iterator_tag;</del>
+      <del>using value_type        = void;</del>
+      <del>using difference_type   = void;</del>
+      <del>using pointer           = void;</del>
+      <del>using reference         = void;</del>
+
+      <del>explicit raw_storage_iterator(OutputIterator x);</del>
+
+      <del>raw_storage_iterator&amp; operator*();</del>
+      <del>raw_storage_iterator&amp; operator=(const T&amp; element);</del>
+      <del>raw_storage_iterator&amp; operator=(T&amp;&amp; element);</del>
+      <del>raw_storage_iterator&amp; operator++();</del>
+      <del>raw_storage_iterator  operator++(int);</del>
+      <del>OutputIterator base() const;</del>
+    <del>};</del>
+  <del>}</del>
+</pre>
+
+<li><del>
+<tt>raw_storage_iterator</tt> is provided to enable algorithms to store their
+results into uninitialized memory. The template parameter
+<tt>OutputIterator</tt> is required to have its <tt>operator*</tt> return an
+object for which <tt>operator&amp;</tt> is defined and returns a pointer to
+<tt>T</tt>, and is also required to satisfy the requirements of an output
+iterator (24.2.4).
+</del></li>
+
+<pre>
+<del>explicit raw_storage_iterator(OutputIterator x);</del>
+</pre>
+<li><del>
+<i>Effects:</i> Initializes the iterator to point to the same value to which
+<tt>x</tt> points.
+</del></li>
+
+<pre>
+<del>raw_storage_iterator&amp; operator*();</del>
+</pre>
+<li><del>
+<i>Returns:</i> <tt>*this</tt>
+</del></li>
+
+<pre>
+<del>raw_storage_iterator&amp; operator=(const T&amp; element);</del>
+</pre>
+<li><del>
+<i>Requires:</i> <tt>T</tt> shall be <tt>CopyConstructible</tt>.
+</del></li>
+<li><del>
+<i>Effects:</i> Constructs a value from <tt>element</tt> at the location to
+which the iterator points.
+</del></li>
+<li><del>
+<i>Returns:</i> A reference to the iterator.
+</del></li>
+
+<pre>
+<del>raw_storage_iterator&amp; operator=(T&amp;&amp; element);</del>
+</pre>
+<li><del>
+<i>Requires:</i> <tt>T</tt> shall be <tt>MoveConstructible</tt>.
+</del></li>
+<li><del>
+<i>Effects:</i> Constructs a value from <tt>std::move(element)</tt> at the
+location to which the iterator points.
+</del></li>
+<li><del>
+<i>Returns:</i> A reference to the iterator.
+</del></li>
+
+<pre>
+<del>raw_storage_iterator&amp; operator++();</del>
+</pre>
+<li><del>
+<i>Effects:</i> Pre-increment: advances the iterator and returns a reference to
+the updated iterator.
+</del></li>
+
+<pre>
+<del>raw_storage_iterator operator++(int);</del>
+</pre>
+<li><del>
+<i>Effects:</i> Post-increment: advances the iterator and returns the old value
+of the iterator.
+</del></li>
+
+<pre>
+<del>OutputIterator base() const;</del>
+</pre>
+<li><del>
+<i>Returns:</i> An iterator of type <tt>OutputIterator</tt> that points to the
+same value as <tt>*this</tt> points to.
+</del></li>
+</ol>
+
+
+<h4><del>D.11 Temporary buffers [depr.temporary.buffer]</del></h4>
+<ol>
+<li><del>
+The header <tt>&lt;memory&gt;</tt> has the following additional functions:</del>
+</del></li>
+<blockquote><pre>
+<del>namespace std {</del>
+  <del><i>// 20.9.11, temporary buffers:</i></del>
+  <del>template &lt;class T&gt;</del>
+    <del>pair&lt;T*, ptrdiff_t&gt; get_temporary_buffer(ptrdiff_t n) noexcept;</del>
+  <del>template &lt;class T&gt;</del>
+    <del>void return_temporary_buffer(T* p);</del>
+<del>}</del>
+</pre></blockquote>
+
+<pre>
+<del>template &lt;class T&gt;</del>
+  <del>pair&lt;T*, ptrdiff_t&gt; get_temporary_buffer(ptrdiff_t n) noexcept;</del>
+</pre>
+<li><del>
+<i>Effects:</i> Obtains a pointer to uninitialized, contiguous storage for
+<i>N</i> adjacent objects of type <tt>T</tt>, for some non-negative number
+<i>N</i>. It is implementation-defined whether over-aligned types are supported
+(3.11).
+</del></li>
+<li><del>
+<i>Remarks:</i> Calling <tt>get_temporary_buffer</tt> with a positive number
+<tt>n</tt> is a non-binding request to return storage for <tt>n</tt> objects of
+type <tt>T</tt>. In this case, an implementation is permitted to return instead
+storage for a non-negative number <i>N</i> of such objects, where
+<i>N</i><tt>!= n</tt> (including <i>N</i><tt> == 0</tt>). [ <i>Note:</i> The
+request is non-binding to allow latitude for implementation-specific
+optimizations of its memory management.  - <i>end note</i> ]
+</del></li>
+<li><del>
+<i>Returns:</i> If <tt>n &lt;= 0</tt> or if no storage could be obtained,
+returns a pair <tt>P</tt> such that <tt>P.first</tt> is a null pointer value
+and <tt>P.second == 0</tt>; otherwise returns a pair <tt>P</tt> such that
+<tt>P.first</tt> refers to the address of the uninitialized storage and
+<tt>P.second</tt> refers to its capacity <i>N</i> (in the units of
+<tt>sizeof(T)</tt>).
+</del></li>
+</ol>
+
+<pre>
+<del>template &lt;class T&gt; void return_temporary_buffer(T* p);</del>
+</pre>
+<ol>
+<li><del>
+<i>Effects:</i> Deallocates the storage referenced by <tt>p</tt>.
+</del></li>
+<li><del>
+<i>Requires:</i> <tt>p</tt> shall be a pointer value returned by an earlier
+call to <tt>get_temporary_buffer</tt> that has not been invalidated by an
+intervening call to <tt>return_temporary_buffer(T*)</tt>.
+</del></li>
+<li><del>
+<i>Throws:</i> Nothing.
+</del></li>
+</ol>
+
+
+<h4><del>D.12 Deprecated Type Traits [depr.meta.type]</del></h4>
+<ol>
+<li><del>
+The header <tt>&lt;type_traits&gt;</tt> has the following additions:</del>
+</del></li>
+
+<blockquote><pre>
+<del>namespace std {</del>
+  <del>template &lt;class T&gt; struct is_literal_type;</del>
+
+  <del>template &lt;class T&gt; constexpr bool is_literal_type_v = is_literal_type&lt;T&gt;::value;</del>
+
+  <del>template &lt;class&gt; struct result_of; // not defined</del>
+  <del>template &lt;class Fn, class... ArgTypes&gt; struct result_of&lt;Fn(ArgTypes...)&gt;;</del>
+
+  <del>template &lt;class T&gt; using result_of_t = typename result_of&lt;T&gt;::type;</del>
+<del>}</del>
+</pre></blockquote>
+
+<li><del>
+<i>Requires:</i> For <tt>is_literal_type</tt>,
+<tt>remove_all_extents_t&lt;T&gt;</tt> shall be a complete type or <i>cv</i>
+<tt>void</tt>.  For <tt>result_of&lt;Fn(ArgTypes...)&gt;</tt>, <tt>Fn</tt> and
+all types in the parameter pack <tt>ArgTypes</tt> shall be complete types,
+<i>cv</i> <tt>void</tt>, or arrays of unknown bound.
+</del></li>
+
+<li><del>
+<tt>is_literal_type</tt> is a <tt>UnaryTypeTrait</tt> (23.15.1) with a
+base-characteristic of <tt>true_type</tt> if <tt>T</tt> is a literal type
+(3.9), and <tt>false_type</tt> otherwise.  The partial specialization
+<tt>result_of&lt;Fn(ArgTypes...)&gt;</tt> is a <tt>TransformationTrait</tt>
+whose member typedef <tt>type</tt> is defined if and only if
+<tt>invoke_result&lt;Fn, ArgTypes...&gt;::type</tt> is defined. If
+<tt>type</tt> is defined, it names the same type as <tt>invoke_result_t&lt;Fn,
+ArgTypes...&gt;</tt>.
+</del></li>
+
+<li><del>
+The behavior of a program that adds specializations for
+<tt>is_literal_type</tt> or <tt>is_literal_type_v</tt> is undefined.
+</del></li>
+</ol>
+
+
+<h4><del>D.14 Deprecated shared_ptr observers [depr.util.smartptr.shared.obs]</del></h4>
+<ol>
+<li><del>
+The following member is defined in addition to those members specified in 23.11.2.2:
+</del></li>
+<blockquote><pre>
+<del>namespace std {</del>
+  <del>template<class T> class shared_ptr {</del>
+  <del>public:</del>
+    <del>bool unique() const noexcept;</del>
+  <del>};</del>
+<del>}</del>
+</pre></blockquote>
+<blockquote><pre>
+<del>bool unique() const noexcept;</del></del>
+</pre></blockquote>
+<li><del>
+<i>Returns:</i> <tt>use_count() == 1</tt>.
+</del></li>
+
+</blockquote>
+
+
+<h2><a name="7.0">7 Acknowledements</h2>
 <p>
 Thanks to everyone who worked on flagging these facilities for deprecation,
 let's take the next step!
 </p>
 
 
-<h2><a name="7.0">7 References</h2>
+<h2><a name="8.0">8 References</h2>
 <ul>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3201">N3201</a> Moving right along, Bjarne Stroustrup</li>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3203">N3203</a> Tightening the conditions for generating implicit moves, Jens Maurer</li>
@@ -3577,6 +5586,7 @@ let's take the next step!
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0386r2">P0386R2</a> Inline Variables, Hal Finkel and Richard Smith</li>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0521r0">P0521R0</a> Proposed Resolution for CA 14 (shared_ptr use_count/unique), Stephan T. Lavavej</li>
   <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0618r0">P0618R0</a> Deprecating <tt>&lt;codecvt&gt;</tt>, Alisdair Meredith</li>
+  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0657r0.pdf">P0657R0</a> Deprecate Certain Declarations in the Global Namespace, Walter Brown</li>
 </ul>
 
 </body>
