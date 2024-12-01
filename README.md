@@ -1,3 +1,8 @@
+# This repository is closed
+
+All related work and archaeiogy has moved to a more up to date repossitory.
+This historical archive is now an abandoned project.
+
 # iso-papers
 
 * P0001 Remove register
